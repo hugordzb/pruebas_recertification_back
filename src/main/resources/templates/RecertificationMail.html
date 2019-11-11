@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="ISO-8859-1">
+	<style>
+		header, main, footer {
+			margin: 5%;
+			padding: 0;
+		}
+				
+		footer {
+			background-color: #efefef;
+			color: #1d1d1d;
+		}
+		
+		h3 {
+			text-align: left;
+		}
+		
+		p {
+			text-align: justify;
+		}
+		
+		footer > p {
+			text-align: center;
+		}
+		
+	</style>
+</head>
+
+<body>
+	<header>
+		<h1><span th:text="${fecha}"></span></h1>	
+	</header>
+	
+	<main>
+	
+		<p> Buenas <span th:text="${idJefe}">,</p>
+		
+		<p>Como parte del proceso de re certificación de usuarios de los sistemas 
+			<span th:text="${sistemas}">, solicitamos de tu apoyo para que nos ayudes en confirmar 
+			las cuentas que son utilizadas en tu equipo de trabajo, por favor.
+		</p>
+		
+		<p> anexar tabla!!!!!!!!!!</p>
+		
+		<p>Por favor de enviar la carta firmada por correo electrónico <span th:text="${correo}"> 
+			o contestar el correo con el siguiente texto:
+		</p>
+		
+		<p>Confirmo que el uso de las cuentas son utilizadas por los miembros de mi equipo de 
+			trabajo mencionados en el documento adjunto, Y que somos conscientes del buen uso 
+			de las cuentas que nos fueron proporcionadas por el área de Sistemas, con el objetivo 
+			de cubrir nuestras funciones dentro de la compañía, por lo que también especifico a 
+			los usuarios que comparten la responsabilidad:
+		</p>
+		
+		<p>[ En este punto por favor de en listar a los usuarios que también utilizan la cuenta, 
+			en caso de haberlos, en caso contrario indicar que esta cuenta es utilizada solo por 
+			los usuarios mencionados en el documento anexo. ]
+		</p>
+	
+		<p>De antemano gracias por la atención.</p>
+		
+		<p>Saludos.</p>
+	</main>
+	
+	<footer>
+		<p>Este proceso es para cumplir con observaciones de auditorías</p>
+		<p><strong>&copy; 2019 TRUPER S.A. de C.V. Todos los derechos reservados. truper.com</strong></p>
+	</footer>
+	
+</body>
+</html>

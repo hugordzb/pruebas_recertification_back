@@ -1,0 +1,34 @@
+package com.truper.recertification.common.template.mapper;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.truper.recertification.common.mail.service.EmailService;
+import com.truper.recertification.common.template.MailContentBuilder;
+import com.truper.recertification.vo.EmailTemplateVO;
+
+public class TemplateMapper {
+
+	@Autowired
+	private MailContentBuilder mailContentBuilder;
+	
+	@Autowired
+	private EmailService emailService;
+	
+	private EmailTemplateVO emailTemplate;
+	
+	public void templateMapper() {
+		
+		SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+		
+		mailContentBuilder.setHtmlTemplateName("RecertificationMail");
+		mailContentBuilder.addParametro("fecha", format.format(new Date()));
+		mailContentBuilder.addParametro("idJefe", emailTemplate.getStrIdJefe());
+		mailContentBuilder.addParametro("sistemas", emailTemplate.getLstIdSistemas().toString());
+		mailContentBuilder.addParametro("correo", emailTemplate.getStrCorreo());
+
+		emailService.sendTemplateMail("Detonacion alerta", mailContentBuilder.build());
+	}
+}
