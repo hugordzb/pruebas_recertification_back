@@ -3,17 +3,32 @@ package com.truper.recertification;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.ldap.core.LdapTemplate;
 import org.springframework.ldap.filter.AndFilter;
 import org.springframework.ldap.filter.EqualsFilter;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.authentication.BadCredentialsException;
 
+import com.truper.recertification.common.mail.service.EmailService;
 import com.truper.recertification.dao.RE_Bitacora_CambiosDAO;
 import com.truper.recertification.dao.RE_Control_CambiosDAO;
 import com.truper.recertification.dao.RE_Cuentas_UsuarioDAO;
@@ -26,17 +41,18 @@ import com.truper.recertification.dao.RE_SistemaDAO;
 import com.truper.recertification.dao.RE_TokenDAO;
 import com.truper.recertification.dao.RE_UsuarioDAO;
 import com.truper.recertification.ldap.repository.LDAPRepository;
-import com.truper.recertification.model.RE_Bitacora_CambiosEntity;
-import com.truper.recertification.model.RE_Control_CambiosEntity;
-import com.truper.recertification.model.RE_Cuentas_UsuarioEntity;
-import com.truper.recertification.model.RE_DepartamentoEntity;
-import com.truper.recertification.model.RE_Detalle_JefeEntity;
-import com.truper.recertification.model.RE_JerarquiaEntity;
-import com.truper.recertification.model.RE_Perfil_SistemaEntity;
-import com.truper.recertification.model.RE_RecertificacionEntity;
-import com.truper.recertification.model.RE_SistemaEntity;
-import com.truper.recertification.model.RE_TokenEntity;
-import com.truper.recertification.model.RE_UsuarioEntity;
+import com.truper.recertification.model.PKRecertificacion;
+import com.truper.recertification.model.ReBitacoraCambiosEntity;
+import com.truper.recertification.model.ReControlCambiosEntity;
+import com.truper.recertification.model.ReCuentasUsuarioEntity;
+import com.truper.recertification.model.ReDepartamentoEntity;
+import com.truper.recertification.model.ReDetalleJefeEntity;
+import com.truper.recertification.model.ReJerarquiaEntity;
+import com.truper.recertification.model.RePerfilSistemaEntity;
+import com.truper.recertification.model.ReRecertificacionEntity;
+import com.truper.recertification.model.ReSistemaEntity;
+import com.truper.recertification.model.ReTokenEntity;
+import com.truper.recertification.model.ReUsuarioEntity;
 import com.truper.recertification.vo.LDAPVO;
 
 import lombok.extern.slf4j.Slf4j;
@@ -83,6 +99,12 @@ class RecertificationApplicationTests {
 	
 	@Autowired
 	private RE_UsuarioDAO usuarioDAO;
+	
+	@Autowired
+	private JavaMailSender emisorCorreo;
+	
+	@Autowired
+	private EmailService correoService;
 	
 	//ldap	
 	@Test
@@ -146,140 +168,214 @@ class RecertificationApplicationTests {
 		assertTrue(auth);
 	}
 	
+	//Excel
+	@Test
+	public void excel() {
+		String strNombreArchivo = "Prueba.xlsx";
+		String strRutaArchivo = "C:\\Users\\mgmolinae\\Downloads\\" + strNombreArchivo;
+		String strHoja = "Activos";
+		
+		try (FileInputStream file = new FileInputStream(new File(strRutaArchivo))) {
+			
+			// leer archivo excel
+			XSSFWorkbook worbook = new XSSFWorkbook(file);
+			//obtener la hoja que se va leer
+			XSSFSheet sheet = worbook.getSheet(strHoja);
+			
+			//obtener todas las filas de la hoja excel
+			Iterator<Row> rowIterator = sheet.iterator();
+
+			Row row;
+			// se recorre cada fila hasta el final
+			while (rowIterator.hasNext()) {
+				row = rowIterator.next();
+				//se obtiene las celdas por fila
+				Iterator<Cell> cellIterator = row.cellIterator();
+				Cell cell;
+				
+				//se recorre cada celda
+				while (cellIterator.hasNext()) {
+					// se obtiene la celda en específico y se la imprime
+					cell = cellIterator.next();
+					
+//					log.info(cell.getStringCellValue()+"|");
+					System.out.print(cell.getStringCellValue()+"|");
+				}
+				
+//				while (cellIterator.hasNext()) 
+//                {
+//                    Cell cell = cellIterator.next();
+                    //Check the cell type and format accordingly
+//                    switch (cell.getCellType()) 
+//                    {
+                    	
+//                            System.out.print(cell.getNumericCellValue() + "t");
+//                            System.out.print(cell.getStringCellValue() + "t");
+                      
+//                    }
+//                }
+			}
+		} catch (Exception e) {
+			e.getMessage();
+		}
+	}
+	@Test
+	public void pruebaCorreo1() throws MessagingException {
+		List<String> lstDestinatarios = new ArrayList<String>();
+		
+		lstDestinatarios.add("mgmolinae@truper.com");
+		lstDestinatarios.add("hdrodriguezb@truper.com");
+		
+	
+		
+		MimeMessage message = emisorCorreo.createMimeMessage();
+	      
+	    MimeMessageHelper helper = new MimeMessageHelper(message, true);
+	     
+	    helper.setTo((String[])lstDestinatarios.toArray(new String[0]));
+	    helper.setSubject("Prueba1");
+	    helper.setText("Hola mundo!!!!");
+	    
+	  
+	    emisorCorreo.send(message);
+	}
+	
+	
 	//Bitacora_Cambios
 	@Test
 	public void findByTipoMov() {
-		List<RE_Bitacora_CambiosEntity> lista = bitacoraDAO.findByTipoMov("A");
+		List<ReBitacoraCambiosEntity> lista = bitacoraDAO.findByTipoMov("A");
 		log.info("Lista: " + lista.size());
 	}
 	
 	@Test
 	public void findBySolicitante() {
-		List<RE_Bitacora_CambiosEntity> lista = bitacoraDAO.findBySolicitante("solicitante");
+		List<ReBitacoraCambiosEntity> lista = bitacoraDAO.findBySolicitante("solicitante");
 		log.info("Lista: " + lista.size());
 	}
 	
 	//Control_Cambios
 	@Test
 	public void findByAtendio() {
-		List<RE_Control_CambiosEntity> lista = controlDAO.findByAtendio("atendio");
+		List<ReControlCambiosEntity> lista = controlDAO.findByAtendio("atendio");
 		log.info("Lista: " + lista.size());
 	}
 
 	@Test
 	public void findByEstatus() {
-		List<RE_Control_CambiosEntity> lista = controlDAO.findByEstatus(false);
+		List<ReControlCambiosEntity> lista = controlDAO.findByEstatus(false);
 		log.info("Lista: " + lista.size());
 	}
 
 	//Cuentas_Usuario
 	@Test
 	public void findbyidCuenta_UsuarioEntitiesIdUsuario() {
-		List<RE_Cuentas_UsuarioEntity> lista = cuentaDAO.findbyidCuenta_UsuarioEntitiesIdUsuario("usuario");
-		log.info("Lista: " + lista.size());
+//		List<ReCuentasUsuarioEntity> lista = cuentaDAO.findByIdCuentasUsuarioIdUsuario("usuario");
+//		log.info("Lista: " + lista.size());
 	}
 	
 	@Test
 	public void findByCuentaSistema() {
-		RE_Cuentas_UsuarioEntity lista = cuentaDAO.findByCuentaSistema("mgmolinae");
+		ReCuentasUsuarioEntity lista = cuentaDAO.findByCuentaSistema("mgmolinae");
 		log.info("Lista: " + lista);
 	}
 	
 	//Departamento
 	@Test
 	public void findByDepartamento() {
-		RE_DepartamentoEntity lista = departamentoDAO.findByDepartamento("Departamento");
+		ReDepartamentoEntity lista = departamentoDAO.findByDepartamento("Departamento");
 		log.info("Lista: " + lista);
 	}
 	
 	//Detalle_Jefe
 	@Test
 	public void findByIdDepartamento() {
-		RE_Detalle_JefeEntity lista = detalleDAO.findByIdDepartamento(1);
+		ReDetalleJefeEntity lista = detalleDAO.findByIdDepartamento(1);
 		log.info("Lista: " + lista);
 	}
 
 	@Test
 	public void findByIdJefe() {
-		List<RE_Detalle_JefeEntity> lista = detalleDAO.findByIdJefe("jefe");
+		List<ReDetalleJefeEntity> lista = detalleDAO.findByIdJefe("jefe");
 		log.info("Lista: " + lista.size());
 	}
 	
 	//Jerarquia
 	@Test
 	public void findByIdEmpleadoJefeIdJefe() {
-		List<RE_JerarquiaEntity> lista = jerarquiaDAO.findByIdEmpleadoJefeIdJefe("jefe");
-		log.info("Lista: " + lista.size());
+//		List<ReJerarquiaEntity> lista = jerarquiaDAO.findByIdJerarquiaIdJefe("jefe");
+//		log.info("Lista: " + lista.size());
 	}
 
 	@Test
 	public void findByIdEmpleadoJefeIdUsuario() {
-		RE_JerarquiaEntity lista = jerarquiaDAO.findByIdEmpleadoJefeIdUsuario("jefe");
-		log.info("Lista: " + lista);
+//		ReJerarquiaEntity lista = jerarquiaDAO.findByIdJerarquiaIdUsuario("usuario");
+//		log.info("Lista: " + lista);
 	}
 	
 	//Perfil_Sistema
 	@Test
 	public void findByIdPerfilSistemaIdSistemaPerfil() {
-		List<RE_Perfil_SistemaEntity> lista = perfilDAO.findByIdPerfilSistemaIdSistema("S004");
+		List<RePerfilSistemaEntity> lista = perfilDAO.findByIdPerfilSistemaIdSistema("S001");
 		log.info("Lista: " + lista.size());
 	}
 	
 	@Test
 	public void findByIdEmpleadoJefeIdJefePerfil() {
-		List<RE_Perfil_SistemaEntity> lista = perfilDAO.findByPerfil("perfil");
+		List<RePerfilSistemaEntity> lista = perfilDAO.findByPerfil("perfil");
 		log.info("Lista: " + lista.size());
 	}
 	
 	//Recertificacion
 	@Test
 	public void findByEstatusRecertificacion() {
-		List<RE_RecertificacionEntity> lista = recertificacionDAO.findByEstatus(true);
+		List<ReRecertificacionEntity> lista = recertificacionDAO.findByEstatus(true);
 		log.info("Lista: " + lista.size());
 	}
 	
 	@Test
 	public void findByPeriodo() {
-		List<RE_RecertificacionEntity> lista = recertificacionDAO.findByPeriodo("0219");
+		PKRecertificacion idRecertificacion = new PKRecertificacion("jefe", "0119");
+		List<ReRecertificacionEntity> lista = recertificacionDAO.findByIdRecertificacion(idRecertificacion);
 		log.info("Lista: " + lista.size());
 	}
 	
 	@Test
 	public void findByIdJefeandIdPeriodo() {
-		RE_RecertificacionEntity lista = recertificacionDAO.findByIdJefeandIdPeriodo("jefe", "0219");
+		List<ReRecertificacionEntity> lista = recertificacionDAO.findByIdRecertificacionPeriodo("0219");
 		log.info("Lista: " + lista);
 	}
 	
 	//Sistema
 	@Test
 	public void findBySistema() {
-		RE_SistemaEntity lista = sistemaDAO.findBySistema("CIAT");
+		ReSistemaEntity lista = sistemaDAO.findBySistema("CIAT");
 		log.info("Lista: " + lista);
 	}
 	
 	//Token
 	@Test
 	public void findByUltimaSesion() {
-		RE_TokenEntity lista = tokenDAO.findByUltimaSesion(new Timestamp(2019, 11, 11, 11, 11, 11, 11));
+		ReTokenEntity lista = tokenDAO.findByUltimaSesion(new Timestamp(2019, 11, 11, 11, 11, 11, 11));
 		log.info("Lista: " + lista);
 	}
 	
 	//Usuario
 	@Test
 	public void findByNombre() {
-		RE_UsuarioEntity lista = usuarioDAO.findByNombre("nombre");
+		ReUsuarioEntity lista = usuarioDAO.findByNombre("nombre");
 		log.info("Lista: " + lista);
 	}
 	
 	@Test
 	public void findByNoEmpleado() {
-		RE_UsuarioEntity lista = usuarioDAO.findByNoEmpleado(1);
+		ReUsuarioEntity lista = usuarioDAO.findByNoEmpleado(1);
 		log.info("Lista: " + lista);
 	}
 	
 	@Test
 	public void findByEstatusUsuario() {
-		List<RE_UsuarioEntity> lista = usuarioDAO.findByEstatus(true);
+		List<ReUsuarioEntity> lista = usuarioDAO.findByEstatus(true);
 		log.info("Lista: " + lista.size());
 	}
 }

@@ -1,11 +1,12 @@
 package com.truper.recertification.model;
 
 import java.io.Serializable;
-import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.springframework.data.domain.Persistable;
 
@@ -21,37 +22,30 @@ import lombok.Setter;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "RE_SSO_SISTEMA")
-public class RE_UsuarioEntity implements Serializable, Persistable<String>{
+@Table(name = "RE_SISTEMA")
+public class ReSistemaEntity implements Serializable, Persistable<String>{
 
 	private static final long serialVersionUID = 1L;
 
-	@Column(name = "IDUSUARIO")
-	private String idUsuario;
-
-	@Column(name = "NOMBRE")
-	private String nombre;
-
-	@Column(name = "NOEMPLEADO")
-	private Integer noEmpleado;
-
-	@Column(name = "ESTATUS")
-	private boolean estatus;
-
-	@Column(name = "FECHAINGRESO")
-	private Date fechaIngreso;
+	@Id
+	@Column(name = "IDSISTEMA")
+	private String idSistema;
 	
-	@Column(name = "FECHATERMINACION")
-	private Date fechaTerminacion;
+	@Column(name = "SISTEMA")
+	private String sistema;
+	
+	@Transient
+	@Builder.Default
+	private boolean exist = false;
 
 	@Override
 	public String getId() {
-		return this.getIdUsuario();
+		return this.getIdSistema();
 	}
 
 	@Override
 	public boolean isNew() {
-		return this.isEstatus();
+		return this.isExist();
 	}
-
+	
 }

@@ -19,16 +19,13 @@ import lombok.ToString;
 @Setter
 @Builder
 @ToString
-public class PK_Cuentas_Usuario implements Serializable{
-	
+public class PKRecertificacion implements Serializable{
+
 	private static final long serialVersionUID = 1L;
 
-	@Column(name = "IDUSUARIO")
-	private String idUsuario;
-
 	@Column(name = "IDPERFIL")
-	private Integer idPerfil;
+	private String idJefe;
 	
-	@Column(name = "IDSISTEMA")
-	private String idSistema;
+	@Column(name = "PERIODO")
+	private String periodo;
 }

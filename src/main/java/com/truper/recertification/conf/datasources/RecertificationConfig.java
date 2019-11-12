@@ -40,8 +40,8 @@ public class RecertificationConfig {
     private String prefix = "recertification.datasource";
     
     @Autowired
-    @Qualifier("dataSourceRecertification")
-    private DataSource dataSourceRecertification;
+    @Qualifier("dataSourceRecert")
+    private DataSource dataSourceRecert;
     
     @Bean
     @ConfigurationProperties(prefix = "recertification.datasource")
@@ -51,23 +51,23 @@ public class RecertificationConfig {
     
     @Primary
     @Profile({Profiles.PROD, Profiles.QAS})
-    @Bean(name = "dataSourceRecertification")
+    @Bean(name = "dataSourceRecert")
     public DataSource dataSource() {
         JndiDataSourceLookup dataSourceLookup = new JndiDataSourceLookup();
         DataSource dataSource = dataSourceLookup.getDataSource(primary().getJndiName());
         return dataSource;
     }
     
-    @Bean(name = "jdbcrecertificationDS")
+    @Bean(name = "jdbcRecert")
     @Primary
-    public JdbcTemplate jdbcTemplate(@Qualifier("dataSourceRecertification") DataSource datasource) {
+    public JdbcTemplate jdbcTemplate(@Qualifier("dataSourceRecert") DataSource datasource) {
     	return new JdbcTemplate(datasource);
     }
     
     @Primary
-    @Bean(name = "dataSourceRecertification")
+    @Bean(name = "dataSourceRecert")
     @Profile({Profiles.DEV})
-    public DataSource recertificationDataSourceDev() {
+    public DataSource recertDataSourceDev(){
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName(env.getProperty(prefix + ".driver-class-name"));
         dataSource.setUrl(env.getProperty(prefix + ".url"));
@@ -80,7 +80,7 @@ public class RecertificationConfig {
     @Primary
     public LocalContainerEntityManagerFactoryBean entityManager() {
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
-        em.setDataSource(this.dataSourceRecertification);
+        em.setDataSource(this.dataSourceRecert);
         em.setPackagesToScan(new String[] { "com.truper.recertification.model"});
  
         HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();

@@ -7,7 +7,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 import org.springframework.data.domain.Persistable;
 
@@ -23,32 +22,35 @@ import lombok.Setter;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "RE_STOKEN")
-public class RE_TokenEntity implements Serializable, Persistable<String>{
+@Table(name = "RE_CONTROL_CAMBIOS")
+public class ReControlCambiosEntity implements Serializable, Persistable<Integer>{
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(name = "IDUSUARIO")
-	private String idUsuario;
-	
-	@Column(name = "TOKEN")
-	private String token;
-	
-	@Column(name = "ULTIMASESION")
-	private Timestamp ultimaSesion;
+	@Column(name = "IDMOVIMIENTO")
+	private Integer idMovimiento;
 
-	@Transient
-	@Builder.Default
-	private boolean exist = false;
+	@Column(name = "ATENDIO")
+	private String atendio;
+	
+	@Column(name = "ESTATUS")
+	private boolean estatus;
+	
+	@Column(name = "FECHAATENCION")
+	private Timestamp fechaAtencion;
+	
+	@Column(name = "COMENTARIOS")
+	private String comentarios;
 	
 	@Override
-	public String getId() {
-		return this.getIdUsuario();
+	public Integer getId() {
+		return this.idMovimiento;
 	}
 
 	@Override
 	public boolean isNew() {
-		return this.isExist();
+		return this.isEstatus();
 	}
+
 }

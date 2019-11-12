@@ -4,13 +4,14 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.truper.recertification.model.RE_RecertificacionEntity;
+import com.truper.recertification.model.PKRecertificacion;
+import com.truper.recertification.model.ReRecertificacionEntity;
 
-public interface RE_RecertificacionDAO extends JpaRepository<RE_RecertificacionEntity, String>{
+public interface RE_RecertificacionDAO extends JpaRepository<ReRecertificacionEntity, PKRecertificacion>{
 
-	public List<RE_RecertificacionEntity> findByEstatus(boolean estatus);
+	public List<ReRecertificacionEntity> findByEstatus(boolean estatus);
 	
-	public List<RE_RecertificacionEntity> findByPeriodo(String periodo);
-	
-	public RE_RecertificacionEntity findByIdJefeandIdPeriodo(String idJefe, String IdPeriodo);
+	public List<ReRecertificacionEntity> findByIdRecertificacion(PKRecertificacion idRecertificacion);
+
+	public List<ReRecertificacionEntity> findByIdRecertificacionPeriodo(String periodo);
 }

@@ -16,11 +16,11 @@ public class TemplateMapper {
 	
 	@Autowired
 	private EmailService emailService;
-	
-	private EmailTemplateVO emailTemplate;
+
+	public EmailTemplateVO emailTemplate;
 	
 	public void templateMapper() {
-		
+
 		SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
 		
 		mailContentBuilder.setHtmlTemplateName("RecertificationMail");

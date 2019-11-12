@@ -4,11 +4,11 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.truper.recertification.model.RE_Bitacora_CambiosEntity;
+import com.truper.recertification.model.ReBitacoraCambiosEntity;
 
-public interface RE_Bitacora_CambiosDAO extends JpaRepository<RE_Bitacora_CambiosEntity, Integer>{
+public interface RE_Bitacora_CambiosDAO extends JpaRepository<ReBitacoraCambiosEntity, Integer>{
 
-	public List<RE_Bitacora_CambiosEntity> findByTipoMov(String tipoMov);
+	public List<ReBitacoraCambiosEntity> findByTipoMov(String tipoMov);
 	
-	public List<RE_Bitacora_CambiosEntity> findBySolicitante(String solicitante);
+	public List<ReBitacoraCambiosEntity> findBySolicitante(String solicitante);
 }

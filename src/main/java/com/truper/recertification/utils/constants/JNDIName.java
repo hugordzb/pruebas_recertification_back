@@ -2,7 +2,7 @@ package com.truper.recertification.utils.constants;
 
 public enum JNDIName {
 
-	recertificationDS("recertificationDS");
+	Recert("Recert");
 	
 	private String jndi;
 	

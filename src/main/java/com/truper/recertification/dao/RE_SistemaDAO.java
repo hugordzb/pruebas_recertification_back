@@ -2,9 +2,9 @@ package com.truper.recertification.dao;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.truper.recertification.model.RE_SistemaEntity;
+import com.truper.recertification.model.ReSistemaEntity;
 
-public interface RE_SistemaDAO extends JpaRepository<RE_SistemaEntity, String>{
+public interface RE_SistemaDAO extends JpaRepository<ReSistemaEntity, String>{
 
-	public RE_SistemaEntity findBySistema(String sistema);
+	public ReSistemaEntity findBySistema(String sistema);
 }

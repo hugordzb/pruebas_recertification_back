@@ -4,9 +4,6 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.SequenceGenerator;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,16 +19,16 @@ import lombok.ToString;
 @Setter
 @Builder
 @ToString
-public class PK_Perfil_Sistema implements Serializable{
-
+public class PKCuentasUsuario implements Serializable{
+	
 	private static final long serialVersionUID = 1L;
 
+	@Column(name = "IDUSUARIO")
+	private String idUsuario;
+
 	@Column(name = "IDPERFIL")
-	@SequenceGenerator(schema = "CONFRONTADAT", name = "RE_IDPERFIL", sequenceName = "SEQ_RE_IDPERFIL", allocationSize = 1)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "RE_IDPERFIL")
 	private Integer idPerfil;
 	
 	@Column(name = "IDSISTEMA")
 	private String idSistema;
-
 }

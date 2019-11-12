@@ -4,12 +4,12 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.truper.recertification.model.RE_Detalle_JefeEntity;
+import com.truper.recertification.model.ReDetalleJefeEntity;
 
-public interface RE_Detalle_JefeDAO extends JpaRepository<RE_Detalle_JefeEntity, String>{
+public interface RE_Detalle_JefeDAO extends JpaRepository<ReDetalleJefeEntity, String>{
 
-	public RE_Detalle_JefeEntity findByIdDepartamento(Integer idDepartamento);
+	public ReDetalleJefeEntity findByIdDepartamento(Integer idDepartamento);
 	
-	public List<RE_Detalle_JefeEntity> findByIdJefe(String idJefe);
+	public List<ReDetalleJefeEntity> findByIdJefe(String idJefe);
 	
 }

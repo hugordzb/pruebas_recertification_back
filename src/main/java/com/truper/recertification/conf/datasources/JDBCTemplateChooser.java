@@ -22,8 +22,8 @@ public class JDBCTemplateChooser {
 		
 		try {
 			switch(jndi) {
-			case "recertificationDS":
-				jdbcTemplate = this.getJNDIJdbcTemplate(JNDIName.recertificationDS);
+			case "Recert":
+				jdbcTemplate = this.getJNDIJdbcTemplate(JNDIName.Recert);
 				break;
 			default:
 				log.error("Error JDNI: " + jndi + " no encontrado");

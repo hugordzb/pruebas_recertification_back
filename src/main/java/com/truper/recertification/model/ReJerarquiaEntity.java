@@ -22,19 +22,19 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "RE_JERARQUIA")
-public class RE_JerarquiaEntity implements Serializable, Persistable<PK_Jerarquia>{
+public class ReJerarquiaEntity implements Serializable, Persistable<PKJerarquia>{
 
 	private static final long serialVersionUID = 1L;
 
 	@EmbeddedId
-	private PK_Jerarquia idEmpleadoJefe;
+	private PKJerarquia idEmpleadoJefe;
 	
 	@Transient
 	@Builder.Default
 	private boolean exist = false;
 	
 	@Override
-	public PK_Jerarquia getId() {
+	public PKJerarquia getId() {
 		return this.getIdEmpleadoJefe();
 	}
 

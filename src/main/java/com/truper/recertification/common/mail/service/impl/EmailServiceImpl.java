@@ -9,7 +9,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import com.truper.recertification.common.mail.service.EmailService;
 import com.truper.recertification.vo.EmailVO;
@@ -17,7 +17,7 @@ import com.truper.recertification.vo.EmailVO;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@Component
+@Service
 public class EmailServiceImpl implements EmailService{
 
 	@Value("${app.mail.emisor}")
@@ -26,7 +26,6 @@ public class EmailServiceImpl implements EmailService{
 	@Autowired
 	private JavaMailSender javaMailSender;
 	
-	@Autowired
 	private EmailVO emailVo;
 	
 	public void sendSimpleMail(String strAsunto, String strContenido) {

@@ -1,7 +1,7 @@
 package com.truper.recertification.model;
 
 import java.io.Serializable;
-import java.security.Timestamp;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -22,30 +22,33 @@ import lombok.Setter;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "RE_CONTROL_CAMBIOS")
-public class RE_Control_CambiosEntity implements Serializable, Persistable<Integer>{
+@Table(name = "RE_SSO_SISTEMA")
+public class ReUsuarioEntity implements Serializable, Persistable<String>{
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(name = "IDMOVIMIENTO")
-	private Integer idMovimiento;
+	@Column(name = "IDUSUARIO")
+	private String idUsuario;
 
-	@Column(name = "ATENDIO")
-	private String atendio;
-	
+	@Column(name = "NOMBRE")
+	private String nombre;
+
+	@Column(name = "NOEMPLEADO")
+	private Integer noEmpleado;
+
 	@Column(name = "ESTATUS")
 	private boolean estatus;
+
+	@Column(name = "FECHAINGRESO")
+	private Date fechaIngreso;
 	
-	@Column(name = "FECHAATENCION")
-	private Timestamp fechaAtencion;
-	
-	@Column(name = "COMENTARIOS")
-	private String comentarios;
-	
+	@Column(name = "FECHATERMINACION")
+	private Date fechaTerminacion;
+
 	@Override
-	public Integer getId() {
-		return this.idMovimiento;
+	public String getId() {
+		return this.getIdUsuario();
 	}
 
 	@Override

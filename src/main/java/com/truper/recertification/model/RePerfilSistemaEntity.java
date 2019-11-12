@@ -3,8 +3,8 @@ package com.truper.recertification.model;
 import java.io.Serializable;
 
 import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -22,39 +22,28 @@ import lombok.Setter;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "RE_DETALLE_JEFE")
-public class RE_Detalle_JefeEntity implements Serializable, Persistable<String>{
-	
+@Table(name = "RE_PERFIL_SISTEMA")
+public class RePerfilSistemaEntity implements Serializable, Persistable<PKPerfilSistema>{
+
 	private static final long serialVersionUID = 1L;
 
-	@Id
-	@Column(name = "IDJEFE")
-	private String idJefe;
-
-	@Column(name = "NOMBRE")
-	private String nombre;
-	
-	@Column(name = "CORREO")
-	private String correo;
-
-	@Column(name = "CORREOCC")
-	private String correoCC;
-	
-	@Column(name = "IDDEPARTAMENTO")
-	private Integer idDepartamento;
+	@EmbeddedId
+	private PKPerfilSistema idPerfilSistema;
+		
+	@Column(name = "PERFIL")
+	private String perfil;
 
 	@Transient
 	@Builder.Default
 	private boolean exist = false;
 	
 	@Override
-	public String getId() {
-		return this.getIdJefe();
+	public PKPerfilSistema getId() {
+		return this.idPerfilSistema;
 	}
 
 	@Override
 	public boolean isNew() {
 		return this.isExist();
 	}
-
 }

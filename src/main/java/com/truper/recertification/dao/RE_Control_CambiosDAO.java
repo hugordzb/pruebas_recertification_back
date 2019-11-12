@@ -4,11 +4,11 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.truper.recertification.model.RE_Control_CambiosEntity;
+import com.truper.recertification.model.ReControlCambiosEntity;
 
-public interface RE_Control_CambiosDAO extends JpaRepository<RE_Control_CambiosEntity, Integer>{
+public interface RE_Control_CambiosDAO extends JpaRepository<ReControlCambiosEntity, Integer>{
 
-	public List<RE_Control_CambiosEntity> findByAtendio(String atendio);
+	public List<ReControlCambiosEntity> findByAtendio(String atendio);
 	
-	public List<RE_Control_CambiosEntity> findByEstatus(boolean estatus);
+	public List<ReControlCambiosEntity> findByEstatus(boolean estatus);
 }

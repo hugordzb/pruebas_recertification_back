@@ -7,7 +7,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -26,14 +25,13 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "RE_BITACORA_CAMBIOS")
-public class RE_Bitacora_CambiosEntity implements Serializable, Persistable<Integer>{
+public class ReBitacoraCambiosEntity implements Serializable, Persistable<Integer>{
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@Column(name = "IDMOVIMIENTO")
-	@SequenceGenerator(schema = "CONFRONTADAT", name = "RE_IDMOVIMIENTO", sequenceName = "SEQ_RE_IDMOVIMIENTO", allocationSize = 1)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "RE_IDMOVIMIENTO")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer idMovimiento;
 
 	@Column(name = "IDUSUARIO")

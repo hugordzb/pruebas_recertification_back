@@ -19,12 +19,12 @@ import lombok.ToString;
 @Setter
 @Builder
 @ToString
-public class PK_Jerarquia implements Serializable{
+public class PKJerarquia implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 
-	@Column(name = "NOEMPLEADO")
-	private String noEmpleado;
+	@Column(name = "IDUSUARIO")
+	private String idUsuario;
 
 	@Column(name = "IDJEFE")
 	private String idJefe;

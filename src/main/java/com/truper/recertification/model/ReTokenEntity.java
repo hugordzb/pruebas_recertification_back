@@ -1,6 +1,7 @@
 package com.truper.recertification.model;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -22,30 +23,32 @@ import lombok.Setter;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "RE_SISTEMA")
-public class RE_SistemaEntity implements Serializable, Persistable<String>{
+@Table(name = "RE_STOKEN")
+public class ReTokenEntity implements Serializable, Persistable<String>{
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(name = "IDSISTEMA")
-	private String idSistema;
+	@Column(name = "IDUSUARIO")
+	private String idUsuario;
 	
-	@Column(name = "SISTEMA")
-	private String sistema;
+	@Column(name = "TOKEN")
+	private String token;
 	
+	@Column(name = "ULTIMASESION")
+	private Date ultimaSesion;
+
 	@Transient
 	@Builder.Default
 	private boolean exist = false;
-
+	
 	@Override
 	public String getId() {
-		return this.getIdSistema();
+		return this.getIdUsuario();
 	}
 
 	@Override
 	public boolean isNew() {
 		return this.isExist();
 	}
-	
 }
