@@ -2,64 +2,57 @@ package com.truper.recertification.excel;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
+import com.truper.recertification.vo.ExcelVO;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@Service
 public class ReadExcel {
 	
+	@Value("${recertification.xlsx.archivo}")
+	private String strArchivo;
+	
+	@Value("${recertification.xlsx.url}")
+	private String strRutaArchivo;
+	
+	@Value("${recertification.xlsx.sheet}")
+	private String strHoja;
+	
+	@Autowired
+	private RecertificacionExcelMapper excelMapper;
+	
 	public void leerFicheros() {
-		String strNombreArchivo = "Prueba.xlsx";
-		String strRutaArchivo = "C:\\Users\\mgmolinae\\Downloads\\" + strNombreArchivo;
-		String strHoja = "Activos";
 		
-		try (FileInputStream file = new FileInputStream(new File(strRutaArchivo))) {
+		try (FileInputStream file = new FileInputStream(new File(strRutaArchivo+strArchivo))) {
 			
-			// leer archivo excel
-			XSSFWorkbook worbook = new XSSFWorkbook(file);
-			
-			//obtener la hoja que se va leer
+			XSSFWorkbook worbook = new XSSFWorkbook();
 			XSSFSheet sheet = worbook.getSheet(strHoja);
-			
-			//obtener todas las filas de la hoja excel
-			Iterator<Row> rowIterator = sheet.iterator();
 
-			Row row;
-			// se recorre cada fila hasta el final
-			while (rowIterator.hasNext()) {
-				row = rowIterator.next();
-				//se obtiene las celdas por fila
-				Iterator<Cell> cellIterator = row.cellIterator();
-//				Cell cell;
-//				//se recorre cada celda
-//				while (cellIterator.hasNext()) {
-//					// se obtiene la celda en específico y se la imprime
-//					cell = cellIterator.next();
-//					
-//					log.info(cell.getStringCellValue()+" | ");
-//				}
-				while (cellIterator.hasNext()) 
-                {
-                    Cell cell = cellIterator.next();
-                    //Check the cell type and format accordingly
-/*                    switch (cell.getCellType()) 
-                    {
-                    	
-                            System.out.print(cell.getNumericCellValue() + "t");
-                            System.out.print(cell.getStringCellValue() + "t");
-                      
-                    }*/
-                }
-				System.out.println();
-			}
+			List<ExcelVO> list = new ArrayList<ExcelVO>();
+			
+			sheet.forEach( v -> list.add(excelMapper.excelMapper((XSSFRow)v)));
+			
+			log.info("1: " + list.get(0).getNombre());
+			log.info("2: " + list.get(1).getNombre());
+
 		} catch (Exception e) {
 			e.getMessage();
+			log.info("error: " + e);
 		}
 	}
 }
