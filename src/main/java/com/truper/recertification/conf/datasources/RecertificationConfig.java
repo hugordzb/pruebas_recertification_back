@@ -1,6 +1,7 @@
 package com.truper.recertification.conf.datasources;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import javax.sql.DataSource;
 
@@ -85,9 +86,10 @@ public class RecertificationConfig {
  
         HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         em.setJpaVendorAdapter(vendorAdapter);
-        HashMap<String, Object> properties = new HashMap<>();
+        Map<String, Object> properties = new HashMap<>();
         properties.put(org.hibernate.cfg.Environment.IMPLICIT_NAMING_STRATEGY, "org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl");
         properties.put(org.hibernate.cfg.Environment.PHYSICAL_NAMING_STRATEGY, "org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl");
+        
         properties.put("hibernate.hbm2ddl.auto", "none");
         properties.put("hibernate.dialect", 
                 this.env.getProperty(this.prefix + ".hibernate.dialect"));

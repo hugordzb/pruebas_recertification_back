@@ -2,7 +2,6 @@ package com.truper.recertification.model;
 
 import java.io.Serializable;
 
-import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -29,9 +28,6 @@ public class ReCuentasUsuarioEntity implements Serializable, Persistable<PKCuent
 	
 	@EmbeddedId
 	private PKCuentasUsuario idCuentaUsuario;
-	
-	@Column(name = "CUENTASISTEMA")
-	private String cuentaSistema;
 	
 	@Transient
 	@Builder.Default

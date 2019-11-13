@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.truper.recertification.model.PKRecertificacion;
 import com.truper.recertification.model.ReRecertificacionEntity;
 
-public interface RE_RecertificacionDAO extends JpaRepository<ReRecertificacionEntity, PKRecertificacion>{
+public interface ReRecertificacionDAO extends JpaRepository<ReRecertificacionEntity, PKRecertificacion>{
 
 	public List<ReRecertificacionEntity> findByEstatus(boolean estatus);
 	

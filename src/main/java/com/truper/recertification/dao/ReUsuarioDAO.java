@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.truper.recertification.model.ReUsuarioEntity;
 
-public interface RE_UsuarioDAO extends JpaRepository<ReUsuarioEntity, String>{
+public interface ReUsuarioDAO extends JpaRepository<ReUsuarioEntity, String>{
 
 	public ReUsuarioEntity findByNombre(String nombre);
 	

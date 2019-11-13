@@ -22,7 +22,7 @@ import lombok.Setter;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "RE_SSO_SISTEMA")
+@Table(name = "RE_Usuario")
 public class ReUsuarioEntity implements Serializable, Persistable<String>{
 
 	private static final long serialVersionUID = 1L;

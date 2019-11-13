@@ -30,8 +30,8 @@ public class ReDepartamentoEntity implements Serializable, Persistable<Integer>{
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(name = "IDDEPARTAMENTO")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "IDDEPARTAMENTO")
 	private Integer idDepartamento;
 	
 	@Column(name = "DEPARTAMENTO")
