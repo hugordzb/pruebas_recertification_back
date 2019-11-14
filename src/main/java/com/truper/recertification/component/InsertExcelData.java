@@ -9,15 +9,19 @@ import com.truper.recertification.dao.ReCuentasUsuarioDAO;
 import com.truper.recertification.dao.ReDepartamentoDAO;
 import com.truper.recertification.dao.ReDetalleJefeDAO;
 import com.truper.recertification.dao.ReJerarquiaDAO;
+import com.truper.recertification.dao.RePerfilSistemaDAO;
 import com.truper.recertification.dao.ReUsuarioDAO;
 import com.truper.recertification.model.PKCuentasUsuario;
 import com.truper.recertification.model.PKJerarquia;
+import com.truper.recertification.model.PKPerfilSistema;
 import com.truper.recertification.model.ReCuentasUsuarioEntity;
 import com.truper.recertification.model.ReDepartamentoEntity;
 import com.truper.recertification.model.ReDetalleJefeEntity;
 import com.truper.recertification.model.ReJerarquiaEntity;
+import com.truper.recertification.model.RePerfilSistemaEntity;
 import com.truper.recertification.model.ReUsuarioEntity;
 import com.truper.recertification.vo.ExcelVO;
+import com.truper.recertification.vo.excel.TelVO;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -40,15 +44,18 @@ public class InsertExcelData {
 	@Autowired
 	private ReUsuarioDAO daoUsuario;
 	
+	@Autowired
+	private RePerfilSistemaDAO daoPerfil;
+
 	public void insertDataLastRecertification(List<ExcelVO> list) {
 
 		for(int i = 0; i < list.size(); i++) {
 			
-//			this.insertDepartamento(list.get(i));
-//			this.insertDetalleJefe(list.get(i));
-//			this.insertUsuario(list.get(i));
-//			this.insertJerarquia(list.get(i));
-			this.insertCuentasUsuario(list.get(i));
+			this.insertDepartamento(list.get(i));
+			this.insertDetalleJefe(list.get(i));
+			this.insertUsuario(list.get(i));
+			this.insertJerarquia(list.get(i));
+//			this.insertCuentasUsuario(list.get(i));
 			
 		}
 	}
@@ -115,33 +122,44 @@ public class InsertExcelData {
 			log.info("ya existe la relacion del Jefe-Empleado");
 		}
 	}
+
 	
 	private void insertCuentasUsuario(ExcelVO excelVO) {
-		
+		TelVO telVo;
 		String strTel = excelVO.getTel();
 		String strCiat = excelVO.getCiat();
 		String strSAP = excelVO.getSap();
 		
 		if(strTel != null) {
-			log.info("TEL: " + daoCuentas.findByIdCuentaUsuarioCuentaSistema(strTel));
-			
-			if(daoCuentas.findByIdCuentaUsuarioCuentaSistema(strTel) == null) {
-				daoCuentas.save(ReCuentasUsuarioEntity.builder()
-						.idCuentaUsuario(PKCuentasUsuario.builder()
-								.idUsuario(excelVO.getAd())
-								.idPerfil(4)
-								.idSistema("S001")
-								.cuentaSistema(strTel)
-								.build())
-						.build());
-			}else {
-				log.info("ya existe el usuario en tel");
-			}
+
+//			PKPerfilSistema pkPerfil = daoPerfil.findByPerfilAndIdPerfilSistemaIdSistema(strTel, "S001").getIdPerfilSistema();
+//			
+//			ReCuentasUsuarioEntity strCuentaExistente = daoCuentas.findById(new PKCuentasUsuario(
+//					excelVO.getAd(), pkPerfil.getIdPerfil(), "S001", 
+////					telVo.getUsuarioTel()
+//					"rs_bcavazos"
+//					)).get();
+//			
+//			if(!strCuentaExistente.getIdCuentaUsuario().getCuentaSistema().equals(strTel)) {
+//				daoCuentas.save(ReCuentasUsuarioEntity.builder()
+//						.idCuentaUsuario(PKCuentasUsuario.builder()
+//								.idUsuario(excelVO.getAd())
+//								.idPerfil(pkPerfil.getIdPerfil())
+//								.idSistema("S001")
+//								.cuentaSistema(strTel)
+//								.build())
+//						.build());
+//			}else {
+//				log.info("ya existe el usuario en tel");
+//			}
+			log.info("tel");
 		}
 		
 		if(strCiat != null) {
-			log.info("CIAT: " + daoCuentas.findByIdCuentaUsuarioCuentaSistema(strCiat));
-			if(daoCuentas.findByIdCuentaUsuarioCuentaSistema(strCiat) == null) {
+			List<ReCuentasUsuarioEntity> s = daoCuentas.findByIdCuentaUsuarioCuentaSistema(strCiat);
+			log.info("CIAT: " + s.size());
+			
+			if(s == null || s.isEmpty()) {
 				daoCuentas.save(ReCuentasUsuarioEntity.builder()
 					.idCuentaUsuario(PKCuentasUsuario.builder()
 							.idUsuario(excelVO.getAd())
@@ -156,8 +174,9 @@ public class InsertExcelData {
 		}
 		
 		if(strSAP != null) {
-			log.info("SAP: " + daoCuentas.findByIdCuentaUsuarioCuentaSistema(strSAP));
-			if(daoCuentas.findByIdCuentaUsuarioCuentaSistema(strSAP) == null) {
+			List<ReCuentasUsuarioEntity> s = daoCuentas.findByIdCuentaUsuarioCuentaSistema(strSAP);
+			log.info("SAP: " + s.size());
+			if(s == null || s.isEmpty()) {
 				daoCuentas.save(ReCuentasUsuarioEntity.builder()
 						.idCuentaUsuario(PKCuentasUsuario.builder()
 								.idUsuario(excelVO.getAd())

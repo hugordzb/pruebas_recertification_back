@@ -1,5 +1,7 @@
 package com.truper.recertification.dao;
 
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,4 +23,10 @@ public class ReSistema {
 		log.info("Lista: " + lista);
 	}
 	
-}
+	@Test
+	public void find() {
+		List<ReSistemaEntity> list = sistemaDAO.findAll();
+		log.info("lista: " + list.size());
+	}
+	
+	}

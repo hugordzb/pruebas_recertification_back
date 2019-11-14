@@ -24,9 +24,14 @@ public class RePerfilSistema {
 	}
 	
 	@Test
-	public void findByIdEmpleadoJefeIdJefePerfil() {
+	public void findByPerfilAndIdPerfilSistemaIdSistema() {
 		List<RePerfilSistemaEntity> lista = perfilDAO.findByPerfil("perfil");
 		log.info("Lista: " + lista.size());
 	}
-		
+	
+	@Test
+	public void findByIdEmpleadoJefeIdJefePerfil() {
+		RePerfilSistemaEntity lista = perfilDAO.findByPerfilAndIdPerfilSistemaIdSistema("Admin", "S001");
+		log.info("Lista: " + lista.getIdPerfilSistema());
+	}	
 }

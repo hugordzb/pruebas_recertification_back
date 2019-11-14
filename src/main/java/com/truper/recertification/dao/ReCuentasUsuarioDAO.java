@@ -12,4 +12,5 @@ public interface ReCuentasUsuarioDAO extends JpaRepository<ReCuentasUsuarioEntit
 	public List<ReCuentasUsuarioEntity> findByIdCuentaUsuarioIdUsuario(String idUsuario);
 		
 	public List<ReCuentasUsuarioEntity> findByIdCuentaUsuarioCuentaSistema(String cuentaSistema);
+	
 }

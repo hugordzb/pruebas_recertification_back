@@ -2,6 +2,7 @@ package com.truper.recertification.excel;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.text.ParseException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -11,7 +12,6 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.truper.recertification.component.InsertExcelData;
@@ -23,30 +23,21 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class ReadExcel {
 	
-	@Value("${recertification.xlsx.archivo}")
-	private String strArchivo;
-	
-	@Value("${recertification.xlsx.url}")
-	private String strRutaArchivo;
-	
-	@Value("${recertification.xlsx.sheet}")
-	private String strHoja;
-	
 	@Autowired
 	private RecertificacionExcelMapper excelMapper;
 	
 	@Autowired
 	private InsertExcelData insertData;
-	
-	public RecertificacionExcelMapper leerFicheros() {
+		
+	public RecertificacionExcelMapper leerFicheros(String strRuta, String strArchivo) {
 		
 		List<List<String>> rowData = new LinkedList<>();
 		DataFormatter formatter = new DataFormatter();
 
-		try (FileInputStream file = new FileInputStream(new File(strRutaArchivo+strArchivo))) {
+		try (FileInputStream file = new FileInputStream(new File(strRuta+strArchivo))) {
 			
 			XSSFWorkbook worbook = new XSSFWorkbook(file);
-			Sheet sheet = worbook.getSheet(strHoja);
+			Sheet sheet = worbook.getSheetAt(0);
 			
 			Row hssfRow;
 			int rowInit = 2;
@@ -81,7 +72,7 @@ public class ReadExcel {
 											break;
 									}
 								}else {
-									cells.add(formatter.formatCellValue(hssfRow.getCell(i)).trim());
+									cells.add(formatter.formatCellValue(hssfRow.getCell(i)).trim());									
 								}
 								i++;
 							}
@@ -90,17 +81,38 @@ public class ReadExcel {
 					}
 				}
 			}
-			insertData.insertDataLastRecertification(excelMapper.excelMapper(rowData));
+			this.mapData(rowData, strArchivo);
+			log.info("archivo: " +strArchivo);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.info("error: " + e);
-		}
-		
+		}		
 		return excelMapper;
 	}
 	
-	private Integer getMaxColumns() {
-		return 24;
+	private int getMaxColumns() {
+		return 25;
+	}
+	
+	private void mapData(List<List<String>> list, String strArchivo) throws ParseException {
+		
+		switch (strArchivo) {
+			case "Usuario TEL_NUEVO.xlsx":
+				excelMapper.excelMapperTel(list);
+			break;
+			case "Usuarios SAP.xlsx":
+				excelMapper.excelMapperSap(list);
+			break;
+			case "Usuarios (ciat).xlsx":
+				excelMapper.excelMapperCiat(list);
+			break;
+			case "Replica.xlsx":
+				insertData.insertDataLastRecertification(excelMapper.excelMapperRecert(list));	
+			break;
+			default:
+				log.info("El nombre del documento no coincide");
+			break;
+		}
 	}
 }

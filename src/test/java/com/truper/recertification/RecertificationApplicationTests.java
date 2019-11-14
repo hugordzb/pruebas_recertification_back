@@ -3,19 +3,12 @@ package com.truper.recertification;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -26,16 +19,8 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.authentication.BadCredentialsException;
 
-import com.truper.recertification.common.mail.service.EmailService;
-import com.truper.recertification.dao.ReCuentasUsuarioDAO;
-import com.truper.recertification.dao.ReDepartamentoDAO;
-import com.truper.recertification.dao.ReJerarquiaDAO;
-import com.truper.recertification.excel.ReadExcel;
+import com.truper.recertification.excel.RecertificationDocs;
 import com.truper.recertification.ldap.repository.LDAPRepository;
-import com.truper.recertification.model.PKCuentasUsuario;
-import com.truper.recertification.model.PKJerarquia;
-import com.truper.recertification.model.ReDepartamentoEntity;
-import com.truper.recertification.model.ReJerarquiaEntity;
 import com.truper.recertification.vo.LDAPVO;
 
 import lombok.extern.slf4j.Slf4j;
@@ -54,10 +39,8 @@ class RecertificationApplicationTests {
 	private JavaMailSender emisorCorreo;
 	
 	@Autowired
-	private ReDepartamentoDAO daoDepa;
-	
-	@Autowired 
-	private ReadExcel excel;
+	private RecertificationDocs recert;
+		
 	
 	//ldap	
 	@Test
@@ -121,24 +104,16 @@ class RecertificationApplicationTests {
 		assertTrue(auth);
 	}
 	
-	@Autowired
-	ReCuentasUsuarioDAO daoCuentas;
-	
 	//Excel
 	@Test
 	public void excel() {
 		log.info("-----Start-------");
-//		excel.leerFicheros();
-		PKCuentasUsuario pk = new PKCuentasUsuario();
-		pk.setIdUsuario("jbaltazar");
-		pk.setIdSistema("S001");
-		pk.setCuentaSistema("1");
-		pk.setIdPerfil(1);
-		log.info("Cuentas: " + daoCuentas.findById(pk));
+		recert.selectRecertificationDoc();
 		log.info("-----Finish-------");
 		
 	}
 	
+	//Mail
 	@Test
 	public void pruebaCorreo() throws MessagingException {
 		List<String> lstDestinatarios = new ArrayList<String>();
