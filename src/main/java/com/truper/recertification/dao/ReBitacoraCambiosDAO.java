@@ -11,4 +11,5 @@ public interface ReBitacoraCambiosDAO extends JpaRepository<ReBitacoraCambiosEnt
 	public List<ReBitacoraCambiosEntity> findByTipoMov(String tipoMov);
 	
 	public List<ReBitacoraCambiosEntity> findBySolicitante(String solicitante);
+	
 }

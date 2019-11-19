@@ -7,19 +7,19 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import com.truper.recertification.vo.ExcelVO;
-import com.truper.recertification.vo.excel.CiatVO;
-import com.truper.recertification.vo.excel.SapVO;
-import com.truper.recertification.vo.excel.TelVO;
+import com.truper.recertification.vo.excel.CiatExcelVO;
+import com.truper.recertification.vo.excel.RecertificationExcelVO;
+import com.truper.recertification.vo.excel.SapExcelVO;
+import com.truper.recertification.vo.excel.TelExcelVO;
 
 @Component
 public class RecertificacionExcelMapper{
 
-	public List<ExcelVO> excelMapperRecert(List<List<String>> rowData) throws ParseException {
-		List<ExcelVO> lstExcel = new ArrayList<ExcelVO>();
+	public List<RecertificationExcelVO> excelMapperRecert(List<List<String>> rowData) throws ParseException {
+		List<RecertificationExcelVO> lstExcel = new ArrayList<RecertificationExcelVO>();
 		
 		for(int i = 0; i < rowData.size(); i++) {
-			ExcelVO recertificacion = new ExcelVO();
+			RecertificationExcelVO recertificacion = new RecertificationExcelVO();
 		
 			recertificacion.setNoEmpleado(Integer.parseInt(rowData.get(i).get(0)));
 		    recertificacion.setFechaIngreso(new SimpleDateFormat("dd/MM/yyyy").parse(rowData.get(i).get(1)));
@@ -51,11 +51,11 @@ public class RecertificacionExcelMapper{
 		return lstExcel;
 	}
 	
-	public List<TelVO> excelMapperTel(List<List<String>> rowData) throws ParseException {
-			List<TelVO> lstExcel = new ArrayList<TelVO>();
+	public List<TelExcelVO> excelMapperTel(List<List<String>> rowData) throws ParseException {
+			List<TelExcelVO> lstExcel = new ArrayList<TelExcelVO>();
 			
 			for(int i = 0; i < rowData.size(); i++) {
-				TelVO tel = new TelVO();
+				TelExcelVO tel = new TelExcelVO();
 				
 				tel.setEstatus(rowData.get(i).get(0));
 				tel.setDepartamento(rowData.get(i).get(1));
@@ -68,11 +68,11 @@ public class RecertificacionExcelMapper{
 			return lstExcel;
 	}
 
-	public List<SapVO> excelMapperSap(List<List<String>> rowData) throws ParseException {
-		List<SapVO> lstExcel = new ArrayList<SapVO>();
+	public List<SapExcelVO> excelMapperSap(List<List<String>> rowData) throws ParseException {
+		List<SapExcelVO> lstExcel = new ArrayList<SapExcelVO>();
 		
 		for(int i = 0; i < rowData.size(); i++) {
-			SapVO sap = new SapVO();
+			SapExcelVO sap = new SapExcelVO();
 			
 			sap.setNombre(rowData.get(i).get(0));
 			sap.setDepartamento(rowData.get(i).get(1));
@@ -84,11 +84,11 @@ public class RecertificacionExcelMapper{
 		return lstExcel;
 	}
 	
-	public List<CiatVO> excelMapperCiat(List<List<String>> rowData) throws ParseException {
-		List<CiatVO> lstExcel = new ArrayList<CiatVO>();
+	public List<CiatExcelVO> excelMapperCiat(List<List<String>> rowData) throws ParseException {
+		List<CiatExcelVO> lstExcel = new ArrayList<CiatExcelVO>();
 		
 		for(int i = 0; i < rowData.size(); i++) {
-			CiatVO ciat = new CiatVO();
+			CiatExcelVO ciat = new CiatExcelVO();
 			
 			ciat.setUsuario(rowData.get(i).get(0));
 			ciat.setNombre(rowData.get(i).get(1));

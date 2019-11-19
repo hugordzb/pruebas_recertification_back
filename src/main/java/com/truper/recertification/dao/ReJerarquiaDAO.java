@@ -9,7 +9,7 @@ import com.truper.recertification.model.ReJerarquiaEntity;
 
 public interface ReJerarquiaDAO extends JpaRepository<ReJerarquiaEntity, PKJerarquia>{
 
-//	public List<ReJerarquiaEntity> findByIdJerarquiaIdJefe(String idJefe);
+	public List<ReJerarquiaEntity> findByIdEmpleadoJefeIdJefe(String idJefe);
 	
-//	public List<ReJerarquiaEntity> findByIdEmpleadoJefe(PKJerarquia idEmpleadoJefe);;
+	public ReJerarquiaEntity findByIdEmpleadoJefeIdUsuario(String idUsuario);
 }

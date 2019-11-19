@@ -1,4 +1,4 @@
-package com.truper.recertification.vo.answer;
+package com.truper.recertification.vo.excel;
 
 import java.io.Serializable;
 
@@ -11,12 +11,17 @@ import lombok.Setter;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class SystemsVO implements Serializable{
+public class TelExcelVO implements Serializable{
 
 	private static final long serialVersionUID = 1L;
-	
-	private String idSistema;
-	
-	private String sistema;
 
+	private String estatus;
+	
+	private String departamento;
+	
+	private String jefeJerarquico;
+	
+	private String usuarioTel;
+	
+	private String rol;
 }

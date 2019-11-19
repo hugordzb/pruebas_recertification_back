@@ -1,22 +1,23 @@
-package com.truper.recertification.vo.answer;
+package com.truper.recertification;
 
 import java.io.Serializable;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Setter
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class SystemsVO implements Serializable{
+public class Empleado implements Serializable{
 
 	private static final long serialVersionUID = 1L;
-	
-	private String idSistema;
-	
-	private String sistema;
 
+    private int id;
+
+    private String nombre;
+
+    private String empresa;
+ 
+    
 }

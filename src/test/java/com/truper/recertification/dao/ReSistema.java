@@ -29,4 +29,13 @@ public class ReSistema {
 		log.info("lista: " + list.size());
 	}
 	
+	@Test
+	public void insert() {
+		sistemaDAO.save(ReSistemaEntity
+				.builder()
+				.idSistema("S100")
+				.sistema("Prueba")
+				.exist(true)
+				.build());
 	}
+}

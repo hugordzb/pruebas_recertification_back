@@ -20,7 +20,7 @@ public class RePerfilSistema {
 	@Test
 	public void findByIdPerfilSistemaIdSistemaPerfil() {
 		List<RePerfilSistemaEntity> lista = perfilDAO.findByIdPerfilSistemaIdSistema("S001");
-		log.info("Lista: " + lista.size());
+		log.info("Lista: " + lista.get(0).getIdPerfilSistema().getIdPerfil());
 	}
 	
 	@Test

@@ -1,7 +1,5 @@
 package com.truper.recertification.dao;
 
-import java.util.List;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -25,7 +23,7 @@ public class ReDetalleJefe {
 
 	@Test
 	public void findByIdJefe() {
-		List<ReDetalleJefeEntity> lista = detalleDAO.findByIdJefe("jefe");
-		log.info("Lista: " + lista.size());
+		ReDetalleJefeEntity lista = detalleDAO.findByIdJefe("jefe");
+		log.info("Lista: " + lista);
 	}
 }

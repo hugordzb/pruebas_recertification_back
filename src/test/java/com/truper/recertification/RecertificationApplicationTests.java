@@ -50,7 +50,7 @@ class RecertificationApplicationTests {
 		String strPassword="password";
 		
 		AndFilter filter = new AndFilter();
-
+		
 		if(!strUsuario.matches("[0-9]*")) {
 			ldapRepo.findByUsername(strUsuario);
 			filter.and(new EqualsFilter("sAMAccountName", strUsuario));
@@ -70,6 +70,16 @@ class RecertificationApplicationTests {
 		log.info("auth: "+ blnOk);
 	}
 		
+	@Test
+	public void ldapName() {
+
+		String strUsuario="ysandoval";
+		Boolean s = false;
+		if(ldapRepo.findByUsername(strUsuario) != null) {
+			s = true;
+		}
+		log.info("-----" + s);
+	}
 	@Test
 	public void ldapFindByNoEmpleado() {
 		int noEmpleado = 4011038;
@@ -132,4 +142,5 @@ class RecertificationApplicationTests {
 	    emisorCorreo.send(message);
 	    log.info("Se envio");
 	}
+
 }

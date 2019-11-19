@@ -1,6 +1,5 @@
 package com.truper.recertification.resources;
 
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,18 +16,15 @@ public class CountsResources {
 	@Autowired
 	private AuditoryService auditoryService;
 	
-	@GetMapping(path="/auditableSystems")
-    public List<String> findAuditableSystems() {
-            return auditoryService.getSystems();
-    }
-	
+		
 	@GetMapping(path="/auditableAcounts")
     public Map<String, Object> findAuditableAcounts() {
             return auditoryService.findCuentasSistema();
     }
 	
-	@GetMapping(path="/auditable")
+	@GetMapping(path="/revisarSiSirveOno")
     public Map<String, Object> findAuditable() {
             return auditoryService.findCuentas();
     }
+	
 }

@@ -64,6 +64,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
             .antMatchers("/api/v1/swagger-resources/**").permitAll()
             .antMatchers("/api/v1/swagger-ui.html").permitAll()
             .antMatchers("/api/v1/webjars/**").permitAll()
+            .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
             .anyRequest().authenticated();
         
        httpSecurity.addFilterBefore(authenticationTokenFilter, UsernamePasswordAuthenticationFilter.class);
@@ -78,7 +79,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
     @Override
     public void configure(WebSecurity web) {
         // AuthenticationTokenFilter will ignore the below paths
-        web.ignoring().antMatchers(HttpMethod.POST, "/auth//login")
+        web.ignoring().antMatchers(HttpMethod.POST, "/auth/login")
         	.antMatchers("/api/v1/v2/api-docs/**")
         	.antMatchers("/api/v1/swagger.json")
         	.antMatchers("/api/v1/swagger-ui.html")

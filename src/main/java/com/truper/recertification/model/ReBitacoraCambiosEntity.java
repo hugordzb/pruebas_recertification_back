@@ -46,7 +46,7 @@ public class ReBitacoraCambiosEntity implements Serializable, Persistable<Intege
 	@Column(name = "IDSISTEMA")
 	private String idSistema;
 	
-	@Column(name = "CUENTAUSUARIO")
+	@Column(name = "CUENTASISTEMA")
 	private String cuentaSistema;
 	
 	@Column(name = "IDJEFE")
@@ -61,7 +61,7 @@ public class ReBitacoraCambiosEntity implements Serializable, Persistable<Intege
 	@Column(name = "NIDSISTEMA")
 	private String nIdSistema;
 	
-	@Column(name = "NCUENTAUSUARIO")
+	@Column(name = "NCUENTASISTEMA")
 	private String nCuentaSistema;
 	
 	@Column(name = "NIDJEFE")

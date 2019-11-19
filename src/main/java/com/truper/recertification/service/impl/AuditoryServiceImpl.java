@@ -9,12 +9,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.truper.recertification.dao.ReCuentasUsuarioDAO;
+import com.truper.recertification.dao.ReDetalleJefeDAO;
 import com.truper.recertification.dao.ReJerarquiaDAO;
+import com.truper.recertification.dao.RePerfilSistemaDAO;
 import com.truper.recertification.dao.ReSistemaDAO;
+import com.truper.recertification.dao.ReUsuarioDAO;
+import com.truper.recertification.ldap.repository.LDAPRepository;
+import com.truper.recertification.model.PKCuentasUsuario;
+import com.truper.recertification.model.PKPerfilSistema;
 import com.truper.recertification.model.ReCuentasUsuarioEntity;
+import com.truper.recertification.model.ReDetalleJefeEntity;
+import com.truper.recertification.model.ReJerarquiaEntity;
 import com.truper.recertification.model.ReSistemaEntity;
 import com.truper.recertification.service.AuditoryService;
-import com.truper.recertification.vo.answer.SystemsVO;
+import com.truper.recertification.vo.answer.CountsByUserVO;
+import com.truper.recertification.vo.answer.CountsBossVO;
+import com.truper.recertification.vo.answer.sistemas.CiatDataVO;
+import com.truper.recertification.vo.answer.sistemas.SapDataVO;
+import com.truper.recertification.vo.answer.sistemas.TelDataVO;
 
 @Service
 public class AuditoryServiceImpl implements AuditoryService{
@@ -28,57 +40,18 @@ public class AuditoryServiceImpl implements AuditoryService{
 	@Autowired
 	private ReJerarquiaDAO daoJerarquia;
 
-	@Override
- 	public List<String> getSystems() {
-		
-		List<String> listSystem = new ArrayList<String>();
-		List<ReSistemaEntity> list = daoSistema.findAll();
-		
-		for(int i = 0; i<list.size(); i++) {
-			listSystem.add(list.get(i).getSistema());
-		}
-		return listSystem;
-	}
+	@Autowired
+	private ReDetalleJefeDAO daoDetalleJefe;
 	
-	@Override
-	public Map<String, Object> findCuentasSistema() {
-		
-		List<ReCuentasUsuarioEntity> lstCuentas = daoCuentas.findAll();
-		
-		Map<String, Object> systemsMap = new HashMap<>();
-		List<SystemsVO> listaTEL = new ArrayList<>();
-		List<SystemsVO> listaCIAT = new ArrayList<>();
-		List<SystemsVO> listaSAP = new ArrayList<>();
-		
-		for(int i = 0; i<lstCuentas.size(); i++) {
-			
-			SystemsVO systemsVO = new SystemsVO();
-			
-			ReCuentasUsuarioEntity cuentasEntity = lstCuentas.get(i);
-						
-			systemsVO.setEmpleado(cuentasEntity.getIdCuentaUsuario().getIdUsuario());
-			systemsVO.setCuentaSistema(cuentasEntity.getIdCuentaUsuario().getCuentaSistema());
-			
-			String strIdSystem = cuentasEntity.getIdCuentaUsuario().getIdSistema();
-			String strSystem = daoSistema.findById(strIdSystem).get().getSistema();
-			
-//			daoJerarquia.findById(id)
-			if(strSystem.equals("TEL")) {
-				listaTEL.add(systemsVO);
-			}else if (strSystem.equals("SAP")) {
-				listaSAP.add(systemsVO);
-			}else if (strSystem.equals("CIAT")) {
-				listaCIAT.add(systemsVO);
-			}
-		}	
-		
-		systemsMap.put("SAP", listaSAP);
-		systemsMap.put("TEL", listaTEL);
-		systemsMap.put("CIAT", listaCIAT);
-				
-		return systemsMap;
-	}
-
+	@Autowired
+	private ReUsuarioDAO daoUsuario;
+	
+	@Autowired
+	private RePerfilSistemaDAO daoPerfil;
+	
+	@Autowired
+	private LDAPRepository ldapRepository;
+	
 	@Override
 	public Map<String, Object> findCuentas() {
 		List<ReCuentasUsuarioEntity> lstCuentas = daoCuentas.findAll();
@@ -108,4 +81,98 @@ public class AuditoryServiceImpl implements AuditoryService{
 				
 		return systemsMap;
 	}
+
+	@Override
+	public Map<String, Object> findCuentasSistema() {
+		
+		Map<String, Object> jefesMap = new HashMap<String, Object>();
+		List<CountsBossVO> lstJefes = new ArrayList<>();
+		
+		List<ReDetalleJefeEntity> lstCuentas = daoDetalleJefe.findAll();
+		
+		for(int i = 0; i<lstCuentas.size(); i++) {
+			
+			List<CountsByUserVO> lstEmpleados = new ArrayList<>();
+			CountsBossVO bossVO = new CountsBossVO();
+			
+			String strIdJefe = lstCuentas.get(i).getIdJefe();
+			
+			List<ReJerarquiaEntity> lstJerarquia = daoJerarquia.findByIdEmpleadoJefeIdJefe(strIdJefe);
+			
+			bossVO.setIdJefe(strIdJefe);
+			bossVO.setJefe(lstCuentas.get(i).getNombre());
+			
+			if(ldapRepository.findByUsername(strIdJefe) != null) {
+				bossVO.setInAD(true);
+			}
+			
+			for(int j = 0; j<lstJerarquia.size(); j++) {
+				CountsByUserVO empleadoVO = new CountsByUserVO();
+				String strIdUsuario = lstJerarquia.get(j).getIdEmpleadoJefe().getIdUsuario();
+				
+				if(ldapRepository.findByUsername(strIdUsuario) != null) {
+					List<ReCuentasUsuarioEntity> lstCuenta = daoCuentas.findByIdCuentaUsuarioIdUsuario(strIdUsuario);
+					
+					empleadoVO.setIdEmpleado(strIdUsuario);
+					empleadoVO.setEmpleado(daoUsuario.findById(strIdUsuario).get().getNombre());
+										
+					for(int k = 0; k<lstCuenta.size(); k++) {
+						TelDataVO telVO = new TelDataVO();
+						SapDataVO sapVO = new SapDataVO();
+						CiatDataVO ciatVO = new CiatDataVO();
+						
+						List<TelDataVO> lstTel = new ArrayList<>();
+						List<SapDataVO> lstSap = new ArrayList<>();
+						List<CiatDataVO> lstCiat = new ArrayList<>();
+						
+						PKCuentasUsuario pkUsuario = lstCuenta.get(k).getIdCuentaUsuario();
+						
+						String strSistema = pkUsuario.getIdSistema();
+						int intIdPerfil = pkUsuario.getIdPerfil();
+						
+						ReSistemaEntity sistemaEntity = daoSistema.findById(strSistema).get();
+						
+						String strCuenta = sistemaEntity.getSistema();
+						String strPerfil = daoPerfil.findById(new PKPerfilSistema(intIdPerfil, strSistema)).get().getPerfil();
+						String cuentaSistema = pkUsuario.getCuentaSistema();
+						
+						switch (strCuenta) {
+						case "TEL":
+								telVO.setCuenta(cuentaSistema);
+								telVO.setPerfil(strPerfil);
+	
+								lstTel.add(telVO);
+								empleadoVO.setTel(lstTel);
+							break;
+						case "SAP":
+								sapVO.setCuenta(cuentaSistema);
+								sapVO.setPerfil(strPerfil);
+								
+								lstSap.add(sapVO);
+								empleadoVO.setSap(lstSap);
+							break;
+						case "CIAT":
+								ciatVO.setCuenta(cuentaSistema);
+								ciatVO.setPerfil(strPerfil);
+								
+								lstCiat.add(ciatVO);
+								empleadoVO.setCiat(lstCiat);
+							break;
+						default:
+							break;			
+						}
+					}
+					lstEmpleados.add(empleadoVO);
+				}
+			}
+			
+			if(!(lstEmpleados.isEmpty() || lstEmpleados == null)) {
+				bossVO.setEmpleados(lstEmpleados);
+				lstJefes.add(bossVO);
+			}
+		}
+		jefesMap.put("jefes", lstJefes);
+		return jefesMap;
+	}
+
 }

@@ -121,6 +121,11 @@
 		    <version>3.12</version>
 		</dependency>		
 		        
+		<dependency><!-- para json -->
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			
+		</dependency>
 	</dependencies>
 
 	<repositories>

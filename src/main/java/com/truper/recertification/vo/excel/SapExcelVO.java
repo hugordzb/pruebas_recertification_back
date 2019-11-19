@@ -1,7 +1,6 @@
 package com.truper.recertification.vo.excel;
 
 import java.io.Serializable;
-import java.util.Date;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,20 +11,15 @@ import lombok.Setter;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CiatVO implements Serializable{
+public class SapExcelVO implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
 
-	private String usuario;
-	
 	private String nombre;
 	
-	private Integer perfil;
+	private String departamento;
 	
-	private String nombrePerfil;
+	private String usuarioSAP;
 	
-	//se encuentra vacio en el doc por lo que no se mapeo
-	private Date fechaBaja;
-	
-	private String almacen;
+	private String rol;
 }

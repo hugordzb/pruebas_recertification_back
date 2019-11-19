@@ -20,8 +20,8 @@ import com.truper.recertification.model.ReDetalleJefeEntity;
 import com.truper.recertification.model.ReJerarquiaEntity;
 import com.truper.recertification.model.RePerfilSistemaEntity;
 import com.truper.recertification.model.ReUsuarioEntity;
-import com.truper.recertification.vo.ExcelVO;
-import com.truper.recertification.vo.excel.TelVO;
+import com.truper.recertification.vo.excel.RecertificationExcelVO;
+import com.truper.recertification.vo.excel.TelExcelVO;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -47,7 +47,7 @@ public class InsertExcelData {
 	@Autowired
 	private RePerfilSistemaDAO daoPerfil;
 
-	public void insertDataLastRecertification(List<ExcelVO> list) {
+	public void insertDataLastRecertification(List<RecertificationExcelVO> list) {
 
 		for(int i = 0; i < list.size(); i++) {
 			
@@ -60,7 +60,7 @@ public class InsertExcelData {
 		}
 	}
 	
-	private void insertDepartamento(ExcelVO excelVO) {
+	private void insertDepartamento(RecertificationExcelVO excelVO) {
 		
 		String strDepa = excelVO.getDepartamento();
 		log.info("depa: " + strDepa);
@@ -74,7 +74,7 @@ public class InsertExcelData {
 		}
 	}
 	
-	private void insertDetalleJefe(ExcelVO excelVO) {
+	private void insertDetalleJefe(RecertificationExcelVO excelVO) {
 		
 		String strJefe = excelVO.getNombreJefeFuncional();
 		
@@ -88,7 +88,7 @@ public class InsertExcelData {
 		}
 	}
 	
-	private void insertUsuario(ExcelVO excelVO) {
+	private void insertUsuario(RecertificationExcelVO excelVO) {
 		
 		String strIdUsuario = excelVO.getAd();
 		
@@ -105,7 +105,7 @@ public class InsertExcelData {
 		}
 	}
 	
-	private void insertJerarquia(ExcelVO excelVO) {
+	private void insertJerarquia(RecertificationExcelVO excelVO) {
 		
 		String strIdEmpleado = excelVO.getAd();
 		String strIdJefe = daoJefe.findByNombre(excelVO.getJefeJerarquico()).getIdJefe();
@@ -124,8 +124,8 @@ public class InsertExcelData {
 	}
 
 	
-	private void insertCuentasUsuario(ExcelVO excelVO) {
-		TelVO telVo;
+	private void insertCuentasUsuario(RecertificationExcelVO excelVO) {
+		TelExcelVO telVo;
 		String strTel = excelVO.getTel();
 		String strCiat = excelVO.getCiat();
 		String strSAP = excelVO.getSap();

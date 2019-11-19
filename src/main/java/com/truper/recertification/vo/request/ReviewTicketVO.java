@@ -1,25 +1,23 @@
-package com.truper.recertification.vo.excel;
+package com.truper.recertification.vo.request;
 
 import java.io.Serializable;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Setter
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class SapVO implements Serializable{
+public class ReviewTicketVO implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
-
-	private String nombre;
 	
-	private String departamento;
+	private String idMovimiento;
 	
-	private String usuarioSAP;
+	private String atendio;
 	
-	private String rol;
+	private String estatus;
+	
+	private String comentarios;
 }

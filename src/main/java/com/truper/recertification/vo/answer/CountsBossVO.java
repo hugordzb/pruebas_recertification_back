@@ -1,6 +1,7 @@
 package com.truper.recertification.vo.answer;
 
 import java.io.Serializable;
+import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,12 +12,16 @@ import lombok.Setter;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class SystemsVO implements Serializable{
-
+public class CountsBossVO implements Serializable{
+	
 	private static final long serialVersionUID = 1L;
+
+	private String idJefe;
 	
-	private String idSistema;
+	private String jefe;
 	
-	private String sistema;
+	private boolean inAD;
+	
+	private List<CountsByUserVO> empleados;
 
 }

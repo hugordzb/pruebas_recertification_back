@@ -1,4 +1,4 @@
-package com.truper.recertification.vo;
+package com.truper.recertification.vo.excel;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -12,7 +12,7 @@ import lombok.Setter;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ExcelVO implements Serializable{
+public class RecertificationExcelVO implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
 

@@ -11,12 +11,14 @@ import lombok.Setter;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class SystemsVO implements Serializable{
-
+public class ProfileSystemVO implements Serializable{
+	
 	private static final long serialVersionUID = 1L;
 	
-	private String idSistema;
+	private Integer idPerfil;
 	
-	private String sistema;
+	private String perfil;
 
+	private SystemsVO systemData;
+	
 }
