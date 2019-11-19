@@ -14,7 +14,7 @@ import lombok.Setter;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CountsByUserVO implements Serializable{
+public class CountsEmployeeVO implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
 

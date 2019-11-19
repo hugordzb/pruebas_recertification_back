@@ -22,6 +22,6 @@ public class CountsBossVO implements Serializable{
 	
 	private boolean inAD;
 	
-	private List<CountsByUserVO> empleados;
+	private List<CountsEmployeeVO> empleados;
 
 }
