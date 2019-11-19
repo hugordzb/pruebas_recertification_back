@@ -1,6 +1,7 @@
 package com.truper.recertification.service.impl;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,6 +26,8 @@ import com.truper.recertification.service.AuditoryService;
 import com.truper.recertification.vo.answer.CountsByUserVO;
 import com.truper.recertification.vo.answer.CountsBossVO;
 import com.truper.recertification.vo.answer.sistemas.CiatDataVO;
+import com.truper.recertification.vo.answer.sistemas.CountsVO;
+import com.truper.recertification.vo.answer.sistemas.ListAcountsVO;
 import com.truper.recertification.vo.answer.sistemas.SapDataVO;
 import com.truper.recertification.vo.answer.sistemas.TelDataVO;
 
@@ -108,6 +111,12 @@ public class AuditoryServiceImpl implements AuditoryService{
 			
 			for(int j = 0; j<lstJerarquia.size(); j++) {
 				CountsByUserVO empleadoVO = new CountsByUserVO();
+				ListAcountsVO aux = new ListAcountsVO();
+				
+				List<TelDataVO> lstTel = new ArrayList<>();
+				List<SapDataVO> lstSap = new ArrayList<>();
+				List<CiatDataVO> lstCiat = new ArrayList<>();
+				
 				String strIdUsuario = lstJerarquia.get(j).getIdEmpleadoJefe().getIdUsuario();
 				
 				if(ldapRepository.findByUsername(strIdUsuario) != null) {
@@ -120,10 +129,6 @@ public class AuditoryServiceImpl implements AuditoryService{
 						TelDataVO telVO = new TelDataVO();
 						SapDataVO sapVO = new SapDataVO();
 						CiatDataVO ciatVO = new CiatDataVO();
-						
-						List<TelDataVO> lstTel = new ArrayList<>();
-						List<SapDataVO> lstSap = new ArrayList<>();
-						List<CiatDataVO> lstCiat = new ArrayList<>();
 						
 						PKCuentasUsuario pkUsuario = lstCuenta.get(k).getIdCuentaUsuario();
 						
@@ -142,26 +147,29 @@ public class AuditoryServiceImpl implements AuditoryService{
 								telVO.setPerfil(strPerfil);
 	
 								lstTel.add(telVO);
-								empleadoVO.setTel(lstTel);
 							break;
 						case "SAP":
 								sapVO.setCuenta(cuentaSistema);
 								sapVO.setPerfil(strPerfil);
 								
 								lstSap.add(sapVO);
-								empleadoVO.setSap(lstSap);
+
 							break;
 						case "CIAT":
 								ciatVO.setCuenta(cuentaSistema);
 								ciatVO.setPerfil(strPerfil);
 								
 								lstCiat.add(ciatVO);
-								empleadoVO.setCiat(lstCiat);
 							break;
 						default:
 							break;			
 						}
 					}
+					aux.setTel(lstTel);
+					aux.setSap(lstSap);
+					aux.setCiat(lstCiat);
+					
+					empleadoVO.setCuentas(this.orderCounts(aux));
 					lstEmpleados.add(empleadoVO);
 				}
 			}
@@ -173,6 +181,48 @@ public class AuditoryServiceImpl implements AuditoryService{
 		}
 		jefesMap.put("jefes", lstJefes);
 		return jefesMap;
+	}
+
+	private List<CountsVO> orderCounts(ListAcountsVO lstAcountsVO) {
+		List<CountsVO> lstCounts = new ArrayList<>();
+		
+		int intTel = 0;
+		int intSap = 0;
+		int intCiat = 0;
+
+		if(lstAcountsVO.getCiat() != null) {
+			intCiat = lstAcountsVO.getCiat().size();
+		}
+		
+		if(lstAcountsVO.getSap() != null) {
+			intSap = lstAcountsVO.getSap().size();
+		}
+		
+		if(lstAcountsVO.getTel() != null) {
+			intTel = lstAcountsVO.getTel().size();
+		}
+		
+		int[] numeros = {intTel, intCiat, intSap};
+		Arrays.sort(numeros);
+		
+		for(int i=0; i < numeros[2]; i++) {
+			CountsVO countsVO = new CountsVO();
+			
+			if(intCiat != 0 && i < intCiat) {
+			countsVO.setCCiat(lstAcountsVO.getCiat().get(i).getCuenta());
+			countsVO.setPCiat(lstAcountsVO.getCiat().get(i).getPerfil());
+			}
+			if(intSap != 0 && i < intSap) {
+			countsVO.setCSap(lstAcountsVO.getSap().get(i).getCuenta());
+			countsVO.setPSap(lstAcountsVO.getSap().get(i).getPerfil());
+			}
+			if(intTel != 0 && i < intTel) {
+			countsVO.setCTel(lstAcountsVO.getTel().get(i).getCuenta());
+			countsVO.setPTel(lstAcountsVO.getTel().get(i).getPerfil());
+			}
+			lstCounts.add(countsVO);
+		}
+		return lstCounts;	
 	}
 
 }

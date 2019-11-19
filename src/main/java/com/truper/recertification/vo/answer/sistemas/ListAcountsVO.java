@@ -1,9 +1,7 @@
-package com.truper.recertification.vo.answer;
+package com.truper.recertification.vo.answer.sistemas;
 
 import java.io.Serializable;
 import java.util.List;
-
-import com.truper.recertification.vo.answer.sistemas.CountsVO;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,13 +12,13 @@ import lombok.Setter;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CountsByUserVO implements Serializable{
-	
+public class ListAcountsVO implements Serializable{
+
 	private static final long serialVersionUID = 1L;
 
-	private String idEmpleado;
+	List<TelDataVO> tel;
 	
-	private String empleado;
-		
-	private List<CountsVO> cuentas;
+	List<SapDataVO> sap;
+	
+	List<CiatDataVO> ciat;
 }
