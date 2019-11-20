@@ -3,7 +3,7 @@ package com.truper.recertification.vo.answer;
 import java.io.Serializable;
 import java.util.List;
 
-import com.truper.recertification.vo.answer.sistemas.CountsVO;
+import com.truper.recertification.vo.answer.sistemas.AcountsVO;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,5 +22,5 @@ public class CountsEmployeeVO implements Serializable{
 	
 	private String empleado;
 		
-	private List<CountsVO> cuentas;
+	private List<AcountsVO> cuentas;
 }

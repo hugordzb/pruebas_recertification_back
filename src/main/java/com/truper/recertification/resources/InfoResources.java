@@ -1,5 +1,7 @@
 package com.truper.recertification.resources;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,6 +26,11 @@ public class InfoResources {
 	@GetMapping(path = "/profileSystems")
 	public ProfileSystemListVO findProfileSystems() {
 		return infoService.getProfileSytem();
+	}
+	
+	@GetMapping(path = "/bitacora")
+	public Map<String, Object> findChangeControl(){
+		return infoService.getChangeControl();
 	}
 	
 }

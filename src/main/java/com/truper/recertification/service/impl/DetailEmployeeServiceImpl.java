@@ -19,7 +19,7 @@ import com.truper.recertification.model.ReSistemaEntity;
 import com.truper.recertification.service.DetailEmployeeService;
 import com.truper.recertification.vo.answer.CountsEmployeeVO;
 import com.truper.recertification.vo.answer.sistemas.CiatDataVO;
-import com.truper.recertification.vo.answer.sistemas.CountsVO;
+import com.truper.recertification.vo.answer.sistemas.AcountsVO;
 import com.truper.recertification.vo.answer.sistemas.ListAcountsVO;
 import com.truper.recertification.vo.answer.sistemas.SapDataVO;
 import com.truper.recertification.vo.answer.sistemas.TelDataVO;
@@ -108,8 +108,8 @@ public class DetailEmployeeServiceImpl implements DetailEmployeeService{
 		}
 	}
 	
-	public List<CountsVO> orderCounts(ListAcountsVO lstAcountsVO) {
-		List<CountsVO> lstCounts = new ArrayList<>();
+	public List<AcountsVO> orderCounts(ListAcountsVO lstAcountsVO) {
+		List<AcountsVO> lstCounts = new ArrayList<>();
 		
 		int intTel = 0;
 		int intSap = 0;
@@ -131,7 +131,7 @@ public class DetailEmployeeServiceImpl implements DetailEmployeeService{
 		Arrays.sort(numeros);
 		
 		for(int i=0; i < numeros[2]; i++) {
-			CountsVO countsVO = new CountsVO();
+			AcountsVO countsVO = new AcountsVO();
 			
 			if(intCiat != 0 && i < intCiat) {
 			countsVO.setCCiat(lstAcountsVO.getCiat().get(i).getCuenta());
