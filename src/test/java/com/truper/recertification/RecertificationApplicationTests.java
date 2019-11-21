@@ -4,19 +4,22 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.mail.MessagingException;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.ldap.core.LdapTemplate;
 import org.springframework.ldap.filter.AndFilter;
 import org.springframework.ldap.filter.EqualsFilter;
 import org.springframework.security.authentication.BadCredentialsException;
 
-import com.truper.recertification.common.mail.service.EmailService;
+import com.truper.recertification.common.email.EmailService;
 import com.truper.recertification.common.template.MailContentBuilder;
 import com.truper.recertification.excel.RecertificationDocs;
 import com.truper.recertification.ldap.repository.LDAPRepository;
@@ -130,18 +133,33 @@ class RecertificationApplicationTests {
 	@Test
 	public void pruebaCorreo() throws MessagingException {
 	    
-	    EmailVO email = new EmailVO();
-	    email.setDestinatario("hdrodriguezb@truper.com");
-	  
-		SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+		// Email parameter variables are created
+		List<String> lstDestinatarios = new ArrayList<>();
+		List<String> lstCC = new ArrayList<>();
+		List<String> lstCCO = new ArrayList<>();
+		List<FileSystemResource> archivos = new ArrayList<>();
 		
+		// Recipients list is filled in
+		lstDestinatarios.add("hdrodriguezb@truper.com");
+		lstDestinatarios.add("mgmolinae@truper.com");
+		
+		log.info("Destinatarios:" + lstDestinatarios.toString());
+		
+		// Email parameters are set
+		emailService.setLstDestinatario(lstDestinatarios);
+		emailService.setLstCC(lstCC);
+		emailService.setLstCCO(lstCCO);
+		emailService.setLstAdjunto(archivos);
+		
+		//Armar correo
+		SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss.SSS");
 		mailContentBuilder.setHtmlTemplateName("RecertificationMail");
 		mailContentBuilder.addParametro("fecha", format.format(new Date()));
-		mailContentBuilder.addParametro("idJefe", "Esto es un prueba");
+		mailContentBuilder.addParametro("idJefe", "--idJefe");
 		String sistemas[] = {"SAP", "CIAT", "TEL"};
 		mailContentBuilder.addParametro("sistemas", sistemas);
 		mailContentBuilder.addParametro("correo","--@correo.com");
-		emailService.sendTemplateMail("Recertificacion", mailContentBuilder.build(), new EmailVO());
+		emailService.sendTemplateMail("Detonacion alerta", mailContentBuilder.build());
 	  
 	    log.info("Se envio");
 	}

@@ -45,7 +45,7 @@ public class MailContentBuilder {
     /**
      * Map parameters names of Template
      * @param strParametro
-     * @param string
+     * @param object
      */
     public void addParametro(String strParametro, Object object) {
     	context.setVariable(strParametro, object);
