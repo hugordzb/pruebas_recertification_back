@@ -59,6 +59,42 @@
 		
 		countsBossVO
 		
+		<table>
+            <thead>
+            	<tr>
+            		<th colspan="8">Cuentas de Usuario</th>
+            	</tr>
+            	<tr>
+            		<th>Nombre</th>
+	                <th>SAP</th>
+	                <th>Rol</th>
+	                <th>TEL</th>
+	                <th>Rol</th>
+	                <th>CIAT</th>
+	                <th>Perfil</th>
+            	</tr>
+            </thead>
+            <tr>
+                <th id="basic-lname">Nombre</th>
+                <th id="basic-lsap">SAP</th>
+                <th id="basic-lpSap">Rol</th>
+                <th id="basic-ltel">TEL</th>
+                <th id="basic-lpTel">Rol</th>
+                <th id="basic-lciat">CIAT</th>
+                <th id="basic-lpCiat">Perfil</th>
+            </tr>
+            <tbody>
+                <tr th:each="row : ${table.rows}">   
+                    <td headers="basic-lname"><span th:text="${nombre}"></span></td>
+                    <td headers="basic-lsap"><span th:text="${sap}"></span></td>
+                    <td headers="basic-lpSap"><span th:text="${pSap}"></span></td>
+                    <td headers="basic-ltel"><span th:text="${tel}"></span></td>
+                    <td headers="basic-lpTel"><span th:text="${pTel}"></span></td>
+                    <td headers="basic-lciat"><span th:text="${ciat}"></span></td>
+                    <td headers="basic-lpCiat"><span th:text="${pCiat}"></span></td>
+                </tr>
+            </tbody>
+        </table>
 		
         
 		<br/>
