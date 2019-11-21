@@ -131,14 +131,15 @@ class RecertificationApplicationTests {
 	public void pruebaCorreo() throws MessagingException {
 	    
 	    EmailVO email = new EmailVO();
-	    email.setDestinatario("mgmolinae@truper.com");
+	    email.setDestinatario("hdrodriguezb@truper.com");
 	  
 		SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
 		
 		mailContentBuilder.setHtmlTemplateName("RecertificationMail");
 		mailContentBuilder.addParametro("fecha", format.format(new Date()));
-		mailContentBuilder.addParametro("idJefe", "--idJefe");
-		mailContentBuilder.addParametro("sistemas", "--sistemas");
+		mailContentBuilder.addParametro("idJefe", "Esto es un prueba");
+		String sistemas[] = {"SAP", "CIAT", "TEL"};
+		mailContentBuilder.addParametro("sistemas", sistemas);
 		mailContentBuilder.addParametro("correo","--@correo.com");
 		emailService.sendTemplateMail("Recertificacion", mailContentBuilder.build(), new EmailVO());
 	  
