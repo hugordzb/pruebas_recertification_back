@@ -51,7 +51,7 @@
 		<p> Buenas <span th:text="${idJefe}"></span>,</p>
 		
 		<p>Como parte del proceso de re certificación de usuarios de los sistemas 
-			<span th:text="${sistemas}"></span>, solicitamos de tu apoyo para que nos ayudes en confirmar 
+			<span th:each="sistema : ${sistemas}" th:text="${sistema}" >, </span>, solicitamos de tu apoyo para que nos ayudes en confirmar 
 			las cuentas que son utilizadas en tu equipo de trabajo, por favor.
 		</p>
 		<br/>

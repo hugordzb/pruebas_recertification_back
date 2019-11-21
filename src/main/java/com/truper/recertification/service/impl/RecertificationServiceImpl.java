@@ -55,6 +55,7 @@ public class RecertificationServiceImpl implements RecertificationService{
 		mailContentBuilder.setHtmlTemplateName("RecertificationMail");
 		mailContentBuilder.addParametro("fecha", format.format(new Date()));
 		mailContentBuilder.addParametro("idJefe", detailBoss.getIdJefe());
+		String sistemas[] = {"SAP", "CIAT", "TEL"};
 		mailContentBuilder.addParametro("sistemas", "SAP, CIAT, TEL");
 		mailContentBuilder.addParametro("correo","oacarmonac@truper.com");
 		emailService.sendTemplateMail("Recertificacion", mailContentBuilder.build(), new EmailVO());
