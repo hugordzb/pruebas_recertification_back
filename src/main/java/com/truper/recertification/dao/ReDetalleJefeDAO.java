@@ -6,10 +6,8 @@ import com.truper.recertification.model.ReDetalleJefeEntity;
 
 public interface ReDetalleJefeDAO extends JpaRepository<ReDetalleJefeEntity, String>{
 
-	public ReDetalleJefeEntity findByIdDetalleJefeIdDepartamento(Integer idDepartamento);
-	
-	public ReDetalleJefeEntity findByIdDetalleJefeIdJefe(String idJefe);
-	
+	public ReDetalleJefeEntity findByIdDepartamento(Integer idDepartamento);
+		
 	public ReDetalleJefeEntity findByNombre(String nombre);
 
 }

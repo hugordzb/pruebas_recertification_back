@@ -36,7 +36,7 @@ public class RecertificationServiceImpl implements RecertificationService{
 	
 	@Override
 	public boolean sendMail(String strIdJefe){
-		ReDetalleJefeEntity detailBoss = daoJefe.findByIdDetalleJefeIdJefe(strIdJefe);
+		ReDetalleJefeEntity detailBoss = daoJefe.findById(strIdJefe).get();
 		
 		if(this.generateMail(detailBoss)) {
 			this.updateDB(detailBoss);

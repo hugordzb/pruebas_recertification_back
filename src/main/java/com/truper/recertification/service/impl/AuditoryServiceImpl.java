@@ -67,7 +67,7 @@ public class AuditoryServiceImpl implements AuditoryService{
 		
 		bossVO.setEmpleados(lstEmpleados);
 		bossVO.setIdJefe(strIdBoss);
-		bossVO.setJefe(daoDetalleJefe.findByIdDetalleJefeIdJefe(strIdBoss).getNombre());
+		bossVO.setJefe(daoDetalleJefe.findById(strIdBoss).get().getNombre());
 		
 		if(ldapRepository.findByUsername(strIdBoss) != null) {
 			bossVO.setInAD(true);

@@ -62,7 +62,7 @@ public class ValidateChangeAcountsServiceImpl implements ValidateAcountsService{
 				
 				daoUsuario.findByIdUsuario(requestVO.getNIdUsuario());
 				this.validateSystemProfile(strIdSistema, requestVO.getPerfil());
-				daoJefe.findByIdDetalleJefeIdJefe(requestVO.getIdJefe());
+				daoJefe.findById(requestVO.getIdJefe());
 				
 			}catch (Exception e) {
 				log.error("Datos no validos, favor de revisar");
@@ -160,7 +160,7 @@ public class ValidateChangeAcountsServiceImpl implements ValidateAcountsService{
 				String strNIdBoss = bitacora.getNIdJefe();
 				List<ReJerarquiaEntity> lstJerarquia = daoJerarquia.findByIdEmpleadoJefeIdJefe(strIdJefe);
 				
-				if(daoJefe.findByIdDetalleJefeIdJefe(strNIdBoss) == null) {
+				if(daoJefe.findById(strNIdBoss).get() == null) {
 					daoJefe.save(ReDetalleJefeEntity
 							.builder()
 							.idJefe(strNIdBoss)

@@ -23,7 +23,7 @@ public class ReDetalleJefe {
 
 	@Test
 	public void findByIdJefe() {
-		ReDetalleJefeEntity lista = detalleDAO.findByIdJefe("jefe");
+		ReDetalleJefeEntity lista = detalleDAO.findById("jefe").get();
 		log.info("Lista: " + lista);
 	}
 }
