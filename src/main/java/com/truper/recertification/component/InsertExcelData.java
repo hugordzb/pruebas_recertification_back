@@ -133,13 +133,13 @@ public class InsertExcelData {
 				daoCuentas.save(ReCuentasUsuarioEntity.builder()
 						.idCuentaUsuario(PKCuentasUsuario.builder()
 								.idUsuario(excelVO.getAd())
-								.idPerfil(daoPerfil.findById(new PKPerfilSistema(perfil, strIdSistema)).get().getIdPerfil())
+								.idPerfil(daoPerfil.findById(new PKPerfilSistema("Admin", strIdSistema)).get().getIdPerfil())
 								.idSistema(strIdSistema)
 								.cuentaSistema(strTel)
 								.build())
 						.build());
 			} catch (Exception e) {
-				log.error("ya existe el usuario en tel");
+				log.error("ya existe la cuenta " + strTel+" asociada al usuario " + excelVO.getAd());
 				log.info(e.getMessage());
 			}
 		}
@@ -150,13 +150,13 @@ public class InsertExcelData {
 				daoCuentas.save(ReCuentasUsuarioEntity.builder()
 						.idCuentaUsuario(PKCuentasUsuario.builder()
 								.idUsuario(excelVO.getAd())
-								.idPerfil(daoPerfil.findById(new PKPerfilSistema(perfil, strIdSistema)).get().getIdPerfil())
+								.idPerfil(daoPerfil.findById(new PKPerfilSistema("Admin", strIdSistema)).get().getIdPerfil())
 								.idSistema(strIdSistema)
 								.cuentaSistema(strCiat)
 								.build())
 						.build());
 			} catch (Exception e) {
-				log.error("ya existe el usuario en ciat");
+				log.error("ya existe la cuenta " + strCiat+" asociada al usuario " + excelVO.getAd());
 				log.info(e.getMessage());
 			}
 		}
@@ -167,13 +167,13 @@ public class InsertExcelData {
 				daoCuentas.save(ReCuentasUsuarioEntity.builder()
 						.idCuentaUsuario(PKCuentasUsuario.builder()
 								.idUsuario(excelVO.getAd())
-								.idPerfil(daoPerfil.findById(new PKPerfilSistema(perfil, strIdSistema)).get().getIdPerfil())
+								.idPerfil(daoPerfil.findById(new PKPerfilSistema("Admin", strIdSistema)).get().getIdPerfil())
 								.idSistema(strIdSistema)
 								.cuentaSistema(strSAP)
 								.build())
 						.build());
 			} catch (Exception e) {
-				log.error("Ya existe el usuario en SAP");
+				log.error("ya existe la cuenta " + strSAP+" asociada al usuario " + excelVO.getAd());
 				log.info(e.getMessage());
 			}
 		}

@@ -1,5 +1,7 @@
 package com.truper.recertification.service.impl;
 
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -196,6 +198,7 @@ public class ValidateChangeAcountsServiceImpl implements ValidateAcountsService{
 	@Override
 	public Integer mapRequest(RequestChangeVO requestVO, String strIdSistema) {
 		try {
+			Date dateChange = new Date();
 			daoCambios.save(ReBitacoraCambiosEntity
 					.builder()
 					.tipoMov(requestVO.getTipoMov())
@@ -210,7 +213,7 @@ public class ValidateChangeAcountsServiceImpl implements ValidateAcountsService{
 					.nIdJefe(requestVO.getNIdJefe())
 					.nCuentaSistema(requestVO.getNCuentaSistema())
 					.solicitante(requestVO.getSolicitante())
-					.fechaSolicitud(fechaSolicitud)
+					.fechaSolicitud(new Timestamp(dateChange.getTime()))
 					.build());
 		}catch (Exception e) {
 			log.error("Error al insertar, datos no validos");
