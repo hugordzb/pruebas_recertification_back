@@ -10,18 +10,18 @@ import com.truper.recertification.dao.ReDepartamentoDAO;
 import com.truper.recertification.dao.ReDetalleJefeDAO;
 import com.truper.recertification.dao.ReJerarquiaDAO;
 import com.truper.recertification.dao.RePerfilSistemaDAO;
+import com.truper.recertification.dao.ReSistemaDAO;
 import com.truper.recertification.dao.ReUsuarioDAO;
 import com.truper.recertification.model.PKCuentasUsuario;
+import com.truper.recertification.model.PKDetalleJefe;
 import com.truper.recertification.model.PKJerarquia;
 import com.truper.recertification.model.PKPerfilSistema;
 import com.truper.recertification.model.ReCuentasUsuarioEntity;
 import com.truper.recertification.model.ReDepartamentoEntity;
 import com.truper.recertification.model.ReDetalleJefeEntity;
 import com.truper.recertification.model.ReJerarquiaEntity;
-import com.truper.recertification.model.RePerfilSistemaEntity;
 import com.truper.recertification.model.ReUsuarioEntity;
 import com.truper.recertification.vo.excel.RecertificationExcelVO;
-import com.truper.recertification.vo.excel.TelExcelVO;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -46,6 +46,9 @@ public class InsertExcelData {
 	
 	@Autowired
 	private RePerfilSistemaDAO daoPerfil;
+	
+	@Autowired
+	private ReSistemaDAO daoSistema;
 
 	public void insertDataLastRecertification(List<RecertificationExcelVO> list) {
 
@@ -73,8 +76,13 @@ public class InsertExcelData {
 	
 	private void insertDetalleJefe(RecertificationExcelVO excelVO) {
 		try {
+
 			daoJefe.save(ReDetalleJefeEntity.builder()
-					.idJefe("ejemplo")
+					.idDetalleJefe(PKDetalleJefe
+							.builder()
+							.idJefe("validar")
+							.idDepartamento(daoDepa.findByDepartamento(excelVO.getDepartamento()).getIdDepartamento())
+							.build())
 					.nombre(excelVO.getNombreJefeFuncional())
 					.build());
 		} catch (Exception e) {
@@ -103,7 +111,7 @@ public class InsertExcelData {
 			daoJerarquia.save(ReJerarquiaEntity.builder()
 					.idEmpleadoJefe(PKJerarquia.builder()
 									.idUsuario(excelVO.getAd())
-									.idJefe(daoJefe.findByNombre(excelVO.getJefeJerarquico()).getIdJefe())
+									.idJefe(daoJefe.findByNombre(excelVO.getJefeJerarquico()).getIdDetalleJefe().getIdJefe())
 									.build())
 					.build());
 		} catch (Exception e) {
@@ -121,11 +129,12 @@ public class InsertExcelData {
 		
 		if(strTel != null) {
 			try {
+				String strIdSistema = daoSistema.findBySistema("TEL").getIdSistema();
 				daoCuentas.save(ReCuentasUsuarioEntity.builder()
 						.idCuentaUsuario(PKCuentasUsuario.builder()
 								.idUsuario(excelVO.getAd())
-								.idPerfil(daoPerfil.findByPerfilAndIdPerfilSistemaIdSistema(strTel, "S001").getIdPerfilSistema().getIdPerfil())
-								.idSistema("S001")
+								.idPerfil(daoPerfil.findById(new PKPerfilSistema(perfil, strIdSistema)).get().getIdPerfil())
+								.idSistema(strIdSistema)
 								.cuentaSistema(strTel)
 								.build())
 						.build());
@@ -137,11 +146,12 @@ public class InsertExcelData {
 		
 		if(strCiat != null) {
 			try {
+				String strIdSistema = daoSistema.findBySistema("CIAT").getIdSistema();
 				daoCuentas.save(ReCuentasUsuarioEntity.builder()
 						.idCuentaUsuario(PKCuentasUsuario.builder()
 								.idUsuario(excelVO.getAd())
-								.idPerfil(5)
-								.idSistema("S002")
+								.idPerfil(daoPerfil.findById(new PKPerfilSistema(perfil, strIdSistema)).get().getIdPerfil())
+								.idSistema(strIdSistema)
 								.cuentaSistema(strCiat)
 								.build())
 						.build());
@@ -153,11 +163,12 @@ public class InsertExcelData {
 		
 		if(strSAP != null) {
 			try {
+				String strIdSistema = daoSistema.findBySistema("SAP").getIdSistema();
 				daoCuentas.save(ReCuentasUsuarioEntity.builder()
 						.idCuentaUsuario(PKCuentasUsuario.builder()
 								.idUsuario(excelVO.getAd())
-								.idPerfil(6)
-								.idSistema("S003")
+								.idPerfil(daoPerfil.findById(new PKPerfilSistema(perfil, strIdSistema)).get().getIdPerfil())
+								.idSistema(strIdSistema)
 								.cuentaSistema(strSAP)
 								.build())
 						.build());

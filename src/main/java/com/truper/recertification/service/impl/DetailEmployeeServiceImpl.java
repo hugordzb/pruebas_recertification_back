@@ -13,7 +13,6 @@ import com.truper.recertification.dao.ReSistemaDAO;
 import com.truper.recertification.dao.ReUsuarioDAO;
 import com.truper.recertification.ldap.repository.LDAPRepository;
 import com.truper.recertification.model.PKCuentasUsuario;
-import com.truper.recertification.model.PKPerfilSistema;
 import com.truper.recertification.model.ReCuentasUsuarioEntity;
 import com.truper.recertification.model.ReSistemaEntity;
 import com.truper.recertification.service.DetailEmployeeService;
@@ -84,7 +83,7 @@ public class DetailEmployeeServiceImpl implements DetailEmployeeService{
 		ReSistemaEntity sistemaEntity = daoSistema.findById(strSistema).get();
 		
 		String strCuenta = sistemaEntity.getSistema();
-		String strPerfil = daoPerfil.findById(new PKPerfilSistema(intIdPerfil, strSistema)).get().getPerfil();
+		String strPerfil = daoPerfil.findByIdPerfil(intIdPerfil).getIdPerfilSistema().getPerfil();
 		String cuentaSistema = pkUsuario.getCuentaSistema();
 		
 		switch (strCuenta) {

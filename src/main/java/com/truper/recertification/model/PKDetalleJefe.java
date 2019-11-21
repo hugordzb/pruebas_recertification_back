@@ -10,7 +10,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 @Embeddable
 @AllArgsConstructor
@@ -18,15 +17,14 @@ import lombok.ToString;
 @Getter
 @Setter
 @Builder
-@ToString
-public class PKPerfilSistema implements Serializable{
+public class PKDetalleJefe implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 
-	@Column(name = "PERFIL")
-	private String perfil;
+	@Column(name = "IDJEFE")
+	private String idJefe;
 	
-	@Column(name = "IDSISTEMA")
-	private String idSistema;
+	@Column(name = "IDDEPARTAMENTO")
+	private Integer idDepartamento;
 
 }

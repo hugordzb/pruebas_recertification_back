@@ -1,6 +1,7 @@
 package com.truper.recertification.model;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -34,41 +35,44 @@ public class ReBitacoraCambiosEntity implements Serializable, Persistable<Intege
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer idMovimiento;
 
-	@Column(name = "IDUSUARIO")
-	private String idUsuario;
-	
 	@Column(name = "TIPOMOV")
 	private String tipoMov;
 	
-	@Column(name = "IDPERFIL")
-	private Integer idPerfil;
+	@Column(name = "IDUSUARIO")
+	private String idUsuario;
 	
-	@Column(name = "IDSISTEMA")
-	private String idSistema;
+	@Column(name = "SISTEMA")
+	private String sistema;
 	
-	@Column(name = "CUENTASISTEMA")
-	private String cuentaSistema;
+	@Column(name = "PERFIL")
+	private String perfil;
 	
 	@Column(name = "IDJEFE")
 	private String idJefe;
 	
+	@Column(name = "CUENTASISTEMA")
+	private String cuentaSistema;
+	
 	@Column(name = "NIDUSUARIO")
 	private String nIdUsuario;
 	
-	@Column(name = "NIDPERFIL")
-	private Integer nIdPerfil;
+	@Column(name = "NSISTEMA")
+	private String nSistema;
 	
-	@Column(name = "NIDSISTEMA")
-	private String nIdSistema;
+	@Column(name = "NPERFIL")
+	private String nPerfil;
+
+	@Column(name = "NIDJEFE")
+	private String nIdJefe;
 	
 	@Column(name = "NCUENTASISTEMA")
 	private String nCuentaSistema;
-	
-	@Column(name = "NIDJEFE")
-	private String nIdJefe;
 		
 	@Column(name = "SOLICITANTE")
 	private String solicitante;
+	
+	@Column(name = "FECHASOLICITUD")
+	private Timestamp fechaSolicitud;
 	
 	@Transient
 	@Builder.Default

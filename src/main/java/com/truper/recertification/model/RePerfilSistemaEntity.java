@@ -5,6 +5,8 @@ import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -26,13 +28,14 @@ import lombok.Setter;
 public class RePerfilSistemaEntity implements Serializable, Persistable<PKPerfilSistema>{
 
 	private static final long serialVersionUID = 1L;
+	
+	@Column(name = "IDPERFIL")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer idPerfil;
 
 	@EmbeddedId
 	private PKPerfilSistema idPerfilSistema;
 		
-	@Column(name = "PERFIL")
-	private String perfil;
-
 	@Transient
 	@Builder.Default
 	private boolean exist = false;

@@ -42,7 +42,7 @@ public class AuditoryServiceImpl implements AuditoryService{
 		
 		for(int i = 0; i<lstCuentas.size(); i++) {
 						
-			String strIdJefe = lstCuentas.get(i).getIdJefe();
+			String strIdJefe = lstCuentas.get(i).getIdDetalleJefe().getIdJefe();
 			CountsBossVO bossVO = this.findByBoss(strIdJefe);
 			
 			if(!(bossVO.getEmpleados().isEmpty() || bossVO.getEmpleados() == null)) {
@@ -67,7 +67,7 @@ public class AuditoryServiceImpl implements AuditoryService{
 		
 		bossVO.setEmpleados(lstEmpleados);
 		bossVO.setIdJefe(strIdBoss);
-		bossVO.setJefe(daoDetalleJefe.findByIdJefe(strIdBoss).getNombre());
+		bossVO.setJefe(daoDetalleJefe.findByIdDetalleJefeIdJefe(strIdBoss).getNombre());
 		
 		if(ldapRepository.findByUsername(strIdBoss) != null) {
 			bossVO.setInAD(true);

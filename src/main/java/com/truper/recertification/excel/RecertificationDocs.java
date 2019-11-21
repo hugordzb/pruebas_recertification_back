@@ -32,8 +32,6 @@ public class RecertificationDocs {
 		readExcel.leerFicheros(strRutaArchivo, strSAP);
 		readExcel.leerFicheros(strRutaArchivo, strCIAT);
 		readExcel.leerFicheros(strRutaArchivo, strRecertificacion);
-		
-		//insert
-		
+				
 	}
 }

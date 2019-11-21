@@ -1,16 +1,9 @@
 package com.truper.recertification.service.impl;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-
-import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 import com.truper.recertification.common.mail.service.EmailService;
@@ -43,7 +36,7 @@ public class RecertificationServiceImpl implements RecertificationService{
 	
 	@Override
 	public boolean sendMail(String strIdJefe){
-		ReDetalleJefeEntity detailBoss = daoJefe.findByIdJefe(strIdJefe);
+		ReDetalleJefeEntity detailBoss = daoJefe.findByIdDetalleJefeIdJefe(strIdJefe);
 		
 		if(this.generateMail(detailBoss)) {
 			this.updateDB(detailBoss);
@@ -61,7 +54,7 @@ public class RecertificationServiceImpl implements RecertificationService{
 		
 		mailContentBuilder.setHtmlTemplateName("RecertificationMail");
 		mailContentBuilder.addParametro("fecha", format.format(new Date()));
-		mailContentBuilder.addParametro("idJefe", detailBoss.getIdJefe());
+		mailContentBuilder.addParametro("idJefe", detailBoss.getIdDetalleJefe().getIdJefe());
 		mailContentBuilder.addParametro("sistemas", "SAP, CIAT, TEL");
 		mailContentBuilder.addParametro("correo","oacarmonac@truper.com");
 		emailService.sendTemplateMail("Recertificacion", mailContentBuilder.build(), new EmailVO());
@@ -75,7 +68,7 @@ public class RecertificationServiceImpl implements RecertificationService{
 					.builder()
 					.idRecertificacion(PKRecertificacion
 							.builder()
-							.idJefe(detailBoss.getIdJefe())
+							.idJefe(detailBoss.getIdDetalleJefe().getIdJefe())
 							.periodo(this.selectPeriod())
 							.build())
 					.cartaSolicitud("guardar ip")

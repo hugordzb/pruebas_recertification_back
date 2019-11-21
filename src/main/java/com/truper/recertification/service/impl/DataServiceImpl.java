@@ -73,8 +73,8 @@ public class DataServiceImpl implements DataService{
 			String idSystem = perfilSistemaVO.getIdPerfilSistema().getIdSistema();
 			String system = daoSistema.findById(idSystem).get().getSistema();
 			
-			answerPSVO.setIdPerfil(perfilSistemaVO.getIdPerfilSistema().getIdPerfil());
-			answerPSVO.setPerfil(perfilSistemaVO.getPerfil());
+			answerPSVO.setIdPerfil(perfilSistemaVO.getIdPerfil());
+			answerPSVO.setPerfil(perfilSistemaVO.getIdPerfilSistema().getPerfil());
 			answerPSVO.setSystemData(new SystemsVO(idSystem, system));
 			
 			lstAnswerPS.add(answerPSVO);

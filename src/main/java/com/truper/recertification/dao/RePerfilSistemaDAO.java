@@ -11,7 +11,7 @@ public interface RePerfilSistemaDAO extends JpaRepository<RePerfilSistemaEntity,
 
 	public List<RePerfilSistemaEntity> findByIdPerfilSistemaIdSistema(String idSistema);
 	
-	public List<RePerfilSistemaEntity> findByPerfil(String perfil);
+	public List<RePerfilSistemaEntity> findByIdPerfilSistemaPerfil(String perfil);
 	
-	public RePerfilSistemaEntity findByPerfilAndIdPerfilSistemaIdSistema(String perfil, String idSistema);
+	public RePerfilSistemaEntity findByIdPerfil(Integer idPerfil);
 }

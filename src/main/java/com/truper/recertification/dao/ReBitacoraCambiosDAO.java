@@ -14,5 +14,5 @@ public interface ReBitacoraCambiosDAO extends JpaRepository<ReBitacoraCambiosEnt
 	public List<ReBitacoraCambiosEntity> findBySolicitante(String solicitante);
 
 	public void save(ReControlCambiosEntity control);
-	
+
 }
