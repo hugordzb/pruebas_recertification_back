@@ -5,7 +5,6 @@ import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.truper.recertification.common.mail.service.EmailService;
 import com.truper.recertification.common.template.MailContentBuilder;
 import com.truper.recertification.vo.EmailTemplateVO;
 
@@ -14,12 +13,7 @@ public class TemplateMapper {
 	@Autowired
 	private MailContentBuilder mailContentBuilder;
 	
-	@Autowired
-	private EmailService emailService;
-
-	public EmailTemplateVO emailTemplate;
-	
-	public void templateMapper() {
+	public void templateMapper(EmailTemplateVO emailTemplate) {
 
 		SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
 		
@@ -29,6 +23,5 @@ public class TemplateMapper {
 		mailContentBuilder.addParametro("sistemas", emailTemplate.getLstIdSistemas().toString());
 		mailContentBuilder.addParametro("correo", emailTemplate.getStrCorreo());
 
-		emailService.sendTemplateMail("Detonacion alerta", mailContentBuilder.build());
 	}
 }

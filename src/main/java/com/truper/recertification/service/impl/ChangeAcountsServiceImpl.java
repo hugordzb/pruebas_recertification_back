@@ -1,15 +1,19 @@
 package com.truper.recertification.service.impl;
 
+import java.sql.Timestamp;
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
 import com.truper.recertification.dao.ReBitacoraCambiosDAO;
-import com.truper.recertification.dao.RePerfilSistemaDAO;
-import com.truper.recertification.dao.ReSistemaDAO;
 import com.truper.recertification.model.ReBitacoraCambiosEntity;
+import com.truper.recertification.model.ReControlCambiosEntity;
 import com.truper.recertification.service.ChangeAcountsService;
-import com.truper.recertification.vo.request.RequestAcountVO;
+import com.truper.recertification.service.ValidateAcountsService;
+import com.truper.recertification.vo.request.ProcessChangeVO;
+import com.truper.recertification.vo.request.RequestChangeVO;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -18,79 +22,54 @@ import lombok.extern.slf4j.Slf4j;
 public class ChangeAcountsServiceImpl implements ChangeAcountsService{
 
 	@Autowired
-	private ReBitacoraCambiosDAO daoCambios;
-  
-	@Autowired
-	private RePerfilSistemaDAO daoPerfil;
+	private ValidateAcountsService validateAcounts;
 	
-	@Autowired 
-	private ReSistemaDAO daoSistema;
+	@Autowired
+	private ReBitacoraCambiosDAO daoBitacora; 
+	
+	@Override
+	public Integer requestChange(String json) {
+		
+		ReControlCambiosEntity control = new ReControlCambiosEntity();
+		Gson gson = new Gson();
+		
+		RequestChangeVO requestVO = gson.fromJson(json, RequestChangeVO.class);
+		
+		String strIdSistema= validateAcounts.validateRequest(requestVO);
+		log.info("String: " +strIdSistema);
+		int intIdMov = validateAcounts.mapRequest(requestVO, strIdSistema);
+		
+		Date today = new Date();
+		control.setAtendio("usuarioDefault");
+		control.setFechaAtencion(new Timestamp(today.getTime()));
+		control.setIdMovimiento(intIdMov);
+		control.setEstatus(false);
+		
+		validateAcounts.generateControlChange(control);
+		
+		return intIdMov;
+	}
 
 	@Override
-	public String requestAcount(String json) {
-		
+	public void processChange(String json) {
+		Date today = new Date();
 		Gson gson = new Gson();
-		RequestAcountVO requestVO = gson.fromJson(json, RequestAcountVO.class);
-		return this.validateParams(requestVO);
-	}
-
-	private String validateParams(RequestAcountVO requestVO) {
-		String answer = "";
-		try {
-			String strIdSistema = daoSistema.findBySistema(requestVO.getSistema()).getIdSistema();
-			String strNIdSistema = daoSistema.findBySistema(requestVO.getNSistema()).getIdSistema();
-			
-			if(strIdSistema == null || strNIdSistema == null) {
-				answer = "El sistema no es valido";
-			}
-			else {
-				int intIdPerfil = daoPerfil.findByPerfilAndIdPerfilSistemaIdSistema(requestVO.getPerfil(), strIdSistema)
-				.getIdPerfilSistema().getIdPerfil();
-				if(daoPerfil.findByPerfilAndIdPerfilSistemaIdSistema(requestVO.getPerfil(), strIdSistema)
-						.getIdPerfilSistema().getIdPerfil() == null) {
-					answer = "No existe la relacion entre el sistema-perfil indicado";
-				}
-				else {
-					this.mapRequest(requestVO, intIdPerfil, strIdSistema);
-				}
-			}
-		} catch (Exception e) {
-			log.info("Error en el sistema: " + e);
+		
+		ProcessChangeVO processVO = gson.fromJson(json, ProcessChangeVO.class);
+		ReControlCambiosEntity control = new ReControlCambiosEntity();
+		
+		control.setIdMovimiento(Integer.parseInt(processVO.getIdMovimiento()));
+		control.setAtendio(processVO.getAtendio());
+		control.setEstatus(Boolean.parseBoolean(processVO.getEstatus()));
+		control.setFechaAtencion(new Timestamp(today.getTime()));
+		control.setComentarios(processVO.getComentarios());
+		
+		if(control.isEstatus()) {
+			ReBitacoraCambiosEntity bitacora = daoBitacora.findById(control.getIdMovimiento()).get();
+			validateAcounts.processRequest(bitacora);
 		}
 		
-		return answer;
+		validateAcounts.generateControlChange(control);
 	}
 	
-	private String mapRequest(RequestAcountVO requestVO, int intIdPerfil, String strIdSistema) {
-		String answer = "";
-		daoCambios.save(ReBitacoraCambiosEntity
-				.builder()
-				.tipoMov(requestVO.getTipoMov())
-				.idUsuario(requestVO.getIdUsuario())
-				.idSistema(strIdSistema)
-				.idPerfil(intIdPerfil)
-				.idJefe(requestVO.getIdJefe())
-				.cuentaSistema(requestVO.getCuentaSistema())
-				.nIdUsuario(requestVO.getNIdUsuario())
-				.nIdSistema(requestVO.getNSistema())
-				.nIdPerfil(Integer.parseInt(requestVO.getNPerfil()))
-				.nIdJefe(requestVO.getNIdJefe())
-				.nCuentaSistema(requestVO.getNCuentaSistema())
-				.solicitante(requestVO.getSolicitante())
-				.build());
-		int dMov = 1;
-		this.generateControlChange(dMov);
-		
-		return answer;		
-	}
-	
-	private void generateControlChange(int dMov) {
-		
-//		daoCambios.save(ReControlCambiosEntity
-//				.builder()
-//				.idMovimiento(dMov)
-//				.estatus(false)
-//				.build());
-	}
-
 }

@@ -7,16 +7,16 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.truper.recertification.service.InfoService;
+import com.truper.recertification.service.DataService;
 import com.truper.recertification.vo.answer.ProfileSystemListVO;
 import com.truper.recertification.vo.answer.SystemsListVO;
 
 @CrossOrigin(origins = "*")
 @RestController
-public class InfoResources {
+public class DataResources {
 
 	@Autowired
-	private InfoService infoService;
+	private DataService infoService;
 	
 	@GetMapping(path = "/auditableSystems")
     public SystemsListVO findAuditableSystems() {
@@ -28,7 +28,7 @@ public class InfoResources {
 		return infoService.getProfileSytem();
 	}
 	
-	@GetMapping(path = "/bitacora")
+	@GetMapping(path = "/binnacle")
 	public Map<String, Object> findChangeControl(){
 		return infoService.getChangeControl();
 	}

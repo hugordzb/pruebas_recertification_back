@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class RequestAcountVO implements Serializable{
+public class RequestChangeVO implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
 

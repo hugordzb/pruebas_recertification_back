@@ -8,12 +8,6 @@ import com.truper.recertification.vo.answer.CountsEmployeeVO;
 public interface AuditoryService {
 
 	/**
-	 * This method find all acounts by system (SAP, CIAT, TEL)
-	 * @return map
-	 */
-	public Map<String, Object> findCuentas();
-	
-	/**
 	 * This method return all recertification information order by boss and systems
 	 * @return map
 	 */

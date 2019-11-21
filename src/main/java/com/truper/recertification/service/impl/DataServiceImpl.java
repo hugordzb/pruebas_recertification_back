@@ -16,18 +16,14 @@ import com.truper.recertification.model.ReBitacoraCambiosEntity;
 import com.truper.recertification.model.ReControlCambiosEntity;
 import com.truper.recertification.model.RePerfilSistemaEntity;
 import com.truper.recertification.model.ReSistemaEntity;
-import com.truper.recertification.service.InfoService;
+import com.truper.recertification.service.DataService;
 import com.truper.recertification.vo.answer.SystemsVO;
-
-import lombok.extern.slf4j.Slf4j;
-
 import com.truper.recertification.vo.answer.ProfileSystemListVO;
 import com.truper.recertification.vo.answer.ProfileSystemVO;
 import com.truper.recertification.vo.answer.SystemsListVO;
 
-@Slf4j
 @Service
-public class InfoServiceImpl implements InfoService{
+public class DataServiceImpl implements DataService{
 
 	@Autowired
 	private ReSistemaDAO daoSistema;
@@ -100,5 +96,10 @@ public class InfoServiceImpl implements InfoService{
 		}
 		mapControl.put("movimientos", lstDetailControl);
 		return mapControl;
+	}
+	
+	@Override
+	public ReControlCambiosEntity getByTicket(int intTicket) {
+		return daoControl.findById(intTicket).get();
 	}
 }

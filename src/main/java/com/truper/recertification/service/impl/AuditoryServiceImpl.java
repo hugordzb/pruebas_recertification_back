@@ -8,12 +8,9 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.truper.recertification.dao.ReCuentasUsuarioDAO;
 import com.truper.recertification.dao.ReDetalleJefeDAO;
 import com.truper.recertification.dao.ReJerarquiaDAO;
-import com.truper.recertification.dao.ReSistemaDAO;
 import com.truper.recertification.ldap.repository.LDAPRepository;
-import com.truper.recertification.model.ReCuentasUsuarioEntity;
 import com.truper.recertification.model.ReDetalleJefeEntity;
 import com.truper.recertification.model.ReJerarquiaEntity;
 import com.truper.recertification.service.AuditoryService;
@@ -22,12 +19,6 @@ import com.truper.recertification.vo.answer.CountsBossVO;
 
 @Service
 public class AuditoryServiceImpl implements AuditoryService{
-
-	@Autowired
-	private ReCuentasUsuarioDAO daoCuentas;
-
-	@Autowired
-	private ReSistemaDAO daoSistema;
 	
 	@Autowired
 	private ReJerarquiaDAO daoJerarquia;
@@ -41,36 +32,6 @@ public class AuditoryServiceImpl implements AuditoryService{
 	@Autowired
 	private DetailEmployeeServiceImpl detailEmployee;
 	
-	@Override
-	public Map<String, Object> findCuentas() {
-		List<ReCuentasUsuarioEntity> lstCuentas = daoCuentas.findAll();
-		
-		Map<String, Object> systemsMap = new HashMap<>();
-		List<String> listaTEL = new ArrayList<>();
-		List<String> listaCIAT = new ArrayList<>();
-		List<String> listaSAP = new ArrayList<>();
-		
-		for(int i = 0; i<lstCuentas.size(); i++) {
-			String strCount = lstCuentas.get(i).getIdCuentaUsuario().getCuentaSistema();
-			String strIdSystem = lstCuentas.get(i).getIdCuentaUsuario().getIdSistema();
-			String strSystem = daoSistema.findById(strIdSystem).get().getSistema();
-			
-			if(strSystem.equals("TEL")) {
-				listaTEL.add(strCount);
-			}else if (strSystem.equals("SAP")) {
-				listaSAP.add(strCount);
-			}else if (strSystem.equals("CIAT")) {
-				listaCIAT.add(strCount);
-			}
-		}	
-		
-		systemsMap.put("SAP", listaSAP);
-		systemsMap.put("TEL", listaTEL);
-		systemsMap.put("CIAT", listaCIAT);
-				
-		return systemsMap;
-	}
-
 	@Override
 	public Map<String, Object> findCuentasSistema() {
 		

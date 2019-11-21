@@ -55,128 +55,104 @@ public class InsertExcelData {
 			this.insertDetalleJefe(list.get(i));
 			this.insertUsuario(list.get(i));
 			this.insertJerarquia(list.get(i));
-//			this.insertCuentasUsuario(list.get(i));
+			this.insertCuentasUsuario(list.get(i));
 			
 		}
 	}
 	
 	private void insertDepartamento(RecertificationExcelVO excelVO) {
-		
-		String strDepa = excelVO.getDepartamento();
-		log.info("depa: " + strDepa);
-		if(daoDepa.findByDepartamento(strDepa) == null){
-		
+		try {
 			daoDepa.save(ReDepartamentoEntity.builder()
-					.departamento(strDepa)
+					.departamento(excelVO.getDepartamento())
 					.build());
-		}else {
-			log.info("ya existe el depa");
+		} catch (Exception e) {
+			log.error("Ya existe el departamento");
+			log.info(e.getMessage());
 		}
 	}
 	
 	private void insertDetalleJefe(RecertificationExcelVO excelVO) {
-		
-		String strJefe = excelVO.getNombreJefeFuncional();
-		
-		if(daoJefe.findByNombre(strJefe) == null){
+		try {
 			daoJefe.save(ReDetalleJefeEntity.builder()
-					.idJefe("zara")
-					.nombre(strJefe)
+					.idJefe("ejemplo")
+					.nombre(excelVO.getNombreJefeFuncional())
 					.build());
-		}else {
-			log.info("ya existe el Jefe");
+		} catch (Exception e) {
+			log.error("Ya existe el Jefe");
+			log.info(e.getMessage());
 		}
 	}
 	
 	private void insertUsuario(RecertificationExcelVO excelVO) {
-		
-		String strIdUsuario = excelVO.getAd();
-		
-		if(daoUsuario.findById(strIdUsuario) == null){
+		try {
 			daoUsuario.save(ReUsuarioEntity.builder()
-					.idUsuario(strIdUsuario)
+					.idUsuario(excelVO.getAd())
 					.nombre(excelVO.getNombre())
 					.noEmpleado(excelVO.getNoEmpleado())
 					.estatus(true)
 					.fechaIngreso(excelVO.getFechaIngreso())
 					.build());
-		}else {
-			log.info("ya existe el usuario en la tabla principal");
+		} catch (Exception e) {
+			log.error("ya existe el usuario en la tabla principal");
+			log.info(e.getMessage());
 		}
 	}
 	
 	private void insertJerarquia(RecertificationExcelVO excelVO) {
-		
-		String strIdEmpleado = excelVO.getAd();
-		String strIdJefe = daoJefe.findByNombre(excelVO.getJefeJerarquico()).getIdJefe();
-		PKJerarquia pkJerarquia = new PKJerarquia(strIdJefe, strIdEmpleado);
-		
-		if(daoJerarquia.findById(pkJerarquia) == null){
+		try {
 			daoJerarquia.save(ReJerarquiaEntity.builder()
 					.idEmpleadoJefe(PKJerarquia.builder()
-							.idUsuario(strIdEmpleado)
-							.idJefe(strIdJefe)
-							.build())
+									.idUsuario(excelVO.getAd())
+									.idJefe(daoJefe.findByNombre(excelVO.getJefeJerarquico()).getIdJefe())
+									.build())
 					.build());
-		}else {
-			log.info("ya existe la relacion del Jefe-Empleado");
+		} catch (Exception e) {
+			log.error("ya existe la relacion del Jefe-Empleado");
+			log.info(e.getMessage());
 		}
 	}
 
 	
 	private void insertCuentasUsuario(RecertificationExcelVO excelVO) {
-		TelExcelVO telVo;
 		String strTel = excelVO.getTel();
 		String strCiat = excelVO.getCiat();
 		String strSAP = excelVO.getSap();
 		
+		
 		if(strTel != null) {
-
-//			PKPerfilSistema pkPerfil = daoPerfil.findByPerfilAndIdPerfilSistemaIdSistema(strTel, "S001").getIdPerfilSistema();
-//			
-//			ReCuentasUsuarioEntity strCuentaExistente = daoCuentas.findById(new PKCuentasUsuario(
-//					excelVO.getAd(), pkPerfil.getIdPerfil(), "S001", 
-////					telVo.getUsuarioTel()
-//					"rs_bcavazos"
-//					)).get();
-//			
-//			if(!strCuentaExistente.getIdCuentaUsuario().getCuentaSistema().equals(strTel)) {
-//				daoCuentas.save(ReCuentasUsuarioEntity.builder()
-//						.idCuentaUsuario(PKCuentasUsuario.builder()
-//								.idUsuario(excelVO.getAd())
-//								.idPerfil(pkPerfil.getIdPerfil())
-//								.idSistema("S001")
-//								.cuentaSistema(strTel)
-//								.build())
-//						.build());
-//			}else {
-//				log.info("ya existe el usuario en tel");
-//			}
-			log.info("tel");
+			try {
+				daoCuentas.save(ReCuentasUsuarioEntity.builder()
+						.idCuentaUsuario(PKCuentasUsuario.builder()
+								.idUsuario(excelVO.getAd())
+								.idPerfil(daoPerfil.findByPerfilAndIdPerfilSistemaIdSistema(strTel, "S001").getIdPerfilSistema().getIdPerfil())
+								.idSistema("S001")
+								.cuentaSistema(strTel)
+								.build())
+						.build());
+			} catch (Exception e) {
+				log.error("ya existe el usuario en tel");
+				log.info(e.getMessage());
+			}
 		}
 		
 		if(strCiat != null) {
-			List<ReCuentasUsuarioEntity> s = daoCuentas.findByIdCuentaUsuarioCuentaSistema(strCiat);
-			log.info("CIAT: " + s.size());
-			
-			if(s == null || s.isEmpty()) {
+			try {
 				daoCuentas.save(ReCuentasUsuarioEntity.builder()
-					.idCuentaUsuario(PKCuentasUsuario.builder()
-							.idUsuario(excelVO.getAd())
-							.idPerfil(5)
-							.idSistema("S002")
-							.cuentaSistema(strCiat)
-							.build())
-					.build());
-			}else {
-				log.info("ya existe el usuario en ciat");
+						.idCuentaUsuario(PKCuentasUsuario.builder()
+								.idUsuario(excelVO.getAd())
+								.idPerfil(5)
+								.idSistema("S002")
+								.cuentaSistema(strCiat)
+								.build())
+						.build());
+			} catch (Exception e) {
+				log.error("ya existe el usuario en ciat");
+				log.info(e.getMessage());
 			}
 		}
 		
 		if(strSAP != null) {
-			List<ReCuentasUsuarioEntity> s = daoCuentas.findByIdCuentaUsuarioCuentaSistema(strSAP);
-			log.info("SAP: " + s.size());
-			if(s == null || s.isEmpty()) {
+			try {
 				daoCuentas.save(ReCuentasUsuarioEntity.builder()
 						.idCuentaUsuario(PKCuentasUsuario.builder()
 								.idUsuario(excelVO.getAd())
@@ -185,8 +161,9 @@ public class InsertExcelData {
 								.cuentaSistema(strSAP)
 								.build())
 						.build());
-			}else {
-				log.info("ya existe el usuario en SAP");
+			} catch (Exception e) {
+				log.error("Ya existe el usuario en SAP");
+				log.info(e.getMessage());
 			}
 		}
 	}

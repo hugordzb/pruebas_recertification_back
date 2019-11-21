@@ -23,7 +23,7 @@ public class PKRecertificacion implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 
-	@Column(name = "IDPERFIL")
+	@Column(name = "IDJEFE")
 	private String idJefe;
 	
 	@Column(name = "PERIODO")

@@ -16,7 +16,12 @@ public class ChangeAcountsResources {
 	private ChangeAcountsService changeService;
 	
 	@PutMapping(path="/requestChange")
-    public String requestChange(@RequestBody String json) {
-		return changeService.requestAcount(json);
+    public Integer requestChange(@RequestBody String json) {
+		return changeService.requestChange(json);
+    }
+	
+	@PutMapping(path="/processChange")
+    public void processChange(@RequestBody String json) {
+		changeService.processChange(json);
     }
 }

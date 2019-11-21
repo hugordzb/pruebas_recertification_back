@@ -56,23 +56,7 @@
 		</p>
 		<br/>
 		
-		<table>
-            <caption>Nombre de Usuarios por Sistema</caption>
-            <tr>
-                <th id="basic-lname">Nombre</th>
-                <th id="basic-lsap">SAP</th>
-                <th id="basic-ltel">TEL</th>
-                <th id="basic-lciat">CIAT</th>
-            </tr>
-            <tbody>
-                <tr th:each="row : ${table.rows}">   
-                    <td headers="basic-lname"><span th:text="${nombre}"></span></td>
-                    <td headers="basic-lsap"><span th:text="${sap}"></span></td>
-                    <td headers="basic-ltel"><span th:text="${tel}"></span></td>
-                    <td headers="basic-lciat"><span th:text="${ciat}"></span></td>
-                </tr>
-            </tbody>
-        </table>
+		
         
 		<br/>
 		<p>Por favor de enviar la carta firmada por correo electrónico <span th:text="${correo}"></span> 

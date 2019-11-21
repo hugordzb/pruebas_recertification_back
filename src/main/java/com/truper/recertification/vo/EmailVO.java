@@ -18,11 +18,11 @@ public class EmailVO implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 
-	private List<String> lstDestinatario;
+	private String destinatario;
 	
-	private List<String> lstCC;
+	private String cc;
 	
-	private List<String> lstCCO;
+	private String cco;
 	
 	private List<FileSystemResource> lstAdjunto;
 	

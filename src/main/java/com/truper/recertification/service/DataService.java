@@ -2,10 +2,11 @@ package com.truper.recertification.service;
 
 import java.util.Map;
 
+import com.truper.recertification.model.ReControlCambiosEntity;
 import com.truper.recertification.vo.answer.ProfileSystemListVO;
 import com.truper.recertification.vo.answer.SystemsListVO;
 
-public interface InfoService {
+public interface DataService {
 
 	/**
 	 * This method return all systems
@@ -24,4 +25,12 @@ public interface InfoService {
 	 * @return REBitacora_Cambios data
 	 */
 	public Map<String, Object> getChangeControl();
+	
+	/**
+	 * This method contain the ticket detail
+	 * @param intTicket
+	 * @return Detail by movement
+	 */
+	public ReControlCambiosEntity getByTicket(int intTicket);
+	
 }

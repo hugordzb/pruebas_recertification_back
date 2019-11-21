@@ -3,7 +3,9 @@ package com.truper.recertification;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.mail.MessagingException;
@@ -19,8 +21,12 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.authentication.BadCredentialsException;
 
+import com.truper.recertification.common.mail.service.EmailService;
+import com.truper.recertification.common.template.MailContentBuilder;
 import com.truper.recertification.excel.RecertificationDocs;
 import com.truper.recertification.ldap.repository.LDAPRepository;
+import com.truper.recertification.service.RecertificationService;
+import com.truper.recertification.vo.EmailVO;
 import com.truper.recertification.vo.LDAPVO;
 
 import lombok.extern.slf4j.Slf4j;
@@ -36,11 +42,13 @@ class RecertificationApplicationTests {
 	private LdapTemplate ldapTemplate;
 	
 	@Autowired
-	private JavaMailSender emisorCorreo;
-	
-	@Autowired
 	private RecertificationDocs recert;
 		
+	@Autowired
+	private MailContentBuilder mailContentBuilder;
+	
+	@Autowired
+	private EmailService emailService;
 	
 	//ldap	
 	@Test
@@ -126,21 +134,27 @@ class RecertificationApplicationTests {
 	//Mail
 	@Test
 	public void pruebaCorreo() throws MessagingException {
-		List<String> lstDestinatarios = new ArrayList<String>();
-		
-		lstDestinatarios.add("mgmolinae@truper.com");
-			
-		MimeMessage message = emisorCorreo.createMimeMessage();
-	      
-	    MimeMessageHelper helper = new MimeMessageHelper(message, true);
-	     
-	    helper.setTo((String[])lstDestinatarios.toArray(new String[0]));
-	    helper.setSubject("Prueba");
-	    helper.setText("Prueba!!!!");
 	    
+	    EmailVO email = new EmailVO();
+	    email.setDestinatario("mgmolinae@truper.com");
 	  
-	    emisorCorreo.send(message);
+		SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+		
+		mailContentBuilder.setHtmlTemplateName("RecertificationMail");
+		mailContentBuilder.addParametro("fecha", format.format(new Date()));
+		mailContentBuilder.addParametro("idJefe", "--idJefe");
+		mailContentBuilder.addParametro("sistemas", "--sistemas");
+		mailContentBuilder.addParametro("correo","--@correo.com");
+		emailService.sendTemplateMail("Recertificacion", mailContentBuilder.build(), new EmailVO());
+	  
 	    log.info("Se envio");
 	}
 
+	@Autowired
+	private RecertificationService recertification;
+	
+	@Test
+	public void PruebaCorreo() {
+		recertification.sendMail("jefe");
+	}
 }

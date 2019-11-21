@@ -8,6 +8,10 @@ import com.truper.recertification.model.ReUsuarioEntity;
 
 public interface ReUsuarioDAO extends JpaRepository<ReUsuarioEntity, String>{
 
+	public ReUsuarioEntity findByIdUsuarioAndEstatus(String idUsuario, boolean estatus);
+	
+	public ReUsuarioEntity findByIdUsuario(String idUsuario);
+	
 	public ReUsuarioEntity findByNombre(String nombre);
 	
 	public ReUsuarioEntity findByNoEmpleado(Integer noEmpleado);
