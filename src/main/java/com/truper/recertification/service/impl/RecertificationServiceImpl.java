@@ -54,7 +54,7 @@ public class RecertificationServiceImpl implements RecertificationService{
 		
 		mailContentBuilder.setHtmlTemplateName("RecertificationMail");
 		mailContentBuilder.addParametro("fecha", format.format(new Date()));
-		mailContentBuilder.addParametro("idJefe", detailBoss.getIdDetalleJefe().getIdJefe());
+		mailContentBuilder.addParametro("idJefe", detailBoss.getIdJefe());
 		mailContentBuilder.addParametro("sistemas", "SAP, CIAT, TEL");
 		mailContentBuilder.addParametro("correo","oacarmonac@truper.com");
 		emailService.sendTemplateMail("Recertificacion", mailContentBuilder.build(), new EmailVO());
@@ -68,7 +68,7 @@ public class RecertificationServiceImpl implements RecertificationService{
 					.builder()
 					.idRecertificacion(PKRecertificacion
 							.builder()
-							.idJefe(detailBoss.getIdDetalleJefe().getIdJefe())
+							.idJefe(detailBoss.getIdJefe())
 							.periodo(this.selectPeriod())
 							.build())
 					.cartaSolicitud("guardar ip")

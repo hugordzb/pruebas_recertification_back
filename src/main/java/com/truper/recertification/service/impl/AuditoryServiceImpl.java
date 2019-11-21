@@ -42,7 +42,7 @@ public class AuditoryServiceImpl implements AuditoryService{
 		
 		for(int i = 0; i<lstCuentas.size(); i++) {
 						
-			String strIdJefe = lstCuentas.get(i).getIdDetalleJefe().getIdJefe();
+			String strIdJefe = lstCuentas.get(i).getIdJefe();
 			CountsBossVO bossVO = this.findByBoss(strIdJefe);
 			
 			if(!(bossVO.getEmpleados().isEmpty() || bossVO.getEmpleados() == null)) {

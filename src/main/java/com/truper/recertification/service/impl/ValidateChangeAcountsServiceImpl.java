@@ -15,9 +15,7 @@ import com.truper.recertification.dao.RePerfilSistemaDAO;
 import com.truper.recertification.dao.ReSistemaDAO;
 import com.truper.recertification.dao.ReUsuarioDAO;
 import com.truper.recertification.model.PKCuentasUsuario;
-import com.truper.recertification.model.PKDetalleJefe;
 import com.truper.recertification.model.PKJerarquia;
-import com.truper.recertification.model.PKPerfilSistema;
 import com.truper.recertification.model.ReBitacoraCambiosEntity;
 import com.truper.recertification.model.ReControlCambiosEntity;
 import com.truper.recertification.model.ReCuentasUsuarioEntity;
@@ -85,7 +83,6 @@ public class ValidateChangeAcountsServiceImpl implements ValidateAcountsService{
 					
 					cuentas.setIdUsuario(requestVO.getIdUsuario());
 					cuentas.setIdPerfil(intIdPerfil);
-					cuentas.setIdSistema(strIdSistema);
 					cuentas.setIdUsuario(requestVO.getCuentaSistema());
 					daoCuentas.findById(cuentas);
 				}
@@ -123,8 +120,7 @@ public class ValidateChangeAcountsServiceImpl implements ValidateAcountsService{
 				String strIdUsuario = bitacora.getIdUsuario();
 				
 				pk.setIdUsuario(strIdUsuario);
-				pk.setIdPerfil(daoPerfil.findById(new PKPerfilSistema(bitacora.getNPerfil(), bitacora.getSistema())).get().getIdPerfil());
-				pk.setIdSistema(strIdSistema);
+				pk.setIdPerfil(daoPerfil.findByIdSistemaAndPerfilAndRol(bitacora.getSistema(), bitacora.getNPerfil(), null).getIdPerfil());
 				pk.setCuentaSistema(bitacora.getCuentaSistema());
 				
 				cuenta.setIdCuentaUsuario(pk);
@@ -153,8 +149,7 @@ public class ValidateChangeAcountsServiceImpl implements ValidateAcountsService{
 					PKCuentasUsuario cuentas = new PKCuentasUsuario();
 					
 					cuentas.setIdUsuario(bitacora.getIdUsuario());
-					cuentas.setIdPerfil(daoPerfil.findById(new PKPerfilSistema(bitacora.getNPerfil(), bitacora.getSistema())).get().getIdPerfil());
-					cuentas.setIdSistema(strIdSistema);
+					cuentas.setIdPerfil(daoPerfil.findByIdSistemaAndPerfilAndRol(bitacora.getSistema(), bitacora.getNPerfil(), null).getIdPerfil());
 					cuentas.setIdUsuario(bitacora.getCuentaSistema());
 					
 					daoCuentas.deleteById(cuentas);
@@ -168,13 +163,9 @@ public class ValidateChangeAcountsServiceImpl implements ValidateAcountsService{
 				if(daoJefe.findByIdDetalleJefeIdJefe(strNIdBoss) == null) {
 					daoJefe.save(ReDetalleJefeEntity
 							.builder()
-							.idDetalleJefe(PKDetalleJefe
-									.builder()
-									.idJefe(strNIdBoss)
-									.idDepartamento(daoJefe.findById(strIdJefe).get().getIdDetalleJefe().getIdDepartamento())
-									.build())
+							.idJefe(strNIdBoss)
+							.idDepartamento(daoJefe.findById(strIdJefe).get().getIdDepartamento())
 							.correo(strNIdBoss+"@truper.com")
-							
 							.build());
 				}
 				
@@ -230,7 +221,7 @@ public class ValidateChangeAcountsServiceImpl implements ValidateAcountsService{
 	
 	@Override
 	public Integer validateSystemProfile(String strIdSistema, String strPerfil) {
-		return daoPerfil.findById(new PKPerfilSistema(strPerfil, strIdSistema)).get().getIdPerfil();
+		return daoPerfil.findByIdSistemaAndPerfilAndRol(strIdSistema, strPerfil, null).getIdPerfil();
 	}
 
 }

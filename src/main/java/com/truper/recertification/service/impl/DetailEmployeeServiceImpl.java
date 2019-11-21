@@ -77,13 +77,13 @@ public class DetailEmployeeServiceImpl implements DetailEmployeeService{
 		
 		PKCuentasUsuario pkUsuario = cuentasUsuario.getIdCuentaUsuario();
 		
-		String strSistema = pkUsuario.getIdSistema();
 		int intIdPerfil = pkUsuario.getIdPerfil();
+		String strSistema = daoPerfil.findById(intIdPerfil).get().getIdSistema();
 		
 		ReSistemaEntity sistemaEntity = daoSistema.findById(strSistema).get();
 		
 		String strCuenta = sistemaEntity.getSistema();
-		String strPerfil = daoPerfil.findByIdPerfil(intIdPerfil).getIdPerfilSistema().getPerfil();
+		String strPerfil = daoPerfil.findById(intIdPerfil).get().getPerfil();
 		String cuentaSistema = pkUsuario.getCuentaSistema();
 		
 		switch (strCuenta) {

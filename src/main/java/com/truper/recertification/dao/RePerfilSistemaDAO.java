@@ -4,14 +4,15 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.truper.recertification.model.PKPerfilSistema;
 import com.truper.recertification.model.RePerfilSistemaEntity;
 
-public interface RePerfilSistemaDAO extends JpaRepository<RePerfilSistemaEntity, PKPerfilSistema>{
+public interface RePerfilSistemaDAO extends JpaRepository<RePerfilSistemaEntity, Integer>{
 
-	public List<RePerfilSistemaEntity> findByIdPerfilSistemaIdSistema(String idSistema);
+	public List<RePerfilSistemaEntity> findByIdSistema(String idSistema);
 	
-	public List<RePerfilSistemaEntity> findByIdPerfilSistemaPerfil(String perfil);
+	public List<RePerfilSistemaEntity> findByPerfil(String perfil);
 	
-	public RePerfilSistemaEntity findByIdPerfil(Integer idPerfil);
+	public RePerfilSistemaEntity findByRol(String rol);
+	
+	public RePerfilSistemaEntity findByIdSistemaAndPerfilAndRol(String idSistema, String perfil, String rol);
 }

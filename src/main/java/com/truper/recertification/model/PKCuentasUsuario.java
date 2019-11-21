@@ -29,9 +29,6 @@ public class PKCuentasUsuario implements Serializable{
 	@Column(name = "IDPERFIL")
 	private Integer idPerfil;
 	
-	@Column(name = "IDSISTEMA")
-	private String idSistema;
-	
 	@Column(name = "CUENTASISTEMA")
 	private String cuentaSistema;
 	
