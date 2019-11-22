@@ -1,7 +1,7 @@
 package com.truper.recertification.excel.service;
 
-import com.truper.recertification.vo.excel.CorreoJefeVO;
-import com.truper.recertification.vo.excel.RecertificationExcelVO;
+import com.truper.recertification.excel.vo.CorreoJefeExcelVO;
+import com.truper.recertification.excel.vo.RecertificationExcelVO;
 
 public interface LoadCoutsDataService {
 
@@ -23,7 +23,7 @@ public interface LoadCoutsDataService {
 	 * @param correoJefeVO
 	 * @param excelVO
 	 */
-	public void insertDetalleJefe(CorreoJefeVO correoJefeVO, RecertificationExcelVO excelVO);
+	public void insertDetalleJefe(CorreoJefeExcelVO correoJefeVO, RecertificationExcelVO excelVO);
 	
 	/**
 	 * This method insert on RE_USUARIO tables the employees

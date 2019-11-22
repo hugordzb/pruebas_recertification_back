@@ -1,4 +1,4 @@
-package com.truper.recertification.vo.excel;
+package com.truper.recertification.excel.vo;
 
 import java.io.Serializable;
 import java.util.Date;

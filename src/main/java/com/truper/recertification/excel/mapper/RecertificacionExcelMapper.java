@@ -6,14 +6,15 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import com.truper.recertification.vo.excel.CiatExcelVO;
-import com.truper.recertification.vo.excel.CiatLineaExcelVO;
-import com.truper.recertification.vo.excel.CorreoJefeVO;
-import com.truper.recertification.vo.excel.RecertificationExcelVO;
-import com.truper.recertification.vo.excel.SapApoExcelVO;
-import com.truper.recertification.vo.excel.SapExcelVO;
-import com.truper.recertification.vo.excel.SapProfilesVO;
-import com.truper.recertification.vo.excel.TelExcelVO;
+import com.truper.recertification.excel.vo.CiatExcelVO;
+import com.truper.recertification.excel.vo.CiatLineaExcelVO;
+import com.truper.recertification.excel.vo.CorreoJefeExcelVO;
+import com.truper.recertification.excel.vo.NewFileExcelVO;
+import com.truper.recertification.excel.vo.RecertificationExcelVO;
+import com.truper.recertification.excel.vo.SapApoExcelVO;
+import com.truper.recertification.excel.vo.SapExcelVO;
+import com.truper.recertification.excel.vo.SapProfilesExcelVO;
+import com.truper.recertification.excel.vo.TelExcelVO;
 
 @Component
 public class RecertificacionExcelMapper{
@@ -120,11 +121,11 @@ public class RecertificacionExcelMapper{
 		return lstExcel;
 	}
 	
-	public List<SapProfilesVO> excelMapperSapProfiles(List<List<String>> rowData) throws ParseException {
-		List<SapProfilesVO> lstExcel = new ArrayList<>();
+	public List<SapProfilesExcelVO> excelMapperSapProfiles(List<List<String>> rowData) throws ParseException {
+		List<SapProfilesExcelVO> lstExcel = new ArrayList<>();
 		
 		for(int i = 0; i < rowData.size(); i++) {
-			SapProfilesVO sapProfile = new SapProfilesVO();
+			SapProfilesExcelVO sapProfile = new SapProfilesExcelVO();
 			
 			sapProfile.setUsuarios(rowData.get(i).get(0));
 			sapProfile.setNombre(rowData.get(i).get(1));
@@ -152,16 +153,39 @@ public class RecertificacionExcelMapper{
 		return lstExcel;
 	}
 	
-	public List<CorreoJefeVO> excelMapperCorreo(List<List<String>> rowData) throws ParseException {
-		List<CorreoJefeVO> lstExcel = new ArrayList<>();
+	public List<CorreoJefeExcelVO> excelMapperCorreo(List<List<String>> rowData) throws ParseException {
+		List<CorreoJefeExcelVO> lstExcel = new ArrayList<>();
 		
 		for(int i = 0; i < rowData.size(); i++) {
-			CorreoJefeVO correo = new CorreoJefeVO();
+			CorreoJefeExcelVO correo = new CorreoJefeExcelVO();
 			
 			correo.setIdJefe(rowData.get(i).get(0));
 			correo.setNombre(rowData.get(i).get(1));
 			
 			lstExcel.add(correo);
+		}
+		return lstExcel;
+	}
+	
+	public List<NewFileExcelVO> excelMapperNewFormat(List<List<String>> rowData) throws ParseException {
+		List<NewFileExcelVO> lstExcel = new ArrayList<>();
+		
+		for(int i = 0; i < rowData.size(); i++) {
+			NewFileExcelVO newFile = new NewFileExcelVO();
+			
+			newFile.setIdJefe(rowData.get(i).get(0));
+			newFile.setNombreJefe(rowData.get(i).get(1));
+			newFile.setIdEmpleado(rowData.get(i).get(2));
+			newFile.setNombreEmpleado(rowData.get(i).get(3));
+			newFile.setCuentatel(rowData.get(i).get(4));
+			newFile.setRolTel(rowData.get(i).get(5));
+			newFile.setCuentaCiat(rowData.get(i).get(6));
+			newFile.setRolCiat(rowData.get(i).get(7));
+			newFile.setCuentaSap(rowData.get(i).get(8));
+			newFile.setRolSap(rowData.get(i).get(9));
+			newFile.setDescRolSap(rowData.get(i).get(10));
+			
+			lstExcel.add(newFile);
 		}
 		return lstExcel;
 	}

@@ -1,15 +1,15 @@
-package com.truper.recertification.component;
+package com.truper.recertification.excel.component;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.truper.recertification.dao.RePerfilSistemaDAO;
 import com.truper.recertification.dao.ReSistemaDAO;
+import com.truper.recertification.excel.recertification.vo.RecertificationDocsVO;
 import com.truper.recertification.excel.service.LoadCoutsDataService;
-import com.truper.recertification.vo.excel.RecertificationDocsVO;
-import com.truper.recertification.vo.excel.RecertificationExcelVO;
-import com.truper.recertification.vo.excel.SapApoExcelVO;
-import com.truper.recertification.vo.excel.SapProfilesVO;
+import com.truper.recertification.excel.vo.RecertificationExcelVO;
+import com.truper.recertification.excel.vo.SapApoExcelVO;
+import com.truper.recertification.excel.vo.SapProfilesExcelVO;
 
 @Component
 public class InsertExcelData {
@@ -62,7 +62,7 @@ public class InsertExcelData {
 		}
 		
 		for(int i = 0; i < recertDocs.getLstSapProfiles().size(); i++) {
-			SapProfilesVO sapProfilesVO = recertDocs.getLstSapProfiles().get(i);
+			SapProfilesExcelVO sapProfilesVO = recertDocs.getLstSapProfiles().get(i);
 			loadService.insertProfiles(sapProfilesVO.getPerfil() + sapProfilesVO.getNombre(), 
 					strIdSystemSap);
 		}

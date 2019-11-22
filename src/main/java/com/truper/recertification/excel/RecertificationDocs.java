@@ -4,9 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.truper.recertification.component.InsertExcelData;
-import com.truper.recertification.vo.excel.DocsDataVO;
-import com.truper.recertification.vo.excel.RecertificationDocsVO;
+import com.truper.recertification.excel.component.InsertExcelData;
+import com.truper.recertification.excel.recertification.vo.DocsDataVO;
+import com.truper.recertification.excel.recertification.vo.RecertificationDocsVO;
 
 /**
  * Identify the documents that need to process to insert on DB
@@ -17,6 +17,9 @@ public class RecertificationDocs {
 	
 	@Value("${recertification.xlsx.url}")
 	private String strRutaArchivo;
+
+	@Value("${recertification.xlsx.url.newUrl}")
+	private String strNewUrl;
 	
 	@Value("${recertification.xlsx.archivo.recertificacion}")
 	private String strRecertificacion;
@@ -51,6 +54,9 @@ public class RecertificationDocs {
 	@Value("${recertification.xlsx.archivo.correo}")
 	private String strCorreoJefe;
 	
+	@Value("${recertification.xlsx.archivo.newFile}")
+	private String strNewFormat;
+	
 	@Autowired
 	private ReadExcel readExcel;
 	
@@ -63,15 +69,21 @@ public class RecertificationDocs {
 	public void selectRecertificationDoc() {
 		
 		RecertificationDocsVO recertDocs = new RecertificationDocsVO();
-		readExcel.leerFicheros(new DocsDataVO(strRutaArchivo, strTel, null), recertDocs);
-		readExcel.leerFicheros(new DocsDataVO(strRutaArchivo, strPerfilSAP, strHojaPerfiles), recertDocs);
-		readExcel.leerFicheros(new DocsDataVO(strRutaArchivo, strPerfilSAP, strHojaAPO), recertDocs);
-		readExcel.leerFicheros(new DocsDataVO(strRutaArchivo, strSAP, null), recertDocs);
-		readExcel.leerFicheros(new DocsDataVO(strRutaArchivo, strCIAT, strHojaCiat), recertDocs);
-		readExcel.leerFicheros(new DocsDataVO(strRutaArchivo, strCIAT, strHojaCiatLinea), recertDocs);
-		readExcel.leerFicheros(new DocsDataVO(strRutaArchivo, strCorreoJefe, null), recertDocs);
-		readExcel.leerFicheros(new DocsDataVO(strRutaArchivo, strRecertificacion, strHojaRecert), recertDocs);
+		readExcel.readExcelSheet(new DocsDataVO(strRutaArchivo, strTel, null), recertDocs);
+		readExcel.readExcelSheet(new DocsDataVO(strRutaArchivo, strPerfilSAP, strHojaPerfiles), recertDocs);
+		readExcel.readExcelSheet(new DocsDataVO(strRutaArchivo, strPerfilSAP, strHojaAPO), recertDocs);
+		readExcel.readExcelSheet(new DocsDataVO(strRutaArchivo, strSAP, null), recertDocs);
+		readExcel.readExcelSheet(new DocsDataVO(strRutaArchivo, strCIAT, strHojaCiat), recertDocs);
+		readExcel.readExcelSheet(new DocsDataVO(strRutaArchivo, strCIAT, strHojaCiatLinea), recertDocs);
+		readExcel.readExcelSheet(new DocsDataVO(strRutaArchivo, strCorreoJefe, null), recertDocs);
+		readExcel.readExcelSheet(new DocsDataVO(strRutaArchivo, strRecertificacion, strHojaRecert), recertDocs);
 		
 		insertData.insertDataLastRecertification(recertDocs);
+	}
+	
+	public void selectNewFormatDoc() {
+		RecertificationDocsVO recertDocs = new RecertificationDocsVO();
+		readExcel.readExcelSheet(new DocsDataVO(strNewUrl, strNewFormat, null), recertDocs);
+		
 	}
 }

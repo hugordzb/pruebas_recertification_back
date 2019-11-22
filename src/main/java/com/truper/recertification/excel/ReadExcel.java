@@ -15,8 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.truper.recertification.excel.mapper.RecertificacionExcelMapper;
-import com.truper.recertification.vo.excel.DocsDataVO;
-import com.truper.recertification.vo.excel.RecertificationDocsVO;
+import com.truper.recertification.excel.recertification.vo.DocsDataVO;
+import com.truper.recertification.excel.recertification.vo.RecertificationDocsVO;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -27,7 +27,7 @@ public class ReadExcel {
 	@Autowired
 	private RecertificacionExcelMapper excelMapper;
 	
-	public void leerFicheros(DocsDataVO docsData, RecertificationDocsVO recertDocs) {
+	public void readExcelSheet(DocsDataVO docsData, RecertificationDocsVO recertDocs) {
 		
 		List<List<String>> rowData = new LinkedList<>();
 		DataFormatter formatter = new DataFormatter();
@@ -120,10 +120,12 @@ public class ReadExcel {
 					recertDocs.setLstSapAPO(excelMapper.excelMapperSapAPO(list));
 				}
 			break;
-			
 			case "Correo Jefe.xlsx":
 				recertDocs.setLstCorreoJefe(excelMapper.excelMapperCorreo(list));
 				break;
+			case "Archivo prueba Recertificacion.xlsx":
+				recertDocs.setLstNewFile(excelMapper.excelMapperNewFormat(list));
+				break;			
 			default:
 				log.info("El nombre del documento no coincide");
 			break;

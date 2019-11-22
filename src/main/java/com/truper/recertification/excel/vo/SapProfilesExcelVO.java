@@ -1,4 +1,4 @@
-package com.truper.recertification.vo.excel;
+package com.truper.recertification.excel.vo;
 
 import java.io.Serializable;
 
@@ -11,20 +11,15 @@ import lombok.Setter;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CiatLineaExcelVO implements Serializable{
+public class SapProfilesExcelVO implements Serializable{
 
 	private static final long serialVersionUID = 1L;
-	
-	private String usuario;
+
+	private String usuarios;
 	
 	private String nombre;
 	
-	private Integer perfil;
+	private String perfil;
 	
-	private String nombrePerfil;
-	
-	private String cdrs;
-	
-	private String estado;
-
+	private String texto;
 }
