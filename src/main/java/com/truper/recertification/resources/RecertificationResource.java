@@ -1,5 +1,7 @@
 package com.truper.recertification.resources;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,19 +14,34 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.truper.recertification.service.RecertificationService;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 @CrossOrigin(origins = "*")
 @RestController
+@Api(value = "Solicitud para recertificar", 
+	 description = "Se genera el envio de correos para solicitar "
+	 		+ "la validación de las cuentas de usuarios; "
+	 		+ "y realizar la recertificación")
 public class RecertificationResource {
 
 	@Autowired
 	private RecertificationService recertification;
 	
 	@GetMapping(path = "/sendRecertification/{idJefe}")
-    public Boolean sendMail(@PathVariable ("idJefe") String strIdJefe) {
+	@ApiOperation(value = "Envio de la Carta para la Recertificación", 
+				  response = Boolean.class)
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "OK"),
+							@ApiResponse(code = 401, message = "Unauthorized")})
+    public Boolean sendMail(
+    		@ApiParam(value = "Cuenta AD (LDAP) del jefe", required = true)
+    		@Valid	@PathVariable ("idJefe") String strIdJefe) {
             return recertification.sendMail(strIdJefe);
     }
 	

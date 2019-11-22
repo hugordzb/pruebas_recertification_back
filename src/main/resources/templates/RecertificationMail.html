@@ -51,13 +51,29 @@
 		<p> Buenas <span th:text="${idJefe}"></span>,</p>
 		
 		<p>Como parte del proceso de re certificación de usuarios de los sistemas 
-			<span th:text="${sistemas}"></span>, solicitamos de tu apoyo para que nos ayudes en confirmar 
+			<span th:each="sistema : ${sistemas}" th:text="${sistema}" >, </span>, solicitamos de tu apoyo para que nos ayudes en confirmar 
 			las cuentas que son utilizadas en tu equipo de trabajo, por favor.
 		</p>
 		<br/>
 		
+		
+		countsBossVO
+		
 		<table>
-            <caption>Cuentas de Usuario</caption>
+            <thead>
+            	<tr>
+            		<th colspan="8">Cuentas de Usuario</th>
+            	</tr>
+            	<tr>
+            		<th>Nombre</th>
+	                <th>SAP</th>
+	                <th>Rol</th>
+	                <th>TEL</th>
+	                <th>Rol</th>
+	                <th>CIAT</th>
+	                <th>Perfil</th>
+            	</tr>
+            </thead>
             <tr>
                 <th id="basic-lname">Nombre</th>
                 <th id="basic-lsap">SAP</th>

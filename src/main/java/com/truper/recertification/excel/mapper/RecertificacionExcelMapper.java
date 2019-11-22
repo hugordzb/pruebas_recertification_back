@@ -184,6 +184,7 @@ public class RecertificacionExcelMapper{
 			newFile.setCuentaSap(rowData.get(i).get(8));
 			newFile.setRolSap(rowData.get(i).get(9));
 			newFile.setDescRolSap(rowData.get(i).get(10));
+			newFile.setDepartamento(rowData.get(i).get(11));
 			
 			lstExcel.add(newFile);
 		}

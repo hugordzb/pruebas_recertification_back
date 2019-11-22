@@ -1,8 +1,6 @@
 package com.truper.recertification.excel.service;
 
-import com.truper.recertification.excel.vo.CorreoJefeExcelVO;
 import com.truper.recertification.excel.vo.NewFileExcelVO;
-import com.truper.recertification.excel.vo.RecertificationExcelVO;
 
 public interface LoadNewFormatService {
 

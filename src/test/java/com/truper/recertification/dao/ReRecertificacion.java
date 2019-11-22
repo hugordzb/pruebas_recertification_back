@@ -25,13 +25,6 @@ public class ReRecertificacion {
 	}
 	
 	@Test
-	public void findByPeriodo() {
-		PKRecertificacion idRecertificacion = new PKRecertificacion("jefe", "0119");
-		List<ReRecertificacionEntity> lista = recertificacionDAO.findByIdRecertificacion(idRecertificacion);
-		log.info("Lista: " + lista.size());
-	}
-	
-	@Test
 	public void findByIdJefeandIdPeriodo() {
 		List<ReRecertificacionEntity> lista = recertificacionDAO.findByIdRecertificacionPeriodo("0219");
 		log.info("Lista: " + lista);

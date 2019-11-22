@@ -1,17 +1,15 @@
 package com.truper.recertification.excel.component;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.truper.recertification.dao.RePerfilSistemaDAO;
 import com.truper.recertification.dao.ReSistemaDAO;
 import com.truper.recertification.excel.recertification.vo.RecertificationDocsVO;
-import com.truper.recertification.excel.service.LoadCoutsDataService;
 import com.truper.recertification.excel.service.LoadNewFormatService;
 import com.truper.recertification.excel.vo.NewFileExcelVO;
-import com.truper.recertification.excel.vo.RecertificationExcelVO;
-import com.truper.recertification.excel.vo.SapApoExcelVO;
-import com.truper.recertification.excel.vo.SapProfilesExcelVO;
 
+@Component
 public class InsertNewExcelData {
 
 	@Autowired

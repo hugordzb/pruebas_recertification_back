@@ -32,6 +32,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @RestController
+@CrossOrigin(origins = "*")
 @Api(value = "Authentication Api", description = "autentificación Single Sing-On")
 public class AuthenticationResource {
 
@@ -49,7 +50,6 @@ public class AuthenticationResource {
     private JwtTokenUtil jwtTokenUtil;
     
     @PostMapping(path="/login")
-	@CrossOrigin(origins = "http://localhost:3000")
     @ApiOperation(value = "Login para usuarios LDAP", 
     			  response = JwtAuthenticationResponse.class)
     @ApiResponses(value = { @ApiResponse(code = 200, message = "OK"),
@@ -61,9 +61,10 @@ public class AuthenticationResource {
     }
 
     @GetMapping(path="/refresh")
-    @CrossOrigin(origins = "http://localhost:3000")
     @ApiOperation(value = "Refresh Token", 
     			  response = JwtAuthenticationResponse.class)
+    @ApiResponses(value = { @ApiResponse(code = 200, message = "OK"),
+							@ApiResponse(code = 401, message = "Unauthorized")})
     public JwtAuthenticationResponse refreshAndGetAuthenticationToken(HttpServletRequest request) {
         String authToken = request.getHeader(tokenHeader);
         final String token = authToken.substring(7);

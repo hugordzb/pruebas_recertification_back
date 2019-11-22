@@ -6,15 +6,17 @@ import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.truper.recertification.common.mail.service.EmailService;
+//import com.truper.recertification.common.email.EmailService;
 import com.truper.recertification.common.template.MailContentBuilder;
 import com.truper.recertification.dao.ReDetalleJefeDAO;
 import com.truper.recertification.dao.ReRecertificacionDAO;
 import com.truper.recertification.model.PKRecertificacion;
 import com.truper.recertification.model.ReDetalleJefeEntity;
 import com.truper.recertification.model.ReRecertificacionEntity;
+import com.truper.recertification.service.AuditoryService;
 import com.truper.recertification.service.RecertificationService;
 import com.truper.recertification.vo.EmailVO;
+import com.truper.recertification.vo.answer.CountsBossVO;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -28,11 +30,14 @@ public class RecertificationServiceImpl implements RecertificationService{
 	@Autowired
 	private MailContentBuilder mailContentBuilder;
 	
-	@Autowired
-	private EmailService emailService;
+//	@Autowired
+//	private EmailService emailService;
 
 	@Autowired
 	private ReRecertificacionDAO daoRecertification;
+	
+	@Autowired
+	private AuditoryService auditoryService;
 	
 	@Override
 	public boolean sendMail(String strIdJefe){
@@ -56,14 +61,18 @@ public class RecertificationServiceImpl implements RecertificationService{
 	    email.setDestinatario(detailBoss.getCorreo());
 	    email.setCc(detailBoss.getCorreoCC());
 	    
+	    CountsBossVO countsBossVO = auditoryService.findByBoss(detailBoss.getId());
+	    
 		SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
 		
 		mailContentBuilder.setHtmlTemplateName("RecertificationMail");
 		mailContentBuilder.addParametro("fecha", format.format(new Date()));
 		mailContentBuilder.addParametro("idJefe", detailBoss.getIdJefe());
-		mailContentBuilder.addParametro("sistemas", "SAP, CIAT, TEL");
+		String sistemas[] = {"SAP, ", "CIAT, ", "TEL"};
+		mailContentBuilder.addParametro("sistemas", sistemas);
+		mailContentBuilder.addParametro("sistemas", countsBossVO);
 		mailContentBuilder.addParametro("correo","oacarmonac@truper.com");
-		emailService.sendTemplateMail("Recertificacion", mailContentBuilder.build(), new EmailVO());
+//		emailService.sendTemplateMail("Recertificacion", mailContentBuilder.build());
 	    
 		return true;
 	}

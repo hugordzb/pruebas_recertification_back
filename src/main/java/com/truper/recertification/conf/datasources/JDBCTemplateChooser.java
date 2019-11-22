@@ -9,6 +9,10 @@ import com.truper.recertification.utils.constants.JNDIName;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * This class select JDNI to connect with DB
+ * @author mgmolinae
+ */
 @Slf4j
 public class JDBCTemplateChooser {
 

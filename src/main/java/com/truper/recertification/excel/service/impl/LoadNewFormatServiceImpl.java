@@ -10,9 +10,7 @@ import com.truper.recertification.dao.ReJerarquiaDAO;
 import com.truper.recertification.dao.RePerfilSistemaDAO;
 import com.truper.recertification.dao.ReUsuarioDAO;
 import com.truper.recertification.excel.service.LoadNewFormatService;
-import com.truper.recertification.excel.vo.CorreoJefeExcelVO;
 import com.truper.recertification.excel.vo.NewFileExcelVO;
-import com.truper.recertification.excel.vo.RecertificationExcelVO;
 import com.truper.recertification.model.PKCuentasUsuario;
 import com.truper.recertification.model.PKJerarquia;
 import com.truper.recertification.model.ReCuentasUsuarioEntity;
@@ -54,7 +52,6 @@ public class LoadNewFormatServiceImpl implements LoadNewFormatService{
 						.idSistema(strIdSystem)
 						.perfil(strPerfil)
 						.build());
-				log.info("perfiles");
 			}
 		} catch (Exception e) {
 			log.error("Error al insertar el perfil");
@@ -70,7 +67,6 @@ public class LoadNewFormatServiceImpl implements LoadNewFormatService{
 						.departamento(newFileVO.getDepartamento())
 						.build());
 			}
-					
 		} catch (Exception e) {
 			log.error("Ya existe el departamento");
 			log.info(e.getMessage());
@@ -79,14 +75,12 @@ public class LoadNewFormatServiceImpl implements LoadNewFormatService{
 	
 	public void insertDetalleJefe(NewFileExcelVO newFileVO) {
 		try {
-			if(daoDepa.findByDepartamento(newFileVO.getDepartamento()).getIdDepartamento() == null) {
-				daoJefe.save(ReDetalleJefeEntity.builder()
-						.idJefe(newFileVO.getIdJefe())
-						.idDepartamento(daoDepa.findByDepartamento(newFileVO.getDepartamento()).getIdDepartamento())
-						.nombre(newFileVO.getNombreJefe())
-						.correo(newFileVO.getIdJefe() + "@truper.com")
-						.build());
-			}
+			daoJefe.save(ReDetalleJefeEntity.builder()
+					.idJefe(newFileVO.getIdJefe())
+					.idDepartamento(daoDepa.findByDepartamento(newFileVO.getDepartamento()).getIdDepartamento())
+					.nombre(newFileVO.getNombreJefe())
+					.correo(newFileVO.getIdJefe() + "@truper.com")
+					.build());
 		} catch (Exception e) {
 			log.error("Ya existe el Jefe");
 			log.info(e.getMessage());
@@ -95,7 +89,6 @@ public class LoadNewFormatServiceImpl implements LoadNewFormatService{
 	
 	public void insertUsuario(NewFileExcelVO newFileVO) {
 		try {
-			log.info("Usuario (empleado)");
 			daoUsuario.save(ReUsuarioEntity.builder()
 					.idUsuario(newFileVO.getIdEmpleado())
 					.nombre(newFileVO.getNombreEmpleado())
@@ -109,7 +102,6 @@ public class LoadNewFormatServiceImpl implements LoadNewFormatService{
 	
 	public void insertUsuarioJefe(String strAD, String strName) {
 		try {
-			log.info("Usuario (jefe)");
 			daoUsuario.save(ReUsuarioEntity.builder()
 					.idUsuario(strAD)
 					.nombre(strName)
@@ -123,11 +115,10 @@ public class LoadNewFormatServiceImpl implements LoadNewFormatService{
 	
 	public void insertJerarquia(NewFileExcelVO newFileVO) {
 		try {
-			log.info("Jerarquia");
 			daoJerarquia.save(ReJerarquiaEntity.builder()
 					.idEmpleadoJefe(PKJerarquia.builder()
 									.idUsuario(newFileVO.getIdEmpleado())
-									.idJefe(daoJefe.findByNombre(newFileVO.getIdJefe()).getIdJefe())
+									.idJefe(newFileVO.getIdJefe())
 									.build())
 					.build());
 		} catch (Exception e) {

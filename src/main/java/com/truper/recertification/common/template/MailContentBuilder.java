@@ -8,7 +8,10 @@ import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
 import lombok.Setter;
-
+/**
+ * This class have methods to identify and insert data on templates
+ * @author mgmolinae
+ */
 @Service
 public class MailContentBuilder {
 	
@@ -40,6 +43,15 @@ public class MailContentBuilder {
      */
     public void addParametro(String strParametro, String string) {
     	context.setVariable(strParametro, string);
+    }
+    
+    /**
+     * Map parameters names of Template
+     * @param strParametro
+     * @param object
+     */
+    public void addParametro(String strParametro, Object object) {
+    	context.setVariable(strParametro, object);
     }
     
     /**

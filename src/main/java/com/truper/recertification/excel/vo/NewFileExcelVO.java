@@ -19,6 +19,8 @@ public class NewFileExcelVO implements Serializable{
 	
 	private String nombreJefe;
 	
+	private String departamento;
+	
 	private String idEmpleado;
 	
 	private String nombreEmpleado;

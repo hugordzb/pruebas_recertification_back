@@ -7,10 +7,24 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.truper.recertification.model.PKCuentasUsuario;
 import com.truper.recertification.model.ReCuentasUsuarioEntity;
 
+/**
+ * This class content methods to find data in RE_CUENTAS_USUARIO table
+ * @author mgmolinae
+ */
 public interface ReCuentasUsuarioDAO extends JpaRepository<ReCuentasUsuarioEntity, PKCuentasUsuario>{
 
+	/**
+	 * This method find data by IdUsuario (could be idBoss or idEmploy)
+	 * @param idUsuario
+	 * @return List<ReCuentasUsuarioEntity>
+	 */
 	public List<ReCuentasUsuarioEntity> findByIdCuentaUsuarioIdUsuario(String idUsuario);
 		
+	/**
+	 * This method find data by systemAcount
+	 * @param cuentaSistema
+	 * @return List<ReCuentasUsuarioEntity>
+	 */
 	public List<ReCuentasUsuarioEntity> findByIdCuentaUsuarioCuentaSistema(String cuentaSistema);
 	
 }

@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.truper.recertification.excel.component.InsertExcelData;
+import com.truper.recertification.excel.component.InsertNewExcelData;
 import com.truper.recertification.excel.recertification.vo.DocsDataVO;
 import com.truper.recertification.excel.recertification.vo.RecertificationDocsVO;
 
@@ -63,6 +64,9 @@ public class RecertificationDocs {
 	@Autowired
 	private InsertExcelData insertData;
 	
+	@Autowired
+	private InsertNewExcelData insertNewData;
+	
 	/**
 	 * Read the first Charge and insert data on tables
 	 */
@@ -85,5 +89,6 @@ public class RecertificationDocs {
 		RecertificationDocsVO recertDocs = new RecertificationDocsVO();
 		readExcel.readExcelSheet(new DocsDataVO(strNewUrl, strNewFormat, null), recertDocs);
 		
+		insertNewData.insertDataLastRecertification(recertDocs);
 	}
 }

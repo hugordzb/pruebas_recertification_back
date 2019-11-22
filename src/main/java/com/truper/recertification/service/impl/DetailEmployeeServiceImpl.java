@@ -11,7 +11,6 @@ import com.truper.recertification.dao.ReCuentasUsuarioDAO;
 import com.truper.recertification.dao.RePerfilSistemaDAO;
 import com.truper.recertification.dao.ReSistemaDAO;
 import com.truper.recertification.dao.ReUsuarioDAO;
-import com.truper.recertification.ldap.repository.LDAPRepository;
 import com.truper.recertification.model.PKCuentasUsuario;
 import com.truper.recertification.model.ReCuentasUsuarioEntity;
 import com.truper.recertification.model.ReSistemaEntity;
@@ -41,13 +40,10 @@ public class DetailEmployeeServiceImpl implements DetailEmployeeService{
 	@Autowired
 	private RePerfilSistemaDAO daoPerfil;
 	
-	@Autowired
-	private LDAPRepository ldapRepository;
-	
 	public CountsEmployeeVO findEmployDetail(String strIdUsuario) {
 		CountsEmployeeVO employeeVO = new CountsEmployeeVO();
 			
-		if(ldapRepository.findByUsername(strIdUsuario) != null) {
+		if(daoUsuario.findByIdUsuario(strIdUsuario).isEstatus()) {
 			List<ReCuentasUsuarioEntity> lstCuenta = daoCuentas.findByIdCuentaUsuarioIdUsuario(strIdUsuario);
 			try {
 				employeeVO.setIdEmpleado(strIdUsuario);

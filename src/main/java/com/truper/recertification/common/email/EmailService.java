@@ -1,9 +1,12 @@
-package com.truper.recertification.common.mail.service.impl;
+package com.truper.recertification.common.email;
+
+import java.util.List;
 
 import javax.mail.MessagingException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -11,31 +14,69 @@ import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import com.truper.recertification.common.mail.service.EmailService;
-import com.truper.recertification.vo.EmailVO;
-
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
+/**
+ * This class provides the service to send e-mails through the configured SMTP server.
+ * @author hdrodriguezb
+ *
+ */
 @Service
-public class EmailServiceImpl implements EmailService{
-
+@Slf4j
+public class EmailService {
+	/**
+	 * This variable needs to be configured through the properties file.
+	 */
 	@Value("${app.mail.emisor}")
 	private String strEmisor;
 
 	@Autowired
 	private JavaMailSender javaMailSender;
 	
-	public void sendSimpleMail(String strAsunto, String strContenido, EmailVO emailVO) {
-		this.sendMail(strAsunto, strContenido, false, false, emailVO);
+	@Getter
+	@Setter
+	private List<String> lstDestinatario;
+	
+	@Getter
+	@Setter
+	private List<String> lstCC;
+	
+	@Getter
+	@Setter
+	private List<String> lstCCO;
+	
+	@Getter
+	@Setter
+	private List<FileSystemResource> lstAdjunto;
+	
+	/**
+	 * This method sends a simple email
+	 * @param strAsunto
+	 * @param strContenido
+	 */
+	public void sendSimpleMail(String strAsunto, String strContenido) {
+		this.sendMail(strAsunto, strContenido, false, false);
 	}
 	
-	public void sendMultipartMail(String strAsunto, String strContenido, EmailVO emailVO) {
-		this.sendMail(strAsunto, strContenido, true, false, emailVO);
+	/**
+	 * THis method sends a multipart email message with attachments if they were provided before 
+	 * calling it.
+	 * @param strAsunto
+	 * @param strContenido
+	 */
+	public void sendMultipartMail(String strAsunto, String strContenido) {
+		this.sendMail(strAsunto, strContenido, true, false);
 	}
 	
-	public void sendTemplateMail(String strAsunto, String strContenido, EmailVO emailVO) {
-		this.sendMail(strAsunto, strContenido, true, true, emailVO);
+	/**
+	 * This method sends a multipart emailmessage with attachments and a specified HTML template
+	 * @param strAsunto
+	 * @param strContenido
+	 */
+	public void sendTemplateMail(String strAsunto, String strContenido) {
+		this.sendMail(strAsunto, strContenido, true, true);
 	}
 	
 	/**
@@ -51,19 +92,20 @@ public class EmailServiceImpl implements EmailService{
 	 * @throws MailException
 	 */
 	@Async
-	private void sendMail(String strAsunto, String strContenido, boolean isMultipart, boolean isHTML, EmailVO emailVO){
-		
+	private void sendMail(String strAsunto, String strContenido, boolean isMultipart, 
+			boolean isHTML) throws MailException {
 		MimeMessagePreparator mimeMessagePreparator = mimeMessage -> {
-
 			MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, isMultipart, "UTF-8");
 			mimeMessageHelper.setFrom(this.strEmisor);
-			log.info("data: " + emailVO.getDestinatario());
-			mimeMessageHelper.setTo(emailVO.getDestinatario());
-			if (!emailVO.getCc().isEmpty())
-				mimeMessageHelper.setCc(emailVO.getCc());
+			mimeMessageHelper.setTo((String[])lstDestinatario.toArray(new String[0]));
 			
-			if (!emailVO.getCco().isEmpty())
-				mimeMessageHelper.setBcc(emailVO.getCco());
+			// If copy receivers are provided, they are added
+			if (lstCC != null && !lstCC.isEmpty())
+				mimeMessageHelper.setCc((String[])lstCC.toArray(new String[0]));
+			
+			// If blind copy receivers are provided, they are added
+			if (lstCCO != null && !lstCCO.isEmpty())
+				mimeMessageHelper.setBcc((String[])lstCCO.toArray(new String[0]));
 			
 			// Subject is added
 			mimeMessageHelper.setSubject( (strAsunto != null) ? strAsunto : "Sin asunto" );
@@ -73,7 +115,7 @@ public class EmailServiceImpl implements EmailService{
 			
 			if(isMultipart) {
 				// Attachments are added
-				emailVO.getLstAdjunto().forEach( v -> {		    
+			    lstAdjunto.forEach( v -> {
 					 try {
 						 mimeMessageHelper.addAttachment(v.getFilename(), v);
 					 } catch (MessagingException e) {
@@ -82,6 +124,7 @@ public class EmailServiceImpl implements EmailService{
 					}
 			    });
 			}
+			
 		};
 
 		try {
