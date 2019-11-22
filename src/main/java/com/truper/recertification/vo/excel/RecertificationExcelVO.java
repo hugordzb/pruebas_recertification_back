@@ -1,7 +1,6 @@
 package com.truper.recertification.vo.excel;
 
 import java.io.Serializable;
-import java.util.Date;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,9 +15,9 @@ public class RecertificationExcelVO implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
 
-	private Integer noEmpleado;
+	private String noEmpleado;
 	
-	private Date fechaIngreso;
+	private String fechaIngreso;
 	
 	private String nombre;
 	

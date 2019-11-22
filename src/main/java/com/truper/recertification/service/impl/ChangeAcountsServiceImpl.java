@@ -37,17 +37,22 @@ public class ChangeAcountsServiceImpl implements ChangeAcountsService{
 		
 		String strIdSistema= validateAcounts.validateRequest(requestVO);
 		log.info("String: " +strIdSistema);
-		int intIdMov = validateAcounts.mapRequest(requestVO, strIdSistema);
 		
-		Date today = new Date();
-		control.setAtendio("usuarioDefault");
-		control.setFechaAtencion(new Timestamp(today.getTime()));
-		control.setIdMovimiento(intIdMov);
-		control.setEstatus(false);
-		
-		validateAcounts.generateControlChange(control);
-		
-		return intIdMov;
+		try {
+			int intIdMov = validateAcounts.mapRequest(requestVO, strIdSistema);
+			Date today = new Date();
+			control.setAtendio("usuarioDefault");
+			control.setFechaAtencion(new Timestamp(today.getTime()));
+			control.setIdMovimiento(intIdMov);
+			control.setEstatus(false);
+			
+			validateAcounts.generateControlChange(control);
+			return intIdMov;
+		} catch (Exception e) {
+			log.error("No existe ticket asociado");
+			log.info(e.getMessage());
+		}
+		return null;
 	}
 
 	@Override
@@ -57,19 +62,23 @@ public class ChangeAcountsServiceImpl implements ChangeAcountsService{
 		
 		ProcessChangeVO processVO = gson.fromJson(json, ProcessChangeVO.class);
 		ReControlCambiosEntity control = new ReControlCambiosEntity();
-		
-		control.setIdMovimiento(Integer.parseInt(processVO.getIdMovimiento()));
-		control.setAtendio(processVO.getAtendio());
-		control.setEstatus(Boolean.parseBoolean(processVO.getEstatus()));
-		control.setFechaAtencion(new Timestamp(today.getTime()));
-		control.setComentarios(processVO.getComentarios());
-		
-		if(control.isEstatus()) {
-			ReBitacoraCambiosEntity bitacora = daoBitacora.findById(control.getIdMovimiento()).get();
-			validateAcounts.processRequest(bitacora);
+		try {
+			control.setIdMovimiento(Integer.parseInt(processVO.getIdMovimiento()));
+			control.setAtendio(processVO.getAtendio());
+			control.setEstatus(Boolean.parseBoolean(processVO.getEstatus()));
+			control.setFechaAtencion(new Timestamp(today.getTime()));
+			control.setComentarios(processVO.getComentarios());
+			
+			if(control.isEstatus()) {
+				ReBitacoraCambiosEntity bitacora = daoBitacora.findById(control.getIdMovimiento()).get();
+				validateAcounts.processRequest(bitacora);
+			}
+			
+			validateAcounts.generateControlChange(control);
+		} catch (Exception e) {
+			log.error("Ticket invalido");
+			log.info(e.getMessage());
 		}
-		
-		validateAcounts.generateControlChange(control);
 	}
 	
 }

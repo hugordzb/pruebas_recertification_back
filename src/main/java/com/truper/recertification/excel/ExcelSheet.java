@@ -7,7 +7,8 @@ public enum ExcelSheet {
 	RECERTIFICACION(0),
 	TEL(1),
 	SAP(2),
-	CIAT(3);
+	CIAT(3),
+	PERFILES_SAP(4);
 	
 	@Getter
 	private int sheetLocation;
@@ -26,7 +27,8 @@ public enum ExcelSheet {
 			return 4;
 		case CIAT:
 			return 6;
-
+		case PERFILES_SAP:
+			return 4;
 		default:
 			break;
 		}

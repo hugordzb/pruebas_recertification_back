@@ -25,7 +25,7 @@ public interface ValidateAcountsService {
 	 * @param strIdSistema
 	 * @return idMovement
 	 */
-	public Integer mapRequest(RequestChangeVO requestVO, String strIdSistema);
+	public Integer mapRequest(RequestChangeVO requestVO, String strIdSistema) throws Exception;
 
 	/**
 	 * Insert on ReControl_Cambios the new request

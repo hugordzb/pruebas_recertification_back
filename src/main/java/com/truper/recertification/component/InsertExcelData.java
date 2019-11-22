@@ -1,46 +1,21 @@
 package com.truper.recertification.component;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.truper.recertification.dao.ReCuentasUsuarioDAO;
-import com.truper.recertification.dao.ReDepartamentoDAO;
-import com.truper.recertification.dao.ReDetalleJefeDAO;
-import com.truper.recertification.dao.ReJerarquiaDAO;
 import com.truper.recertification.dao.RePerfilSistemaDAO;
 import com.truper.recertification.dao.ReSistemaDAO;
-import com.truper.recertification.dao.ReUsuarioDAO;
-import com.truper.recertification.model.PKCuentasUsuario;
-import com.truper.recertification.model.PKJerarquia;
-import com.truper.recertification.model.ReCuentasUsuarioEntity;
-import com.truper.recertification.model.ReDepartamentoEntity;
-import com.truper.recertification.model.ReDetalleJefeEntity;
-import com.truper.recertification.model.ReJerarquiaEntity;
-import com.truper.recertification.model.ReUsuarioEntity;
+import com.truper.recertification.excel.service.LoadCoutsDataService;
+import com.truper.recertification.vo.excel.RecertificationDocsVO;
 import com.truper.recertification.vo.excel.RecertificationExcelVO;
+import com.truper.recertification.vo.excel.SapApoExcelVO;
+import com.truper.recertification.vo.excel.SapProfilesVO;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 @Component
 public class InsertExcelData {
 
 	@Autowired
-	private ReCuentasUsuarioDAO daoCuentas;
-	
-	@Autowired
-	private ReDepartamentoDAO daoDepa;
-	
-	@Autowired
-	private ReDetalleJefeDAO daoJefe;
-	
-	@Autowired
-	private ReJerarquiaDAO daoJerarquia;
-	
-	@Autowired
-	private ReUsuarioDAO daoUsuario;
+	private LoadCoutsDataService loadService;
 	
 	@Autowired
 	private RePerfilSistemaDAO daoPerfil;
@@ -48,125 +23,119 @@ public class InsertExcelData {
 	@Autowired
 	private ReSistemaDAO daoSistema;
 
-	public void insertDataLastRecertification(List<RecertificationExcelVO> list) {
-
-		for(int i = 0; i < list.size(); i++) {
+	public void insertDataLastRecertification(RecertificationDocsVO recertDocs) {
+		
+		this.insertPerfilSystem(recertDocs);
+		this.insertBossData(recertDocs);
+		
+		for(int i = 0; i < recertDocs.getLstRecert().size(); i++) {
+			RecertificationExcelVO recertVO =recertDocs.getLstRecert().get(i);
+			loadService.insertUsuario(recertVO);
+			loadService.insertJerarquia(recertVO);
+			this.insertCuentasUsuario(recertDocs, recertVO);
+		}
+	}
+	
+	/**
+	 * Read and insert profiles on SAP, TEL and CIAT 
+	 * @param recertDocs
+	 */
+	public void insertPerfilSystem(RecertificationDocsVO recertDocs) {		
+		String strIdSystemCiat = daoSistema.findBySistema("CIAT").getIdSistema();
+		String strIdSystemSap = daoSistema.findBySistema("SAP").getIdSistema();
+		String strIdSystemTel = daoSistema.findBySistema("TEL").getIdSistema();
+		
+		for(int i = 0; i < recertDocs.getLstCiat().size(); i++) {
+			loadService.insertProfiles(recertDocs.getLstCiat().get(i).getNombrePerfil(),
+					strIdSystemCiat);
+		}
+		
+		for(int i = 0; i < recertDocs.getLstCiatLinea().size(); i++) {
+			loadService.insertProfiles(recertDocs.getLstCiatLinea().get(i).getNombrePerfil(), 
+					strIdSystemCiat);
+		}
+		
+		for(int i = 0; i < recertDocs.getLstSapAPO().size(); i++) {
+			SapApoExcelVO sapApoVO = recertDocs.getLstSapAPO().get(i);
+			loadService.insertProfiles(sapApoVO.getPerfil() + sapApoVO.getNombre(), 
+					strIdSystemSap);
+		}
+		
+		for(int i = 0; i < recertDocs.getLstSapProfiles().size(); i++) {
+			SapProfilesVO sapProfilesVO = recertDocs.getLstSapProfiles().get(i);
+			loadService.insertProfiles(sapProfilesVO.getPerfil() + sapProfilesVO.getNombre(), 
+					strIdSystemSap);
+		}
+		
+		for(int i = 0; i < recertDocs.getLstTel().size(); i++) {
+			loadService.insertProfiles(recertDocs.getLstTel().get(i).getRol(), strIdSystemTel);
+		}
+		
+	}
+	
+	/**
+	 * Read and insert boss data 
+	 * @param recertDocs
+	 */
+	public void insertBossData(RecertificationDocsVO recertDocs) {
+		for(int i = 0; i < recertDocs.getLstRecert().size(); i++) {
+			RecertificationExcelVO recertVO =recertDocs.getLstRecert().get(i);
 			
-			this.insertDepartamento(list.get(i));
-			this.insertDetalleJefe(list.get(i));
-			this.insertUsuario(list.get(i));
-			this.insertJerarquia(list.get(i));
-			this.insertCuentasUsuario(list.get(i));
+			loadService.insertDepartamento(recertVO);
+			loadService.insertDetalleJefe(recertDocs.getLstCorreoJefe().get(i), recertDocs.getLstRecert().get(i));
+			loadService.insertUsuarioJefe(recertDocs.getLstCorreoJefe().get(i).getIdJefe(), 
+					recertDocs.getLstRecert().get(i).getNombreJefeFuncional());
 		}
 	}
 	
-	private void insertDepartamento(RecertificationExcelVO excelVO) {
-		try {
-			daoDepa.save(ReDepartamentoEntity.builder()
-					.departamento(excelVO.getDepartamento())
-					.build());
-		} catch (Exception e) {
-			log.error("Ya existe el departamento");
-			log.info(e.getMessage());
-		}
-	}
-	
-	private void insertDetalleJefe(RecertificationExcelVO excelVO) {
-		try {
-
-			daoJefe.save(ReDetalleJefeEntity.builder()
-					.idJefe("validar")
-					.idDepartamento(daoDepa.findByDepartamento(excelVO.getDepartamento()).getIdDepartamento())
-					.nombre(excelVO.getNombreJefeFuncional())
-					.build());
-		} catch (Exception e) {
-			log.error("Ya existe el Jefe");
-			log.info(e.getMessage());
-		}
-	}
-	
-	private void insertUsuario(RecertificationExcelVO excelVO) {
-		try {
-			daoUsuario.save(ReUsuarioEntity.builder()
-					.idUsuario(excelVO.getAd())
-					.nombre(excelVO.getNombre())
-					.noEmpleado(excelVO.getNoEmpleado())
-					.estatus(true)
-					.fechaIngreso(excelVO.getFechaIngreso())
-					.build());
-		} catch (Exception e) {
-			log.error("ya existe el usuario en la tabla principal");
-			log.info(e.getMessage());
-		}
-	}
-	
-	private void insertJerarquia(RecertificationExcelVO excelVO) {
-		try {
-			daoJerarquia.save(ReJerarquiaEntity.builder()
-					.idEmpleadoJefe(PKJerarquia.builder()
-									.idUsuario(excelVO.getAd())
-									.idJefe(daoJefe.findByNombre(excelVO.getJefeJerarquico()).getIdJefe())
-									.build())
-					.build());
-		} catch (Exception e) {
-			log.error("ya existe la relacion del Jefe-Empleado");
-			log.info(e.getMessage());
-		}
-	}
-
-	
-	private void insertCuentasUsuario(RecertificationExcelVO excelVO) {
+	/**
+	 * Read and insert Employee Acounts
+	 * @param recertDocs
+	 * @param excelVO
+	 */
+	public void insertCuentasUsuario(RecertificationDocsVO recertDocs, RecertificationExcelVO excelVO) {
 		String strTel = excelVO.getTel();
 		String strCiat = excelVO.getCiat();
 		String strSAP = excelVO.getSap();
 		
+		String strIdSystemCiat = daoSistema.findBySistema("CIAT").getIdSistema();
+		String strIdSystemSap = daoSistema.findBySistema("SAP").getIdSistema();
+		String strIdSystemTel = daoSistema.findBySistema("TEL").getIdSistema();
 		
-		if(strTel != null) {
-			try {
-				String strIdSistema = daoSistema.findBySistema("TEL").getIdSistema();
-				daoCuentas.save(ReCuentasUsuarioEntity.builder()
-						.idCuentaUsuario(PKCuentasUsuario.builder()
-								.idUsuario(excelVO.getAd())
-								.idPerfil(daoPerfil.findByIdSistemaAndPerfilAndRol("Admin", strIdSistema, "rol").getIdPerfil())
-								.cuentaSistema(strTel)
-								.build())
-						.build());
-			} catch (Exception e) {
-				log.error("ya existe la cuenta " + strTel+" asociada al usuario " + excelVO.getAd());
-				log.info(e.getMessage());
+		if(strTel != null && !strTel.isEmpty()) {
+			for(int i = 0; i < recertDocs.getLstTel().size(); i++) {
+				int intIdPerfil = daoPerfil.findByIdSistemaAndPerfilAndRol(strIdSystemTel, 
+						recertDocs.getLstTel().get(i).getRol(), null).getIdPerfil();
+				loadService.insertAcount(excelVO.getAd(), intIdPerfil, strTel);
 			}
 		}
 		
-		if(strCiat != null) {
-			try {
-				String strIdSistema = daoSistema.findBySistema("CIAT").getIdSistema();
-				daoCuentas.save(ReCuentasUsuarioEntity.builder()
-						.idCuentaUsuario(PKCuentasUsuario.builder()
-								.idUsuario(excelVO.getAd())
-								.idPerfil(daoPerfil.findByIdSistemaAndPerfilAndRol("Admin", strIdSistema, "rol").getIdPerfil())
-								.cuentaSistema(strCiat)
-								.build())
-						.build());
-			} catch (Exception e) {
-				log.error("ya existe la cuenta " + strCiat+" asociada al usuario " + excelVO.getAd());
-				log.info(e.getMessage());
+		if(strCiat != null && !strCiat.isEmpty()) {
+			for(int i = 0; i < recertDocs.getLstCiat().size(); i++) {
+				int intIdPerfil = daoPerfil.findByIdSistemaAndPerfilAndRol(strIdSystemCiat, 
+						recertDocs.getLstCiat().get(i).getNombrePerfil(), null).getIdPerfil();
+				loadService.insertAcount(excelVO.getAd(), intIdPerfil, strCiat);
+			}
+			
+			for(int i = 0; i < recertDocs.getLstCiatLinea().size(); i++) {
+				int intIdPerfil = daoPerfil.findByIdSistemaAndPerfilAndRol(strIdSystemCiat, 
+						recertDocs.getLstCiatLinea().get(i).getNombrePerfil(), null).getIdPerfil();
+				loadService.insertAcount(excelVO.getAd(), intIdPerfil, strCiat);
 			}
 		}
 		
-		if(strSAP != null) {
-			try {
-				String strIdSistema = daoSistema.findBySistema("SAP").getIdSistema();
-				daoCuentas.save(ReCuentasUsuarioEntity.builder()
-						.idCuentaUsuario(PKCuentasUsuario.builder()
-								.idUsuario(excelVO.getAd())
-								.idPerfil(daoPerfil.findByIdSistemaAndPerfilAndRol("Admin", strIdSistema, null).getIdPerfil())
-								.cuentaSistema(strSAP)
-								.build())
-						.build());
-			} catch (Exception e) {
-				log.error("ya existe la cuenta " + strSAP+" asociada al usuario " + excelVO.getAd());
-				log.info(e.getMessage());
+		if(strSAP != null && !strSAP.isEmpty()) {
+			for(int i = 0; i < recertDocs.getLstSapAPO().size(); i++) {
+				int intIdPerfil = daoPerfil.findByIdSistemaAndPerfilAndRol(strIdSystemSap, 
+						recertDocs.getLstSapAPO().get(i).getPerfil(), null).getIdPerfil();
+				loadService.insertAcount(excelVO.getAd(), intIdPerfil, strSAP);
+			}
+			
+			for(int i = 0; i < recertDocs.getLstSapProfiles().size(); i++) {
+				int intIdPerfil = daoPerfil.findByIdSistemaAndPerfilAndRol(strIdSystemSap, 
+						recertDocs.getLstSapProfiles().get(i).getPerfil(), null).getIdPerfil();
+				loadService.insertAcount(excelVO.getAd(), intIdPerfil, strSAP);
 			}
 		}
-	}
+	}	
 }

@@ -15,8 +15,12 @@ import com.truper.recertification.model.ReDetalleJefeEntity;
 import com.truper.recertification.model.ReJerarquiaEntity;
 import com.truper.recertification.service.AuditoryService;
 import com.truper.recertification.vo.answer.CountsEmployeeVO;
+
+import lombok.extern.slf4j.Slf4j;
+
 import com.truper.recertification.vo.answer.CountsBossVO;
 
+@Slf4j
 @Service
 public class AuditoryServiceImpl implements AuditoryService{
 	
@@ -67,7 +71,12 @@ public class AuditoryServiceImpl implements AuditoryService{
 		
 		bossVO.setEmpleados(lstEmpleados);
 		bossVO.setIdJefe(strIdBoss);
-		bossVO.setJefe(daoDetalleJefe.findById(strIdBoss).get().getNombre());
+		try {
+			bossVO.setJefe(daoDetalleJefe.findById(strIdBoss).get().getNombre());
+		} catch (Exception e) {
+			log.error("El jefe no ha sido dado de alta");
+			log.info(e.getMessage());
+		}
 		
 		if(ldapRepository.findByUsername(strIdBoss) != null) {
 			bossVO.setInAD(true);
@@ -78,7 +87,7 @@ public class AuditoryServiceImpl implements AuditoryService{
 	
 	@Override
 	public CountsEmployeeVO findEmployeeAcounts(String strIdEmployee) {
-		return detailEmployee.findEmployDetail(strIdEmployee);
+			return detailEmployee.findEmployDetail(strIdEmployee);
 	}
 
 }

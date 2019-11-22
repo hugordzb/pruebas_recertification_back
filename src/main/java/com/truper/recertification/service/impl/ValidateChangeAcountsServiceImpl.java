@@ -187,7 +187,7 @@ public class ValidateChangeAcountsServiceImpl implements ValidateAcountsService{
 	}
 	
 	@Override
-	public Integer mapRequest(RequestChangeVO requestVO, String strIdSistema) {
+	public Integer mapRequest(RequestChangeVO requestVO, String strIdSistema)  throws Exception{
 		try {
 			Date dateChange = new Date();
 			daoCambios.save(ReBitacoraCambiosEntity
@@ -206,12 +206,12 @@ public class ValidateChangeAcountsServiceImpl implements ValidateAcountsService{
 					.solicitante(requestVO.getSolicitante())
 					.fechaSolicitud(new Timestamp(dateChange.getTime()))
 					.build());
+			return daoCambios.findAll().size();	
 		}catch (Exception e) {
 			log.error("Error al insertar, datos no validos");
 			log.info(e.getMessage());
 		}
-		
-		return daoCambios.findAll().size();		
+		return null;
 	}
 	
 	@Override

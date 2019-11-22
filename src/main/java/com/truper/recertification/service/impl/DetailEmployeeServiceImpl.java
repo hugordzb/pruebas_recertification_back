@@ -23,6 +23,9 @@ import com.truper.recertification.vo.answer.sistemas.ListAcountsVO;
 import com.truper.recertification.vo.answer.sistemas.SapDataVO;
 import com.truper.recertification.vo.answer.sistemas.TelDataVO;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class DetailEmployeeServiceImpl implements DetailEmployeeService{
 
@@ -46,24 +49,28 @@ public class DetailEmployeeServiceImpl implements DetailEmployeeService{
 			
 		if(ldapRepository.findByUsername(strIdUsuario) != null) {
 			List<ReCuentasUsuarioEntity> lstCuenta = daoCuentas.findByIdCuentaUsuarioIdUsuario(strIdUsuario);
+			try {
+				employeeVO.setIdEmpleado(strIdUsuario);
+				employeeVO.setEmpleado(daoUsuario.findById(strIdUsuario).get().getNombre());
 				
-			employeeVO.setIdEmpleado(strIdUsuario);
-			employeeVO.setEmpleado(daoUsuario.findById(strIdUsuario).get().getNombre());
+				ListAcountsVO lstAcounts = new ListAcountsVO();
 				
-			ListAcountsVO lstAcounts = new ListAcountsVO();
-			
-			List<TelDataVO> lstTel = new ArrayList<>();
-			List<SapDataVO> lstSap = new ArrayList<>();
-			List<CiatDataVO> lstCiat = new ArrayList<>();
-			
-			for(int j = 0; j<lstCuenta.size(); j++) {
-				this.findAcounts(lstCuenta.get(j), lstTel, lstSap, lstCiat);
+				List<TelDataVO> lstTel = new ArrayList<>();
+				List<SapDataVO> lstSap = new ArrayList<>();
+				List<CiatDataVO> lstCiat = new ArrayList<>();
+				
+				for(int j = 0; j<lstCuenta.size(); j++) {
+					this.findAcounts(lstCuenta.get(j), lstTel, lstSap, lstCiat);
+				}
+				lstAcounts.setTel(lstTel);
+				lstAcounts.setSap(lstSap);
+				lstAcounts.setCiat(lstCiat);
+					
+				employeeVO.setCuentas(this.orderCounts(lstAcounts));	
+			} catch (Exception e) {
+				log.error("El usuario " + strIdUsuario);
+				log.info(e.getMessage());
 			}
-			lstAcounts.setTel(lstTel);
-			lstAcounts.setSap(lstSap);
-			lstAcounts.setCiat(lstCiat);
-				
-			employeeVO.setCuentas(this.orderCounts(lstAcounts));		
 		}
 		return employeeVO;
 	}

@@ -14,8 +14,9 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.truper.recertification.component.InsertExcelData;
 import com.truper.recertification.excel.mapper.RecertificacionExcelMapper;
+import com.truper.recertification.vo.excel.DocsDataVO;
+import com.truper.recertification.vo.excel.RecertificationDocsVO;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -26,19 +27,18 @@ public class ReadExcel {
 	@Autowired
 	private RecertificacionExcelMapper excelMapper;
 	
-	@Autowired
-	private InsertExcelData insertData;
-		
-	public RecertificacionExcelMapper leerFicheros(String strRuta, String strArchivo) {
+	public void leerFicheros(DocsDataVO docsData, RecertificationDocsVO recertDocs) {
 		
 		List<List<String>> rowData = new LinkedList<>();
 		DataFormatter formatter = new DataFormatter();
 
-		try (FileInputStream file = new FileInputStream(new File(strRuta+strArchivo))) {
+		try (FileInputStream file = new FileInputStream(new File(docsData.getStrRuta()+docsData.getStrArchivo()))) {
 			
 			XSSFWorkbook worbook = new XSSFWorkbook(file);
 			Sheet sheet = worbook.getSheetAt(0);
-			
+			if(docsData.getStrHoja() != null) {
+				sheet = worbook.getSheet(docsData.getStrHoja());
+			}
 			Row hssfRow;
 			int rowInit = 2;
 			int rows = sheet.getLastRowNum();
@@ -81,38 +81,53 @@ public class ReadExcel {
 					}
 				}
 			}
-			this.mapData(rowData, strArchivo);
-			log.info("archivo: " +strArchivo);
-			
+			this.mapData(rowData, docsData, recertDocs);
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.info("error: " + e);
-		}		
-		return excelMapper;
+		}
 	}
 	
 	private int getMaxColumns() {
 		return 25;
 	}
 	
-	private void mapData(List<List<String>> list, String strArchivo) throws ParseException {
-		
-		switch (strArchivo) {
-			case "Usuario TEL_NUEVO.xlsx":
-				excelMapper.excelMapperTel(list);
+	private RecertificationDocsVO mapData(List<List<String>> list, DocsDataVO docsData, RecertificationDocsVO recertDocs) throws ParseException {		
+
+		switch (docsData.getStrArchivo()) {
+			case "Usuarios TEL.xlsx":
+				recertDocs.setLstTel(excelMapper.excelMapperTel(list));
 			break;
 			case "Usuarios SAP.xlsx":
-				excelMapper.excelMapperSap(list);
+				recertDocs.setLstSap(excelMapper.excelMapperSap(list));
 			break;
-			case "Usuarios (ciat).xlsx":
-				excelMapper.excelMapperCiat(list);
+			case "Usuarios CIAT.xlsx":
+				if(docsData.getStrHoja().equals("Ciat")) {
+					recertDocs.setLstCiat(excelMapper.excelMapperCiat(list));
+				}else if(docsData.getStrHoja().equals("Ciat en Linea")) {
+					recertDocs.setLstCiatLinea(excelMapper.excelMapperCiatLinea(list));
+				}
 			break;
-			case "Replica.xlsx":
-				insertData.insertDataLastRecertification(excelMapper.excelMapperRecert(list));	
+			case "Recertificacion.xlsx":
+				if(docsData.getStrHoja().equals("Activos")) {
+					recertDocs.setLstRecert(excelMapper.excelMapperRecert(list));
+				}
 			break;
+			case "Perfiles SAP.xlsx":
+				if(docsData.getStrHoja().equals("PERFILES")) {
+					recertDocs.setLstSapProfiles(excelMapper.excelMapperSapProfiles(list));
+				}else if(docsData.getStrHoja().equals("APO")) {
+					recertDocs.setLstSapAPO(excelMapper.excelMapperSapAPO(list));
+				}
+			break;
+			
+			case "Correo Jefe.xlsx":
+				recertDocs.setLstCorreoJefe(excelMapper.excelMapperCorreo(list));
+				break;
 			default:
 				log.info("El nombre del documento no coincide");
 			break;
 		}
+		return recertDocs;
 	}
 }

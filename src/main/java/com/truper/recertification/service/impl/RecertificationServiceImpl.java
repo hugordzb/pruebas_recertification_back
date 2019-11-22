@@ -36,13 +36,19 @@ public class RecertificationServiceImpl implements RecertificationService{
 	
 	@Override
 	public boolean sendMail(String strIdJefe){
-		ReDetalleJefeEntity detailBoss = daoJefe.findById(strIdJefe).get();
-		
-		if(this.generateMail(detailBoss)) {
-			this.updateDB(detailBoss);
-			return true;
+		boolean blnAnswer = false;
+		try {
+			ReDetalleJefeEntity detailBoss = daoJefe.findById(strIdJefe).get();
+			
+			if(this.generateMail(detailBoss)) {
+				this.updateDB(detailBoss);
+				blnAnswer = true;
+			}
+		} catch (Exception e) {
+			log.error("Error al generar el email");
+			log.info(e.getMessage());
 		}
-		return false;
+		return blnAnswer;
 	}
 	
 	private boolean generateMail(ReDetalleJefeEntity detailBoss) {
