@@ -53,6 +53,7 @@ public class JwtAuthorizationTokenFilter extends OncePerRequestFilter {
             } catch (ExpiredJwtException e) {
                 log.info("the token is expired and not valid anymore", e);
             } catch (Exception exG){
+            	exG.printStackTrace();
             	log.info("Error  en authenticación");
             }
         }

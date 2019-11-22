@@ -11,6 +11,10 @@ import com.truper.recertification.excel.vo.RecertificationExcelVO;
 import com.truper.recertification.excel.vo.SapApoExcelVO;
 import com.truper.recertification.excel.vo.SapProfilesExcelVO;
 
+/**
+ * This method insert excel data, using the last format docs
+ * @author mgmolinae
+ */
 @Component
 public class InsertExcelData {
 
@@ -23,6 +27,10 @@ public class InsertExcelData {
 	@Autowired
 	private ReSistemaDAO daoSistema;
 
+	/**
+	 * This method insert data on tables 
+	 * @param recertDocs
+	 */
 	public void insertDataLastRecertification(RecertificationDocsVO recertDocs) {
 		
 		this.insertPerfilSystem(recertDocs);

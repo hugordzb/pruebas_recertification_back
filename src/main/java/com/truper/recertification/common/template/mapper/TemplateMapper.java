@@ -23,13 +23,13 @@ public class TemplateMapper {
 	 */
 	public void templateMapper(EmailTemplateVO emailTemplate) {
 
-		SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-		
-		mailContentBuilder.setHtmlTemplateName("RecertificationMail");
-		mailContentBuilder.addParametro("fecha", format.format(new Date()));
-		mailContentBuilder.addParametro("idJefe", emailTemplate.getStrIdJefe());
-		mailContentBuilder.addParametro("sistemas", emailTemplate.getLstIdSistemas().toString());
-		mailContentBuilder.addParametro("correo", emailTemplate.getStrCorreo());
+//		SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+//		
+//		mailContentBuilder.setHtmlTemplateName("RecertificationMail");
+//		mailContentBuilder.addParametro("fecha", format.format(new Date()));
+//		mailContentBuilder.addParametro("idJefe", emailTemplate.getStrIdJefe());
+//		mailContentBuilder.addParametro("sistemas", emailTemplate.getLstIdSistemas().toString());
+//		mailContentBuilder.addParametro("correo", emailTemplate.getStrCorreo());
 
 	}
 }

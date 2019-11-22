@@ -16,9 +16,19 @@ import com.truper.recertification.excel.vo.SapExcelVO;
 import com.truper.recertification.excel.vo.SapProfilesExcelVO;
 import com.truper.recertification.excel.vo.TelExcelVO;
 
+/**
+ * This class map excel docs
+ * @author mgmolinae
+ */
 @Component
 public class RecertificacionExcelMapper{
 
+	/**
+	 * This method map the principal excel doc of recertification
+	 * @param rowData
+	 * @return
+	 * @throws ParseException
+	 */
 	public List<RecertificationExcelVO> excelMapperRecert(List<List<String>> rowData) throws ParseException {
 		List<RecertificationExcelVO> lstExcel = new ArrayList<>();
 		
@@ -54,6 +64,12 @@ public class RecertificacionExcelMapper{
 		return lstExcel;
 	}
 	
+	/**
+	 * This method map the profiles of tel, excel doc that need the recertification data
+	 * @param rowData
+	 * @return
+	 * @throws ParseException
+	 */
 	public List<TelExcelVO> excelMapperTel(List<List<String>> rowData) throws ParseException {
 			List<TelExcelVO> lstExcel = new ArrayList<>();
 			
@@ -71,6 +87,12 @@ public class RecertificacionExcelMapper{
 			return lstExcel;
 	}
 
+	/**
+	 * This method map the profiles of Sap, excel doc that need the recertification data
+	 * @param rowData
+	 * @return
+	 * @throws ParseException
+	 */
 	public List<SapExcelVO> excelMapperSap(List<List<String>> rowData) throws ParseException {
 		List<SapExcelVO> lstExcel = new ArrayList<>();
 		

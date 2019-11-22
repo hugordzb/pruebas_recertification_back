@@ -9,6 +9,10 @@ import com.truper.recertification.excel.recertification.vo.RecertificationDocsVO
 import com.truper.recertification.excel.service.LoadNewFormatService;
 import com.truper.recertification.excel.vo.NewFileExcelVO;
 
+/**
+ * This method insert excel data, using the new format docs
+ * @author mgmolinae
+ */
 @Component
 public class InsertNewExcelData {
 
@@ -21,6 +25,10 @@ public class InsertNewExcelData {
 	@Autowired
 	private ReSistemaDAO daoSistema;
 
+	/**
+	 * This method insert data on tables 
+	 * @param recertDocs
+	 */
 	public void insertDataLastRecertification(RecertificationDocsVO recertDocs) {
 		
 		for(int i = 0; i < recertDocs.getLstNewFile().size(); i++) {

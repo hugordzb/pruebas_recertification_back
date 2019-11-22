@@ -169,7 +169,7 @@ class RecertificationApplicationTests {
 			String sistemas[] = {"SAP", "CIAT", "TEL"};
 			mailContentBuilder.addParametro("sistemas", sistemas);
 			mailContentBuilder.addParametro("correo","--@correo.com");
-			emailService.sendTemplateMail("Detonacion alerta", mailContentBuilder.build());
+			emailService.sendTemplateMail("Envio para recertificacion", mailContentBuilder.build());
 		  
 		    log.info("Se envio");
 		}

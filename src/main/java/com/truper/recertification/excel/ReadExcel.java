@@ -20,6 +20,10 @@ import com.truper.recertification.excel.recertification.vo.RecertificationDocsVO
 
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * This class read excel files
+ * @author mgmolinae
+ */
 @Slf4j
 @Service
 public class ReadExcel {
@@ -27,6 +31,11 @@ public class ReadExcel {
 	@Autowired
 	private RecertificacionExcelMapper excelMapper;
 	
+	/**
+	 * This method review data on excel columns, and identify by sheets (if sheet's not defined read the first sheet) 
+	 * @param docsData
+	 * @param recertDocs
+	 */
 	public void readExcelSheet(DocsDataVO docsData, RecertificationDocsVO recertDocs) {
 		
 		List<List<String>> rowData = new LinkedList<>();
@@ -88,10 +97,22 @@ public class ReadExcel {
 		}
 	}
 	
+	/**
+	 * This method content the maximun number of columns in the docs
+	 * @return integer
+	 */
 	private int getMaxColumns() {
 		return 25;
 	}
 	
+	/**
+	 * This method identify docs and invoke maps
+	 * @param list
+	 * @param docsData
+	 * @param recertDocs
+	 * @return RecertificationDocsVO
+	 * @throws ParseException
+	 */
 	private RecertificationDocsVO mapData(List<List<String>> list, DocsDataVO docsData, RecertificationDocsVO recertDocs) throws ParseException {		
 
 		switch (docsData.getStrArchivo()) {

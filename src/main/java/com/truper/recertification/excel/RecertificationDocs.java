@@ -68,7 +68,7 @@ public class RecertificationDocs {
 	private InsertNewExcelData insertNewData;
 	
 	/**
-	 * Read the first Charge and insert data on tables
+	 * Read the first Charge and insert data on tables with the last excel format
 	 */
 	public void selectRecertificationDoc() {
 		
@@ -85,6 +85,9 @@ public class RecertificationDocs {
 		insertData.insertDataLastRecertification(recertDocs);
 	}
 	
+	/**
+	 * Read the first Charge and insert data on tables with the new excelFormat
+	 */
 	public void selectNewFormatDoc() {
 		RecertificationDocsVO recertDocs = new RecertificationDocsVO();
 		readExcel.readExcelSheet(new DocsDataVO(strNewUrl, strNewFormat, null), recertDocs);
