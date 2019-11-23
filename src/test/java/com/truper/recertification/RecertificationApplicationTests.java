@@ -3,6 +3,7 @@ package com.truper.recertification;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
@@ -30,7 +31,6 @@ import com.lowagie.text.FontFactory;
 import com.lowagie.text.pdf.PdfWriter;
 import com.truper.recertification.common.email.EmailService;
 import com.truper.recertification.common.template.MailContentBuilder;
-import com.truper.recertification.common.template.PDF;
 import com.truper.recertification.excel.RecertificationDocs;
 import com.truper.recertification.ldap.repository.LDAPRepository;
 import com.truper.recertification.model.ReDetalleJefeEntity;
@@ -58,8 +58,6 @@ class RecertificationApplicationTests {
 	@Autowired
 	private EmailService emailService;
 	
-	@Autowired
-	private PDF pdf;
 	//ldap	
 	@Test
 	public void ldapFindByUsername() {
@@ -161,8 +159,9 @@ class RecertificationApplicationTests {
 		List<FileSystemResource> archivos = new ArrayList<>();
 		
 		// Recipients list is filled in
-		lstDestinatarios.add("hdrodriguezb@truper.com");
 		lstDestinatarios.add("mgmolinae@truper.com");
+		
+		archivos.add(new FileSystemResource(new File("C:\\Users\\mgmolinae\\workspace\\workspaceGit\\recertification\\iTextHelloWorld.pdf")));
 		
 		log.info("Destinatarios:" + lstDestinatarios.toString());
 		
@@ -198,8 +197,15 @@ class RecertificationApplicationTests {
 	
 	@Test
 	public void generatePDF() throws DocumentException, FileNotFoundException {
-		log.info("----start----");
-//		pdf.makePDF();
-		log.info("----finish----");
+		Document document = new Document();
+		PdfWriter.getInstance(document, new FileOutputStream("iTextHelloWorld.pdf"));
+		 
+		document.open();
+		Font font = FontFactory.getFont(FontFactory.COURIER, 16);
+		Chunk chunk = new Chunk("Hello World", font);
+		 
+		document.add(chunk);
+		document.close();
+		log.info("terminp");
 	}
 }

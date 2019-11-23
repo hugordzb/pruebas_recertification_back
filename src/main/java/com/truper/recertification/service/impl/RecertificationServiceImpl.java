@@ -1,11 +1,13 @@
 package com.truper.recertification.service.impl;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Service;
 
@@ -36,6 +38,9 @@ public class RecertificationServiceImpl implements RecertificationService{
 	@Autowired
 	private MailTemplate mailTemplate;
 	
+	@Value("${recertification.xlsx.letters.url}")
+	public String urlLetters;
+	
 	@Override
 	public boolean sendMail(String strIdJefe){
 		boolean blnAnswer = false;
@@ -64,7 +69,7 @@ public class RecertificationServiceImpl implements RecertificationService{
 		log.info("Destinatarios:" + lstDestinatarios.toString());
 				
 		//Falta agregar los archivos adjuntos;
-//		archivos.add();
+		archivos.add(new FileSystemResource(new File(urlLetters + detailBoss.getNombre() +".pdf")));
 		
 		emailService.setLstDestinatario(lstDestinatarios);
 		emailService.setLstCC(lstCC);
