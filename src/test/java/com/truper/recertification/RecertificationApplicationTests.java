@@ -3,6 +3,8 @@ package com.truper.recertification;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -18,12 +20,20 @@ import org.springframework.ldap.core.LdapTemplate;
 import org.springframework.ldap.filter.AndFilter;
 import org.springframework.ldap.filter.EqualsFilter;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.web.bind.annotation.ModelAttribute;
 
+import com.lowagie.text.Chunk;
+import com.lowagie.text.Document;
+import com.lowagie.text.DocumentException;
+import com.lowagie.text.Font;
+import com.lowagie.text.FontFactory;
+import com.lowagie.text.pdf.PdfWriter;
 import com.truper.recertification.common.email.EmailService;
-import com.truper.recertification.common.template.PdfView;
 import com.truper.recertification.common.template.MailContentBuilder;
+import com.truper.recertification.common.template.PDF;
 import com.truper.recertification.excel.RecertificationDocs;
 import com.truper.recertification.ldap.repository.LDAPRepository;
+import com.truper.recertification.model.ReDetalleJefeEntity;
 import com.truper.recertification.service.RecertificationService;
 import com.truper.recertification.vo.LDAPVO;
 
@@ -49,8 +59,7 @@ class RecertificationApplicationTests {
 	private EmailService emailService;
 	
 	@Autowired
-	private PdfView pdf;
-
+	private PDF pdf;
 	//ldap	
 	@Test
 	public void ldapFindByUsername() {
@@ -188,7 +197,9 @@ class RecertificationApplicationTests {
 	}
 	
 	@Test
-	public void generatePDF() {
-		
+	public void generatePDF() throws DocumentException, FileNotFoundException {
+		log.info("----start----");
+//		pdf.makePDF();
+		log.info("----finish----");
 	}
 }
