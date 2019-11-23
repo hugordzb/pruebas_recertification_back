@@ -110,7 +110,7 @@ public class AuditoryServiceImpl implements AuditoryService{
 		String tel = "";
 		String ciat = "";
 		String sap = "";
-
+/*
 		for(int i = 0; i < lstEmpleados.size(); i++) {
 			List<AcountsVO> lstAcounts = lstEmpleados.get(i).getCuentas();
 			
@@ -119,12 +119,12 @@ public class AuditoryServiceImpl implements AuditoryService{
 				
 				if(tel.isEmpty() && acountsVO.getCCiat() != null)
 					ciat = "CIAT, ";
-				if(tel.isEmpty() && acountsVO.getPSap() != null)
-					sap = "SAP, ";
+				//if(tel.isEmpty() && acountsVO.getPSap() != null)
+					//sap = "SAP, ";
 				if(tel.isEmpty() && acountsVO.getCTel() != null)
 					tel = "TEL,";
 			}
-		}
+		}*/
 		return ciat + sap + tel;
 	}
 

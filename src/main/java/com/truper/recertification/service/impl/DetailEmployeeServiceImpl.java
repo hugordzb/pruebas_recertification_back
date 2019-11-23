@@ -46,8 +46,7 @@ public class DetailEmployeeServiceImpl implements DetailEmployeeService{
 		if(daoUsuario.findByIdUsuario(strIdUsuario).isEstatus()) {
 			List<ReCuentasUsuarioEntity> lstCuenta = daoCuentas.findByIdCuentaUsuarioIdUsuario(strIdUsuario);
 			try {
-				employeeVO.setIdEmpleado(strIdUsuario);
-				employeeVO.setEmpleado(daoUsuario.findById(strIdUsuario).get().getNombre());
+				employeeVO.setNombre(daoUsuario.findById(strIdUsuario).get().getNombre());
 				
 				ListAcountsVO lstAcounts = new ListAcountsVO();
 				
@@ -58,11 +57,12 @@ public class DetailEmployeeServiceImpl implements DetailEmployeeService{
 				for(int j = 0; j<lstCuenta.size(); j++) {
 					this.findAcounts(lstCuenta.get(j), lstTel, lstSap, lstCiat);
 				}
+				
 				lstAcounts.setTel(lstTel);
 				lstAcounts.setSap(lstSap);
 				lstAcounts.setCiat(lstCiat);
 					
-				employeeVO.setCuentas(this.orderCounts(lstAcounts));	
+				//employeeVO.setCuentas(this.orderCounts(lstAcounts));	
 			} catch (Exception e) {
 				log.error("El usuario " + strIdUsuario);
 				log.info(e.getMessage());
@@ -132,20 +132,22 @@ public class DetailEmployeeServiceImpl implements DetailEmployeeService{
 		int[] numeros = {intTel, intCiat, intSap};
 		Arrays.sort(numeros);
 		
-		for(int i=0; i < numeros[2]; i++) {
+		for(int i = 0; i < numeros[2]; i++) {
 			AcountsVO countsVO = new AcountsVO();
 			
 			if(intCiat != 0 && i < intCiat) {
-			countsVO.setCCiat(lstAcountsVO.getCiat().get(i).getCuenta());
-			countsVO.setPCiat(lstAcountsVO.getCiat().get(i).getPerfil());
+				countsVO.setCCiat(lstAcountsVO.getCiat().get(i).getCuenta());
+				countsVO.setPCiat(lstAcountsVO.getCiat().get(i).getPerfil());
 			}
+			
 			if(intSap != 0 && i < intSap) {
-			countsVO.setCSap(lstAcountsVO.getSap().get(i).getCuenta());
-			countsVO.setPSap(lstAcountsVO.getSap().get(i).getPerfil());
+				//countsVO.setCSap(lstAcountsVO.getSap().get(i).getCuenta());
+				//countsVO.setPSap(lstAcountsVO.getSap().get(i).getPerfil());
 			}
+			
 			if(intTel != 0 && i < intTel) {
-			countsVO.setCTel(lstAcountsVO.getTel().get(i).getCuenta());
-			countsVO.setPTel(lstAcountsVO.getTel().get(i).getPerfil());
+				countsVO.setCTel(lstAcountsVO.getTel().get(i).getCuenta());
+				countsVO.setPTel(lstAcountsVO.getTel().get(i).getPerfil());
 			}
 			lstCounts.add(countsVO);
 		}
