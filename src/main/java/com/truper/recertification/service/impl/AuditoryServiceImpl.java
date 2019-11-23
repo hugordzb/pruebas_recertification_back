@@ -57,7 +57,7 @@ public class AuditoryServiceImpl implements AuditoryService{
 		jefesMap.put("jefes", lstJefes);
 		return jefesMap;
 	}
-
+	
 	@Override
 	public CountsBossVO findByBoss(String strIdBoss) {
 		CountsBossVO bossVO = new CountsBossVO();
@@ -86,6 +86,18 @@ public class AuditoryServiceImpl implements AuditoryService{
 			bossVO.setInAD(true);
 				
 		return bossVO;
+	}
+
+	@Override
+	public List<CountsEmployeeVO> generateLetterByBoss(String strIdBoss) {
+		List<CountsEmployeeVO> lstEmpleados = new ArrayList<>();		
+		List<ReJerarquiaEntity> lstJerarquia = daoJerarquia.findByIdEmpleadoJefeIdJefe(strIdBoss);
+		
+		for(int j = 0; j<lstJerarquia.size(); j++) {
+			String strIdemployee = lstJerarquia.get(j).getIdEmpleadoJefe().getIdUsuario();
+			lstEmpleados.add(this.findEmployeeAcounts(strIdemployee));
+		}
+		return lstEmpleados;
 	}
 	
 	@Override

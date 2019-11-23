@@ -1,5 +1,6 @@
 package com.truper.recertification.resources;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
@@ -53,6 +54,17 @@ public class CountsResources {
 			@ApiParam(value = "Cuenta AD (LDAP) del jefe", required = true)
     		@Valid	@PathVariable ("idJefe") String strIdJefe) {
 		return auditoryService.findByBoss(strIdJefe);
+	}
+	
+	@GetMapping(path = "/letterService/{idJefe}")
+	@ApiOperation(value = "Detalle de las Cuentas relacionadas a la recertificación, por jefe", 
+	  			  response = List.class)
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "OK"),
+							@ApiResponse(code = 401, message = "Unauthorized")})
+	public List<CountsEmployeeVO> letterService(
+			@ApiParam(value = "Cuenta AD (LDAP) del jefe", required = true)
+    		@Valid	@PathVariable ("idJefe") String strIdJefe) {
+		return auditoryService.generateLetterByBoss(strIdJefe);
 	}
 	
 	@GetMapping	(path = "/employeeDetail/{strIdEmployee}")

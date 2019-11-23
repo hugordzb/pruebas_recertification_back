@@ -1,5 +1,6 @@
 package com.truper.recertification.service;
 
+import java.util.List;
 import java.util.Map;
 
 import com.truper.recertification.vo.answer.CountsBossVO;
@@ -19,6 +20,8 @@ public interface AuditoryService {
 	 * @return acounts data by systems and employee
 	 */
 	public CountsBossVO findByBoss(String strIdBoss);
+	
+	public List<CountsEmployeeVO> generateLetterByBoss(String strIdBoss);
 	
 	/**
 	 * This methos find by employee
