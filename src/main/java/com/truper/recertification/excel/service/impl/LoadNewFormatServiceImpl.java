@@ -59,6 +59,7 @@ public class LoadNewFormatServiceImpl implements LoadNewFormatService{
 		}
 	}
 	
+	@Override
 	public void insertDepartamento(NewFileExcelVO newFileVO){
 		try {
 			if(daoDepa.findByDepartamento(newFileVO.getDepartamento()) == null) {
@@ -73,6 +74,7 @@ public class LoadNewFormatServiceImpl implements LoadNewFormatService{
 		}
 	}
 	
+	@Override
 	public void insertDetalleJefe(NewFileExcelVO newFileVO) {
 		try {
 			daoJefe.save(ReDetalleJefeEntity.builder()
@@ -87,6 +89,7 @@ public class LoadNewFormatServiceImpl implements LoadNewFormatService{
 		}
 	}
 	
+	@Override
 	public void insertUsuario(NewFileExcelVO newFileVO) {
 		try {
 			daoUsuario.save(ReUsuarioEntity.builder()
@@ -100,6 +103,7 @@ public class LoadNewFormatServiceImpl implements LoadNewFormatService{
 		}
 	}
 	
+	@Override
 	public void insertUsuarioJefe(String strAD, String strName) {
 		try {
 			daoUsuario.save(ReUsuarioEntity.builder()
@@ -113,6 +117,7 @@ public class LoadNewFormatServiceImpl implements LoadNewFormatService{
 		}
 	}
 	
+	@Override
 	public void insertJerarquia(NewFileExcelVO newFileVO) {
 		try {
 			daoJerarquia.save(ReJerarquiaEntity.builder()
@@ -127,6 +132,7 @@ public class LoadNewFormatServiceImpl implements LoadNewFormatService{
 		}
 	}
 	
+	@Override
 	public void insertAcount(String strIdUsuario, int intIdPerfil, String strCuenta) {
 		try {
 			log.info("Cuenta: " +strCuenta);

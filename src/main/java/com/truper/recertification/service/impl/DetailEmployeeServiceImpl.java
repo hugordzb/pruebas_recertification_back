@@ -40,6 +40,7 @@ public class DetailEmployeeServiceImpl implements DetailEmployeeService{
 	@Autowired
 	private RePerfilSistemaDAO daoPerfil;
 	
+	@Override
 	public CountsEmployeeVO findEmployDetail(String strIdUsuario) {
 		CountsEmployeeVO employeeVO = new CountsEmployeeVO();
 			
@@ -71,6 +72,7 @@ public class DetailEmployeeServiceImpl implements DetailEmployeeService{
 		return employeeVO;
 	}
 	
+	@Override
 	public void findAcounts(ReCuentasUsuarioEntity cuentasUsuario, List<TelDataVO> lstTel,
 			List<SapDataVO> lstSap, List<CiatDataVO> lstCiat) {
 		
@@ -110,6 +112,7 @@ public class DetailEmployeeServiceImpl implements DetailEmployeeService{
 		}
 	}
 	
+	@Override
 	public List<AcountsVO> orderCounts(ListAcountsVO lstAcountsVO) {
 		List<AcountsVO> lstCounts = new ArrayList<>();
 		
@@ -141,7 +144,7 @@ public class DetailEmployeeServiceImpl implements DetailEmployeeService{
 			}
 			if(intSap != 0 && i < intSap) {
 			countsVO.setCSap(lstAcountsVO.getSap().get(i).getCuenta());
-			countsVO.setPSap(lstAcountsVO.getSap().get(i).getPerfil());
+			countsVO.setPSap(countsVO.getPSap() + " " + lstAcountsVO.getSap().get(i).getPerfil());
 			}
 			if(intTel != 0 && i < intTel) {
 			countsVO.setCTel(lstAcountsVO.getTel().get(i).getCuenta());
