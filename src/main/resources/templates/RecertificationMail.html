@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
-	<meta charset="ISO-8859-1">
+	<meta charset="UTF-8">
 	<style>
 		header, main, footer {
 			margin: 5%;
 			padding: 0;
+			text-align: left;
 		}
 				
 		footer {
@@ -50,77 +51,38 @@
 	
 		<p> Buenas <span th:text="${idJefe}"></span>,</p>
 		
-		<p>Como parte del proceso de re certificación de usuarios de los sistemas 
-			<span th:each="sistema : ${sistemas}" th:text="${sistema}" >, </span>, solicitamos de tu apoyo para que nos ayudes en confirmar 
+		<p>Como parte del proceso de recertificaciÃ³n de usuarios de los sistemas 
+			<span th:text="${sistemas}" ></span> solicitamos de tu apoyo para que nos ayudes en confirmar 
 			las cuentas que son utilizadas en tu equipo de trabajo, por favor.
 		</p>
 		<br/>
 		
 		
-		countsBossVO
 		
-		<table>
-            <thead>
-            	<tr>
-            		<th colspan="8">Cuentas de Usuario</th>
-            	</tr>
-            	<tr>
-            		<th>Nombre</th>
-	                <th>SAP</th>
-	                <th>Rol</th>
-	                <th>TEL</th>
-	                <th>Rol</th>
-	                <th>CIAT</th>
-	                <th>Perfil</th>
-            	</tr>
-            </thead>
-            <tr>
-                <th id="basic-lname">Nombre</th>
-                <th id="basic-lsap">SAP</th>
-                <th id="basic-lpSap">Rol</th>
-                <th id="basic-ltel">TEL</th>
-                <th id="basic-lpTel">Rol</th>
-                <th id="basic-lciat">CIAT</th>
-                <th id="basic-lpCiat">Perfil</th>
-            </tr>
-            <tbody>
-                <tr th:each="row : ${table.rows}">   
-                    <td headers="basic-lname"><span th:text="${nombre}"></span></td>
-                    <td headers="basic-lsap"><span th:text="${sap}"></span></td>
-                    <td headers="basic-lpSap"><span th:text="${pSap}"></span></td>
-                    <td headers="basic-ltel"><span th:text="${tel}"></span></td>
-                    <td headers="basic-lpTel"><span th:text="${pTel}"></span></td>
-                    <td headers="basic-lciat"><span th:text="${ciat}"></span></td>
-                    <td headers="basic-lpCiat"><span th:text="${pCiat}"></span></td>
-                </tr>
-            </tbody>
-        </table>
-		
-        
 		<br/>
-		<p>Por favor de enviar la carta firmada por correo electrónico <span th:text="${correo}"></span> 
+		<p>Por favor de enviar la carta firmada por correo electrÃ³nico <span th:text="${correo}"></span> 
 			o contestar el correo con el siguiente texto:
 		</p>
 		
 		<p>Confirmo que el uso de las cuentas son utilizadas por los miembros de mi equipo de 
 			trabajo mencionados en el documento adjunto, Y que somos conscientes del buen uso 
-			de las cuentas que nos fueron proporcionadas por el área de Sistemas, con el objetivo 
-			de cubrir nuestras funciones dentro de la compañía, por lo que también especifico a 
+			de las cuentas que nos fueron proporcionadas por el Ã¡rea de Sistemas, con el objetivo 
+			de cubrir nuestras funciones dentro de la compaÃ±Ã­a, por lo que tambiÃ©n especifico a 
 			los usuarios que comparten la responsabilidad:
 		</p>
 		
-		<p>[ En este punto por favor de en listar a los usuarios que también utilizan la cuenta, 
+		<p>[ En este punto por favor de en listar a los usuarios que tambiÃ©n utilizan la cuenta, 
 			en caso de haberlos, en caso contrario indicar que esta cuenta es utilizada solo por 
 			los usuarios mencionados en el documento anexo. ]
 		</p>
 	
-		<p>De antemano gracias por la atención.</p>
+		<p>De antemano gracias por la atenciÃ³n.</p>
 		
 		<p>Saludos.</p>
 	</main>
 	
 	<footer>
-		<p>Este proceso es para cumplir con observaciones de auditorías</p>
+		<p>Este proceso es para cumplir con observaciones de auditorÃ­as</p>
 		<p><strong>&copy; 2019 TRUPER S.A. de C.V. Todos los derechos reservados. truper.com</strong></p>
 	</footer>
 	

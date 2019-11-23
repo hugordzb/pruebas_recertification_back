@@ -15,6 +15,7 @@ import com.truper.recertification.model.ReDetalleJefeEntity;
 import com.truper.recertification.model.ReJerarquiaEntity;
 import com.truper.recertification.service.AuditoryService;
 import com.truper.recertification.vo.answer.CountsEmployeeVO;
+import com.truper.recertification.vo.answer.systems.AcountsVO;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -60,6 +61,7 @@ public class AuditoryServiceImpl implements AuditoryService{
 	@Override
 	public CountsBossVO findByBoss(String strIdBoss) {
 		CountsBossVO bossVO = new CountsBossVO();
+		String strSystems = null;
 		
 		List<CountsEmployeeVO> lstEmpleados = new ArrayList<>();		
 		List<ReJerarquiaEntity> lstJerarquia = daoJerarquia.findByIdEmpleadoJefeIdJefe(strIdBoss);
@@ -68,9 +70,11 @@ public class AuditoryServiceImpl implements AuditoryService{
 			String strIdemployee = lstJerarquia.get(j).getIdEmpleadoJefe().getIdUsuario();
 			lstEmpleados.add(this.findEmployeeAcounts(strIdemployee));
 		}
-		
+		strSystems = this.systems(lstEmpleados);
+		bossVO.setSistemas(strSystems);
 		bossVO.setEmpleados(lstEmpleados);
 		bossVO.setIdJefe(strIdBoss);
+		
 		try {
 			bossVO.setJefe(daoDetalleJefe.findById(strIdBoss).get().getNombre());
 		} catch (Exception e) {
@@ -78,9 +82,8 @@ public class AuditoryServiceImpl implements AuditoryService{
 			log.info(e.getMessage());
 		}
 		
-		if(ldapRepository.findByUsername(strIdBoss) != null) {
+		if(ldapRepository.findByUsername(strIdBoss) != null)
 			bossVO.setInAD(true);
-		}
 				
 		return bossVO;
 	}
@@ -88,6 +91,28 @@ public class AuditoryServiceImpl implements AuditoryService{
 	@Override
 	public CountsEmployeeVO findEmployeeAcounts(String strIdEmployee) {
 			return detailEmployee.findEmployDetail(strIdEmployee);
+	}
+	
+	private String systems(List<CountsEmployeeVO> lstEmpleados) {
+		String tel = "";
+		String ciat = "";
+		String sap = "";
+
+		for(int i = 0; i < lstEmpleados.size(); i++) {
+			List<AcountsVO> lstAcounts = lstEmpleados.get(i).getCuentas();
+			
+			for(int j = 0; j < lstAcounts.size(); j++) {
+				AcountsVO acountsVO = lstAcounts.get(j);
+				
+				if(tel.isEmpty() && acountsVO.getCCiat() != null)
+					ciat = "CIAT, ";
+				if(tel.isEmpty() && acountsVO.getPSap() != null)
+					sap = "SAP, ";
+				if(tel.isEmpty() && acountsVO.getCTel() != null)
+					tel = "TEL,";
+			}
+		}
+		return ciat + sap + tel;
 	}
 
 }

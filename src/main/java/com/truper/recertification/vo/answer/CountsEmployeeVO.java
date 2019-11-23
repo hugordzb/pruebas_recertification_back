@@ -3,7 +3,7 @@ package com.truper.recertification.vo.answer;
 import java.io.Serializable;
 import java.util.List;
 
-import com.truper.recertification.vo.answer.sistemas.AcountsVO;
+import com.truper.recertification.vo.answer.systems.AcountsVO;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -20,6 +20,8 @@ public class CountsBossVO implements Serializable{
 	
 	private String jefe;
 	
+	private String sistemas;
+
 	private boolean inAD;
 	
 	private List<CountsEmployeeVO> empleados;

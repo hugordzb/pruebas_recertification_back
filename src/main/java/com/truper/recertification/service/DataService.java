@@ -3,6 +3,7 @@ package com.truper.recertification.service;
 import java.util.Map;
 
 import com.truper.recertification.model.ReControlCambiosEntity;
+import com.truper.recertification.vo.answer.BossDetailVO;
 import com.truper.recertification.vo.answer.ProfileSystemListVO;
 import com.truper.recertification.vo.answer.SystemsListVO;
 
@@ -33,4 +34,16 @@ public interface DataService {
 	 */
 	public ReControlCambiosEntity getByTicket(int intTicket);
 	
+	/**
+	 * This method contain boss data
+	 * @param idJefe
+	 * @return
+	 */
+	public BossDetailVO findByBoss(String idJefe);
+	
+	/**
+	 * This method that contain all boss data
+	 * @return
+	 */
+	public Map<String, Object> findByAllBoss();
 }

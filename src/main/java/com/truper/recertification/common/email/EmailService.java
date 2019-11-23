@@ -94,14 +94,15 @@ public class EmailService {
 	@Async
 	private void sendMail(String strAsunto, String strContenido, boolean isMultipart, 
 			boolean isHTML) throws MailException {
+		
 		MimeMessagePreparator mimeMessagePreparator = mimeMessage -> {
 			MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, isMultipart, "UTF-8");
 			mimeMessageHelper.setFrom(this.strEmisor);
 			mimeMessageHelper.setTo((String[])lstDestinatario.toArray(new String[0]));
 			
 			// If copy receivers are provided, they are added
-			if (lstCC != null && !lstCC.isEmpty())
-				mimeMessageHelper.setCc((String[])lstCC.toArray(new String[0]));
+//			if (lstCC != null && !lstCC.isEmpty())
+//				mimeMessageHelper.setCc((String[])lstCC.toArray(new String[0]));
 			
 			// If blind copy receivers are provided, they are added
 			if (lstCCO != null && !lstCCO.isEmpty())
@@ -124,7 +125,6 @@ public class EmailService {
 					}
 			    });
 			}
-			
 		};
 
 		try {

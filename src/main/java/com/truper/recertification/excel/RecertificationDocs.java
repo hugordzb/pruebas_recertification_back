@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.truper.recertification.excel.component.InsertExcelData;
 import com.truper.recertification.excel.component.InsertNewExcelData;
-import com.truper.recertification.excel.recertification.vo.DocsDataVO;
+import com.truper.recertification.excel.recertification.vo.DataDocsVO;
 import com.truper.recertification.excel.recertification.vo.RecertificationDocsVO;
 
 /**
@@ -73,14 +73,14 @@ public class RecertificationDocs {
 	public void selectRecertificationDoc() {
 		
 		RecertificationDocsVO recertDocs = new RecertificationDocsVO();
-		readExcel.readExcelSheet(new DocsDataVO(strRutaArchivo, strTel, null), recertDocs);
-		readExcel.readExcelSheet(new DocsDataVO(strRutaArchivo, strPerfilSAP, strHojaPerfiles), recertDocs);
-		readExcel.readExcelSheet(new DocsDataVO(strRutaArchivo, strPerfilSAP, strHojaAPO), recertDocs);
-		readExcel.readExcelSheet(new DocsDataVO(strRutaArchivo, strSAP, null), recertDocs);
-		readExcel.readExcelSheet(new DocsDataVO(strRutaArchivo, strCIAT, strHojaCiat), recertDocs);
-		readExcel.readExcelSheet(new DocsDataVO(strRutaArchivo, strCIAT, strHojaCiatLinea), recertDocs);
-		readExcel.readExcelSheet(new DocsDataVO(strRutaArchivo, strCorreoJefe, null), recertDocs);
-		readExcel.readExcelSheet(new DocsDataVO(strRutaArchivo, strRecertificacion, strHojaRecert), recertDocs);
+		readExcel.readExcelSheet(new DataDocsVO(strRutaArchivo, strTel, null), recertDocs);
+		readExcel.readExcelSheet(new DataDocsVO(strRutaArchivo, strPerfilSAP, strHojaPerfiles), recertDocs);
+		readExcel.readExcelSheet(new DataDocsVO(strRutaArchivo, strPerfilSAP, strHojaAPO), recertDocs);
+		readExcel.readExcelSheet(new DataDocsVO(strRutaArchivo, strSAP, null), recertDocs);
+		readExcel.readExcelSheet(new DataDocsVO(strRutaArchivo, strCIAT, strHojaCiat), recertDocs);
+		readExcel.readExcelSheet(new DataDocsVO(strRutaArchivo, strCIAT, strHojaCiatLinea), recertDocs);
+		readExcel.readExcelSheet(new DataDocsVO(strRutaArchivo, strCorreoJefe, null), recertDocs);
+		readExcel.readExcelSheet(new DataDocsVO(strRutaArchivo, strRecertificacion, strHojaRecert), recertDocs);
 		
 		insertData.insertDataLastRecertification(recertDocs);
 	}
@@ -90,7 +90,7 @@ public class RecertificationDocs {
 	 */
 	public void selectNewFormatDoc() {
 		RecertificationDocsVO recertDocs = new RecertificationDocsVO();
-		readExcel.readExcelSheet(new DocsDataVO(strNewUrl, strNewFormat, null), recertDocs);
+		readExcel.readExcelSheet(new DataDocsVO(strNewUrl, strNewFormat, null), recertDocs);
 		
 		insertNewData.insertDataLastRecertification(recertDocs);
 	}

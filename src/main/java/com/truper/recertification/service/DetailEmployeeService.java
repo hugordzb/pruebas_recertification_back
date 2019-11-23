@@ -4,11 +4,11 @@ import java.util.List;
 
 import com.truper.recertification.model.ReCuentasUsuarioEntity;
 import com.truper.recertification.vo.answer.CountsEmployeeVO;
-import com.truper.recertification.vo.answer.sistemas.CiatDataVO;
-import com.truper.recertification.vo.answer.sistemas.AcountsVO;
-import com.truper.recertification.vo.answer.sistemas.ListAcountsVO;
-import com.truper.recertification.vo.answer.sistemas.SapDataVO;
-import com.truper.recertification.vo.answer.sistemas.TelDataVO;
+import com.truper.recertification.vo.answer.systems.AcountsVO;
+import com.truper.recertification.vo.answer.systems.CiatDataVO;
+import com.truper.recertification.vo.answer.systems.ListAcountsVO;
+import com.truper.recertification.vo.answer.systems.SapDataVO;
+import com.truper.recertification.vo.answer.systems.TelDataVO;
 
 public interface DetailEmployeeService {
 

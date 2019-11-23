@@ -16,11 +16,11 @@ import com.truper.recertification.model.ReCuentasUsuarioEntity;
 import com.truper.recertification.model.ReSistemaEntity;
 import com.truper.recertification.service.DetailEmployeeService;
 import com.truper.recertification.vo.answer.CountsEmployeeVO;
-import com.truper.recertification.vo.answer.sistemas.CiatDataVO;
-import com.truper.recertification.vo.answer.sistemas.AcountsVO;
-import com.truper.recertification.vo.answer.sistemas.ListAcountsVO;
-import com.truper.recertification.vo.answer.sistemas.SapDataVO;
-import com.truper.recertification.vo.answer.sistemas.TelDataVO;
+import com.truper.recertification.vo.answer.systems.AcountsVO;
+import com.truper.recertification.vo.answer.systems.CiatDataVO;
+import com.truper.recertification.vo.answer.systems.ListAcountsVO;
+import com.truper.recertification.vo.answer.systems.SapDataVO;
+import com.truper.recertification.vo.answer.systems.TelDataVO;
 
 import lombok.extern.slf4j.Slf4j;
 

@@ -1,4 +1,4 @@
-package com.truper.recertification.vo.answer.sistemas;
+package com.truper.recertification.vo.answer;
 
 import java.io.Serializable;
 
@@ -11,11 +11,18 @@ import lombok.Setter;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class SapDataVO implements Serializable{
-
+public class BossDetailVO implements Serializable{
+	
 	private static final long serialVersionUID = 1L;
 
-	private String cuenta;
+	private String idJefe;
 	
-	private String perfil;
+	private String nombre;
+	
+	private String correo;
+
+	private String correoCC;
+
+	private String departamento;
+	
 }

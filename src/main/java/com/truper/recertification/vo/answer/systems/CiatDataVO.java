@@ -1,4 +1,4 @@
-package com.truper.recertification.vo.answer.sistemas;
+package com.truper.recertification.vo.answer.systems;
 
 import java.io.Serializable;
 

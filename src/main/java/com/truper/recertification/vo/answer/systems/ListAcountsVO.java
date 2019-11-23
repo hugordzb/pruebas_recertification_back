@@ -1,6 +1,7 @@
-package com.truper.recertification.excel.recertification.vo;
+package com.truper.recertification.vo.answer.systems;
 
 import java.io.Serializable;
+import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,14 +12,13 @@ import lombok.Setter;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class DocsDataVO implements Serializable{
+public class ListAcountsVO implements Serializable{
 
 	private static final long serialVersionUID = 1L;
+
+	List<TelDataVO> tel;
 	
-	private String strRuta;
+	List<SapDataVO> sap;
 	
-	private String strArchivo;
-	
-	private String strHoja;
-	
+	List<CiatDataVO> ciat;
 }

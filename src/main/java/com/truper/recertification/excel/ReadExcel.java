@@ -15,7 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.truper.recertification.excel.mapper.RecertificacionExcelMapper;
-import com.truper.recertification.excel.recertification.vo.DocsDataVO;
+import com.truper.recertification.excel.recertification.vo.DataDocsVO;
 import com.truper.recertification.excel.recertification.vo.RecertificationDocsVO;
 
 import lombok.extern.slf4j.Slf4j;
@@ -36,7 +36,7 @@ public class ReadExcel {
 	 * @param docsData
 	 * @param recertDocs
 	 */
-	public void readExcelSheet(DocsDataVO docsData, RecertificationDocsVO recertDocs) {
+	public void readExcelSheet(DataDocsVO docsData, RecertificationDocsVO recertDocs) {
 		
 		List<List<String>> rowData = new LinkedList<>();
 		DataFormatter formatter = new DataFormatter();
@@ -113,7 +113,7 @@ public class ReadExcel {
 	 * @return RecertificationDocsVO
 	 * @throws ParseException
 	 */
-	private RecertificationDocsVO mapData(List<List<String>> list, DocsDataVO docsData, RecertificationDocsVO recertDocs) throws ParseException {		
+	private RecertificationDocsVO mapData(List<List<String>> list, DataDocsVO docsData, RecertificationDocsVO recertDocs) throws ParseException {		
 
 		switch (docsData.getStrArchivo()) {
 			case "Usuarios TEL.xlsx":

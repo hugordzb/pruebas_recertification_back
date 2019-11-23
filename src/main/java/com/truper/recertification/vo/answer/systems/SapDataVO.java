@@ -1,4 +1,4 @@
-package com.truper.recertification.vo.answer.sistemas;
+package com.truper.recertification.vo.answer.systems;
 
 import java.io.Serializable;
 
@@ -11,7 +11,7 @@ import lombok.Setter;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class TelDataVO implements Serializable{
+public class SapDataVO implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 

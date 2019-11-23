@@ -10,14 +10,18 @@ import org.springframework.stereotype.Service;
 
 import com.truper.recertification.dao.ReBitacoraCambiosDAO;
 import com.truper.recertification.dao.ReControlCambiosDAO;
+import com.truper.recertification.dao.ReDepartamentoDAO;
+import com.truper.recertification.dao.ReDetalleJefeDAO;
 import com.truper.recertification.dao.RePerfilSistemaDAO;
 import com.truper.recertification.dao.ReSistemaDAO;
 import com.truper.recertification.model.ReBitacoraCambiosEntity;
 import com.truper.recertification.model.ReControlCambiosEntity;
+import com.truper.recertification.model.ReDetalleJefeEntity;
 import com.truper.recertification.model.RePerfilSistemaEntity;
 import com.truper.recertification.model.ReSistemaEntity;
 import com.truper.recertification.service.DataService;
 import com.truper.recertification.vo.answer.SystemsVO;
+import com.truper.recertification.vo.answer.BossDetailVO;
 import com.truper.recertification.vo.answer.ProfileSystemListVO;
 import com.truper.recertification.vo.answer.ProfileSystemVO;
 import com.truper.recertification.vo.answer.SystemsListVO;
@@ -36,6 +40,12 @@ public class DataServiceImpl implements DataService{
 	
 	@Autowired
 	private ReBitacoraCambiosDAO daoBitacora;
+	
+	@Autowired
+	private ReDetalleJefeDAO daoJefe;
+	
+	@Autowired
+	private ReDepartamentoDAO daoDepartamento;
 	
 	@Override
  	public SystemsListVO getSystems() {
@@ -101,5 +111,36 @@ public class DataServiceImpl implements DataService{
 	@Override
 	public ReControlCambiosEntity getByTicket(int intTicket) {
 		return daoControl.findById(intTicket).get();
+	}
+
+	@Override
+	public BossDetailVO findByBoss(String idJefe) {
+		
+		BossDetailVO bossVO = new BossDetailVO();
+		
+		ReDetalleJefeEntity detailBoss = daoJefe.findById(idJefe).get();
+		bossVO.setIdJefe(idJefe);
+		bossVO.setNombre(detailBoss.getNombre());
+		bossVO.setCorreo(detailBoss.getCorreo());
+		bossVO.setCorreoCC(detailBoss.getCorreoCC());
+		bossVO.setDepartamento(daoDepartamento.findById(
+				detailBoss.getIdDepartamento()).get().getDepartamento());
+		
+		return bossVO;
+	}
+
+	@Override
+	public Map<String, Object> findByAllBoss() {
+		Map<String, Object> bossMap = new HashMap<>();
+		
+		List<ReDetalleJefeEntity> lstDetail = daoJefe.findAll();
+		List<BossDetailVO> lstBoss = new ArrayList<>();
+		
+		for(int i = 0; i < lstDetail.size(); i++) {
+			lstBoss.add(this.findByBoss(lstDetail.get(i).getId()));
+		}
+		bossMap.put("jefes",lstBoss);
+		
+		return bossMap;
 	}
 }

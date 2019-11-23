@@ -1,22 +1,22 @@
 package com.truper.recertification.service.impl;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Service;
 
-//import com.truper.recertification.common.email.EmailService;
-import com.truper.recertification.common.template.MailContentBuilder;
+import com.truper.recertification.common.email.EmailService;
+import com.truper.recertification.common.template.MailTemplate;
 import com.truper.recertification.dao.ReDetalleJefeDAO;
 import com.truper.recertification.dao.ReRecertificacionDAO;
 import com.truper.recertification.model.PKRecertificacion;
 import com.truper.recertification.model.ReDetalleJefeEntity;
 import com.truper.recertification.model.ReRecertificacionEntity;
-import com.truper.recertification.service.AuditoryService;
 import com.truper.recertification.service.RecertificationService;
-import com.truper.recertification.vo.EmailVO;
-import com.truper.recertification.vo.answer.CountsBossVO;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -26,29 +26,26 @@ public class RecertificationServiceImpl implements RecertificationService{
 
 	@Autowired
 	private ReDetalleJefeDAO daoJefe;
-		
+
 	@Autowired
-	private MailContentBuilder mailContentBuilder;
-	
-//	@Autowired
-//	private EmailService emailService;
+	private EmailService emailService;
 
 	@Autowired
 	private ReRecertificacionDAO daoRecertification;
 	
 	@Autowired
-	private AuditoryService auditoryService;
+	private MailTemplate mailTemplate;
 	
 	@Override
 	public boolean sendMail(String strIdJefe){
 		boolean blnAnswer = false;
+		
 		try {
 			ReDetalleJefeEntity detailBoss = daoJefe.findById(strIdJefe).get();
-			
-			if(this.generateMail(detailBoss)) {
-				this.updateDB(detailBoss);
-				blnAnswer = true;
-			}
+			this.generateMail(detailBoss);
+			log.info("termino");
+			blnAnswer = true;
+		
 		} catch (Exception e) {
 			log.error("Error al generar el email");
 			log.info(e.getMessage());
@@ -56,28 +53,34 @@ public class RecertificationServiceImpl implements RecertificationService{
 		return blnAnswer;
 	}
 	
-	private boolean generateMail(ReDetalleJefeEntity detailBoss) {
-		EmailVO email = new EmailVO();
-	    email.setDestinatario(detailBoss.getCorreo());
-	    email.setCc(detailBoss.getCorreoCC());
-	    
-	    CountsBossVO countsBossVO = auditoryService.findByBoss(detailBoss.getId());
-	    
-		SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+	public void generateMail(ReDetalleJefeEntity detailBoss) {
+		List<String> lstDestinatarios = new ArrayList<>();
+		List<String> lstCC = new ArrayList<>();
+		List<FileSystemResource> archivos = new ArrayList<>();
 		
-		mailContentBuilder.setHtmlTemplateName("RecertificationMail");
-		mailContentBuilder.addParametro("fecha", format.format(new Date()));
-		mailContentBuilder.addParametro("idJefe", detailBoss.getIdJefe());
-		String sistemas[] = {"SAP, ", "CIAT, ", "TEL"};
-		mailContentBuilder.addParametro("sistemas", sistemas);
-		mailContentBuilder.addParametro("sistemas", countsBossVO);
-		mailContentBuilder.addParametro("correo","oacarmonac@truper.com");
-//		emailService.sendTemplateMail("Recertificacion", mailContentBuilder.build());
-	    
-		return true;
+		lstDestinatarios.add(detailBoss.getCorreo());
+		lstCC.add(detailBoss.getCorreoCC());
+		
+		log.info("Destinatarios:" + lstDestinatarios.toString());
+				
+		//Falta agregar los archivos adjuntos;
+//		archivos.add();
+		
+		emailService.setLstDestinatario(lstDestinatarios);
+		emailService.setLstCC(lstCC);
+		emailService.setLstAdjunto(archivos);
+		
+		try {
+			emailService.sendTemplateMail("Recertificacion", mailTemplate.recertificationTemplate(detailBoss).build());
+			this.updateDB(detailBoss);
+			
+		} catch (Exception e) {
+			log.info("Error al enviar el correo de recertificacion");
+			log.error(e.getMessage());
+		}
 	}
 	
-	private void updateDB(ReDetalleJefeEntity detailBoss) {
+	public void updateDB(ReDetalleJefeEntity detailBoss) {
 		try {
 			daoRecertification.save(ReRecertificacionEntity
 					.builder()

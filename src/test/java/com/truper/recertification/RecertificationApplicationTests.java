@@ -20,6 +20,7 @@ import org.springframework.ldap.filter.EqualsFilter;
 import org.springframework.security.authentication.BadCredentialsException;
 
 import com.truper.recertification.common.email.EmailService;
+import com.truper.recertification.common.template.PdfView;
 import com.truper.recertification.common.template.MailContentBuilder;
 import com.truper.recertification.excel.RecertificationDocs;
 import com.truper.recertification.ldap.repository.LDAPRepository;
@@ -46,9 +47,10 @@ class RecertificationApplicationTests {
 	
 	@Autowired
 	private EmailService emailService;
-//	@Autowired
-//	private EmailService emailService;
 	
+	@Autowired
+	private PdfView pdf;
+
 	//ldap	
 	@Test
 	public void ldapFindByUsername() {
@@ -140,45 +142,53 @@ class RecertificationApplicationTests {
 	}
 	
 	//Mail
-		@Test
-		public void pruebaCorreo() throws MessagingException {
-		    
-			// Email parameter variables are created
-			List<String> lstDestinatarios = new ArrayList<>();
-			List<String> lstCC = new ArrayList<>();
-			List<String> lstCCO = new ArrayList<>();
-			List<FileSystemResource> archivos = new ArrayList<>();
-			
-			// Recipients list is filled in
-			lstDestinatarios.add("hdrodriguezb@truper.com");
-			lstDestinatarios.add("mgmolinae@truper.com");
-			
-			log.info("Destinatarios:" + lstDestinatarios.toString());
-			
-			// Email parameters are set
-			emailService.setLstDestinatario(lstDestinatarios);
-			emailService.setLstCC(lstCC);
-			emailService.setLstCCO(lstCCO);
-			emailService.setLstAdjunto(archivos);
-			
-			//Armar correo
-			SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss.SSS");
-			mailContentBuilder.setHtmlTemplateName("RecertificationMail");
-			mailContentBuilder.addParametro("fecha", format.format(new Date()));
-			mailContentBuilder.addParametro("idJefe", "--idJefe");
-			String sistemas[] = {"SAP", "CIAT", "TEL"};
-			mailContentBuilder.addParametro("sistemas", sistemas);
-			mailContentBuilder.addParametro("correo","--@correo.com");
-			emailService.sendTemplateMail("Envio para recertificacion", mailContentBuilder.build());
-		  
-		    log.info("Se envio");
-		}
+	@Test
+	public void pruebaCorreo() throws MessagingException {
+	    
+		// Email parameter variables are created
+		List<String> lstDestinatarios = new ArrayList<>();
+		List<String> lstCC = new ArrayList<>();
+		List<String> lstCCO = new ArrayList<>();
+		List<FileSystemResource> archivos = new ArrayList<>();
+		
+		// Recipients list is filled in
+		lstDestinatarios.add("hdrodriguezb@truper.com");
+		lstDestinatarios.add("mgmolinae@truper.com");
+		
+		log.info("Destinatarios:" + lstDestinatarios.toString());
+		
+		// Email parameters are set
+		emailService.setLstDestinatario(lstDestinatarios);
+		emailService.setLstCC(lstCC);
+		emailService.setLstCCO(lstCCO);
+		emailService.setLstAdjunto(archivos);
+		
+		//Armar correo
+		SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss.SSS");
+		mailContentBuilder.setHtmlTemplateName("RecertificationMail");
+		mailContentBuilder.addParametro("fecha", format.format(new Date()));
+		mailContentBuilder.addParametro("idJefe", "--idJefe");
+		String sistemas[] = {"SAP, ", "CIAT y ", "TEL"};
+		mailContentBuilder.addParametro("sistemas", sistemas);
+		mailContentBuilder.addParametro("correo","--@correo.com");
+		
+		emailService.sendTemplateMail("Envio para recertificacion", mailContentBuilder.build());
+	  
+	    log.info("Se envio");
+	}
 
 	@Autowired
 	private RecertificationService recertification;
 	
 	@Test
 	public void PruebaCorreo() {
-		recertification.sendMail("jefe");
+		log.info("---start---");
+		recertification.sendMail("mgmolinae");
+		log.info("---finish---");
+	}
+	
+	@Test
+	public void generatePDF() {
+		
 	}
 }
