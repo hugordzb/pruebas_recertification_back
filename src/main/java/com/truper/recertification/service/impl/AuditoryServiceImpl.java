@@ -100,6 +100,7 @@ public class AuditoryServiceImpl implements AuditoryService{
 		return lstEmpleados;
 	}
 	
+	
 	@Override
 	public CountsEmployeeVO findEmployeeAcounts(String strIdEmployee) {
 			return detailEmployee.findEmployDetail(strIdEmployee);

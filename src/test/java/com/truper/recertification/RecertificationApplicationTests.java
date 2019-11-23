@@ -34,8 +34,10 @@ import com.truper.recertification.common.template.MailContentBuilder;
 import com.truper.recertification.excel.RecertificationDocs;
 import com.truper.recertification.ldap.repository.LDAPRepository;
 import com.truper.recertification.model.ReDetalleJefeEntity;
+import com.truper.recertification.service.AuditoryService;
 import com.truper.recertification.service.RecertificationService;
 import com.truper.recertification.vo.LDAPVO;
+import com.truper.recertification.vo.answer.CountsEmployeeVO;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -57,6 +59,9 @@ class RecertificationApplicationTests {
 	
 	@Autowired
 	private EmailService emailService;
+	
+	@Autowired
+	private AuditoryService auditoryService;
 	
 	//ldap	
 	@Test
@@ -96,6 +101,7 @@ class RecertificationApplicationTests {
 		}
 		log.info("-----" + s);
 	}
+	
 	@Test
 	public void ldapFindByNoEmpleado() {
 		int noEmpleado = 4011038;
@@ -197,6 +203,7 @@ class RecertificationApplicationTests {
 	
 	@Test
 	public void generatePDF() throws DocumentException, FileNotFoundException {
+
 		Document document = new Document();
 		PdfWriter.getInstance(document, new FileOutputStream("iTextHelloWorld.pdf"));
 		 
@@ -207,5 +214,13 @@ class RecertificationApplicationTests {
 		document.add(chunk);
 		document.close();
 		log.info("terminp");
+	}
+	
+	@Test
+	public void lstEmployee() {
+		log.info("------Start-------");
+		List<CountsEmployeeVO> lstAcounts = auditoryService.generateLetterByBoss("mgmolinae");
+		log.info("Lista: " + lstAcounts.size());
+		log.info("------Finish-------");
 	}
 }
