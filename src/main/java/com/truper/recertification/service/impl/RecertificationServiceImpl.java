@@ -38,7 +38,7 @@ public class RecertificationServiceImpl implements RecertificationService{
 	@Autowired
 	private MailTemplate mailTemplate;
 	
-	@Value("${recertification.xlsx.letters.url}")
+	@Value("${recertification.letters.url}")
 	public String urlLetters;
 	
 	@Override
@@ -78,7 +78,6 @@ public class RecertificationServiceImpl implements RecertificationService{
 		try {
 			emailService.sendTemplateMail("Recertificacion", mailTemplate.recertificationTemplate(detailBoss).build());
 			this.updateDB(detailBoss);
-			
 		} catch (Exception e) {
 			log.info("Error al enviar el correo de recertificacion");
 			log.error(e.getMessage());

@@ -47,8 +47,7 @@ public class DetailEmployeeServiceImpl implements DetailEmployeeService{
 		if(daoUsuario.findByIdUsuario(strIdUsuario).isEstatus()) {
 			List<ReCuentasUsuarioEntity> lstCuenta = daoCuentas.findByIdCuentaUsuarioIdUsuario(strIdUsuario);
 			try {
-				employeeVO.setIdEmpleado(strIdUsuario);
-				employeeVO.setEmpleado(daoUsuario.findById(strIdUsuario).get().getNombre());
+				employeeVO.setNombre(daoUsuario.findById(strIdUsuario).get().getNombre());
 				
 				ListAcountsVO lstAcounts = new ListAcountsVO();
 				
@@ -59,11 +58,12 @@ public class DetailEmployeeServiceImpl implements DetailEmployeeService{
 				for(int j = 0; j<lstCuenta.size(); j++) {
 					this.findAcounts(lstCuenta.get(j), lstTel, lstSap, lstCiat);
 				}
+				
 				lstAcounts.setTel(lstTel);
 				lstAcounts.setSap(lstSap);
 				lstAcounts.setCiat(lstCiat);
 					
-				employeeVO.setCuentas(this.orderCounts(lstAcounts));	
+				//employeeVO.setCuentas(this.orderCounts(lstAcounts));	
 			} catch (Exception e) {
 				log.error("El usuario " + strIdUsuario);
 				log.info(e.getMessage());
@@ -113,9 +113,9 @@ public class DetailEmployeeServiceImpl implements DetailEmployeeService{
 	}
 	
 	@Override
-	public List<AcountsVO> orderCounts(ListAcountsVO lstAcountsVO) {
-		List<AcountsVO> lstCounts = new ArrayList<>();
-		
+	public AcountsVO orderCounts(ListAcountsVO lstAcountsVO) {
+//		List<AcountsVO> lstCounts = new ArrayList<>();
+		AcountsVO countsVO = new AcountsVO();
 		int intTel = 0;
 		int intSap = 0;
 		int intCiat = 0;
@@ -134,25 +134,23 @@ public class DetailEmployeeServiceImpl implements DetailEmployeeService{
 		
 		int[] numeros = {intTel, intCiat, intSap};
 		Arrays.sort(numeros);
-		
-		for(int i=0; i < numeros[2]; i++) {
-			AcountsVO countsVO = new AcountsVO();
-			
+		//basicamente son acums
+		for(int i = 0; i < numeros[2]; i++) {			
 			if(intCiat != 0 && i < intCiat) {
-			countsVO.setCCiat(lstAcountsVO.getCiat().get(i).getCuenta());
-			countsVO.setPCiat(lstAcountsVO.getCiat().get(i).getPerfil());
+				countsVO.setCCiat(countsVO.getCCiat() + "</br> " + lstAcountsVO.getCiat().get(i).getCuenta());
+				countsVO.setPCiat(countsVO.getPCiat() + "</br> " + lstAcountsVO.getCiat().get(i).getPerfil());
 			}
 			if(intSap != 0 && i < intSap) {
-			countsVO.setCSap(lstAcountsVO.getSap().get(i).getCuenta());
-			countsVO.setPSap(countsVO.getPSap() + " " + lstAcountsVO.getSap().get(i).getPerfil());
+				countsVO.setCSap(lstAcountsVO.getSap().get(i).getCuenta()); //las cuentas de sap son compartidas por lo que se pueden repetir
+				countsVO.setPSap(countsVO.getPSap() + "</br> " + lstAcountsVO.getSap().get(i).getPerfil());
 			}
 			if(intTel != 0 && i < intTel) {
-			countsVO.setCTel(lstAcountsVO.getTel().get(i).getCuenta());
-			countsVO.setPTel(lstAcountsVO.getTel().get(i).getPerfil());
+				countsVO.setCTel(countsVO.getCTel() + "</br> " + lstAcountsVO.getTel().get(i).getCuenta());
+				countsVO.setPTel(countsVO.getPTel() + "</br> " + lstAcountsVO.getTel().get(i).getPerfil());
 			}
-			lstCounts.add(countsVO);
+//			lstCounts.add(countsVO);
 		}
-		return lstCounts;	
+		return countsVO;	
 	}
 
 }
