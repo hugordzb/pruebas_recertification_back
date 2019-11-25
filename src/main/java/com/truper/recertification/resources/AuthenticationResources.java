@@ -34,7 +34,7 @@ import lombok.Setter;
 @RestController
 @CrossOrigin(origins = "*")
 @Api(value = "Authentication Api", description = "autentificación Single Sing-On")
-public class AuthenticationResource {
+public class AuthenticationResources {
 
     @Value("${jwt.header}")
     private String tokenHeader;

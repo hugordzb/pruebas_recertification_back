@@ -14,6 +14,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.lowagie.text.pdf.codec.Base64.InputStream;
 import com.truper.recertification.excel.mapper.RecertificacionExcelMapper;
 import com.truper.recertification.excel.recertification.vo.DataDocsVO;
 import com.truper.recertification.excel.recertification.vo.RecertificationDocsVO;
@@ -36,17 +37,17 @@ public class ReadExcel {
 	 * @param docsData
 	 * @param recertDocs
 	 */
-	public void readExcelSheet(DataDocsVO docsData, RecertificationDocsVO recertDocs) {
+	public void readExcelSheet(DataDocsVO dataDocsVO, RecertificationDocsVO recertDocs) {
 		
 		List<List<String>> rowData = new LinkedList<>();
 		DataFormatter formatter = new DataFormatter();
 
-		try (FileInputStream file = new FileInputStream(new File(docsData.getStrRuta()+docsData.getStrArchivo()))) {
+		try (FileInputStream file = new FileInputStream(new File(dataDocsVO.getStrNameFile()))) {
 			
 			XSSFWorkbook worbook = new XSSFWorkbook(file);
 			Sheet sheet = worbook.getSheetAt(0);
-			if(docsData.getStrHoja() != null) {
-				sheet = worbook.getSheet(docsData.getStrHoja());
+			if(dataDocsVO.getStrHoja() != null) {
+				sheet = worbook.getSheet(dataDocsVO.getStrHoja());
 			}
 			Row hssfRow;
 			int rowInit = 2;
@@ -90,7 +91,7 @@ public class ReadExcel {
 					}
 				}
 			}
-			this.mapData(rowData, docsData, recertDocs);
+			this.mapData(rowData, dataDocsVO, recertDocs);
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.info("error: " + e);
@@ -108,14 +109,14 @@ public class ReadExcel {
 	/**
 	 * This method identify docs and invoke maps
 	 * @param list
-	 * @param docsData
+	 * @param dataDocsVO
 	 * @param recertDocs
 	 * @return RecertificationDocsVO
 	 * @throws ParseException
 	 */
-	private RecertificationDocsVO mapData(List<List<String>> list, DataDocsVO docsData, RecertificationDocsVO recertDocs) throws ParseException {		
+	private RecertificationDocsVO mapData(List<List<String>> list, DataDocsVO dataDocsVO, RecertificationDocsVO recertDocs) throws ParseException {		
 
-		switch (docsData.getStrArchivo()) {
+		switch (dataDocsVO.getStrNameFile()) {
 			case "Usuarios TEL.xlsx":
 				recertDocs.setLstTel(excelMapper.excelMapperTel(list));
 			break;
@@ -123,21 +124,21 @@ public class ReadExcel {
 				recertDocs.setLstSap(excelMapper.excelMapperSap(list));
 			break;
 			case "Usuarios CIAT.xlsx":
-				if(docsData.getStrHoja().equals("Ciat")) {
+				if(dataDocsVO.getStrHoja().equals("Ciat")) {
 					recertDocs.setLstCiat(excelMapper.excelMapperCiat(list));
-				}else if(docsData.getStrHoja().equals("Ciat en Linea")) {
+				}else if(dataDocsVO.getStrHoja().equals("Ciat en Linea")) {
 					recertDocs.setLstCiatLinea(excelMapper.excelMapperCiatLinea(list));
 				}
 			break;
 			case "Recertificacion.xlsx":
-				if(docsData.getStrHoja().equals("Activos")) {
+				if(dataDocsVO.getStrHoja().equals("Activos")) {
 					recertDocs.setLstRecert(excelMapper.excelMapperRecert(list));
 				}
 			break;
 			case "Perfiles SAP.xlsx":
-				if(docsData.getStrHoja().equals("PERFILES")) {
+				if(dataDocsVO.getStrHoja().equals("PERFILES")) {
 					recertDocs.setLstSapProfiles(excelMapper.excelMapperSapProfiles(list));
-				}else if(docsData.getStrHoja().equals("APO")) {
+				}else if(dataDocsVO.getStrHoja().equals("APO")) {
 					recertDocs.setLstSapAPO(excelMapper.excelMapperSapAPO(list));
 				}
 			break;
