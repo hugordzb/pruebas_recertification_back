@@ -56,7 +56,7 @@ public class ChangeAcountsServiceImpl implements ChangeAcountsService{
 	}
 
 	@Override
-	public void processChange(String json) {
+	public boolean processChange(String json) {
 		Date today = new Date();
 		Gson gson = new Gson();
 		
@@ -75,9 +75,11 @@ public class ChangeAcountsServiceImpl implements ChangeAcountsService{
 			}
 			
 			validateAcounts.generateControlChange(control);
+			return true;
 		} catch (Exception e) {
 			log.error("Ticket invalido");
 			log.info(e.getMessage());
+			return false;
 		}
 	}
 	

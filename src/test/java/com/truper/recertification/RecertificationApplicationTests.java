@@ -26,24 +26,17 @@ import com.lowagie.text.FontFactory;
 import com.lowagie.text.pdf.PdfWriter;
 import com.truper.recertification.common.email.EmailService;
 import com.truper.recertification.common.template.MailContentBuilder;
-import com.truper.recertification.dao.ReDetalleJefeDAO;
-import com.truper.recertification.excel.RecertificationDocs;
-import com.truper.recertification.ldap.repository.LDAPRepository;
 import com.truper.recertification.reports.RecertificacionCarta;
-import com.truper.recertification.service.AuditoryService;
 import com.truper.recertification.service.DetailEmployeeService;
 import com.truper.recertification.service.RecertificationService;
-import com.truper.recertification.vo.LDAPVO;
 import com.truper.recertification.vo.answer.DetailCountsEmployeeVO;
 import com.truper.recertification.vo.answer.CountEmployeeVO;
 import com.truper.recertification.vo.answer.systems.AcountsVO;
 
 import lombok.extern.slf4j.Slf4j;
-import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 @Slf4j
 @SpringBootTest
@@ -56,19 +49,12 @@ class RecertificationApplicationTests {
 	private EmailService emailService;
 	
 	@Autowired
-	private AuditoryService auditoryService;
-	
-	@Autowired
 	@Qualifier("letter")
 	private DetailEmployeeService detail;
 	
 	@Value("${recertification.letters.url}")
 	public String urlLetters;
 	
-	
-	@Autowired
-	private ReDetalleJefeDAO daoJefe;
-		
 	//Mail
 	@Test
 	public void pruebaCorreo() throws MessagingException {
