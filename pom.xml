@@ -11,6 +11,7 @@
 	<groupId>com.truper</groupId>
 	<artifactId>recertification</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	<packaging>${project.packaging}</packaging>
 	<name>recertification</name>
 	<description>Proceso de recertificacion automatizado</description>
 
