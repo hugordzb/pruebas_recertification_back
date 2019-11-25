@@ -34,5 +34,5 @@ public interface DetailEmployeeService {
 	 * @param lstAcountsVO
 	 * @return
 	 */
-	public AcountsVO orderCounts(ListAcountsVO lstAcountsVO);
+	public List<AcountsVO> orderCounts(ListAcountsVO lstAcountsVO);
 }

@@ -1,6 +1,5 @@
 package com.truper.recertification.conf.security.service.impl;
 
-import java.util.Base64;
 import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +13,6 @@ import org.springframework.stereotype.Service;
 import com.truper.recertification.conf.security.AuthenticationException;
 import com.truper.recertification.conf.security.CustomAuthenticationManager;
 import com.truper.recertification.conf.security.service.AuthenticateService;
-import com.truper.recertification.service.SystemsServices;
 import com.truper.recertification.vo.JwtAuthenticationResponse;
 import com.truper.recertification.vo.JwtTokenUtil;
 import com.truper.recertification.vo.JwtUser;
@@ -33,11 +31,11 @@ public class AuthenticateServiceImpl implements AuthenticateService{
 	@Autowired
     private CustomAuthenticationManager authenticationManager;
 	
-	SystemsServices sistema;
-	
-	public JwtAuthenticationResponse loginAndCreateToken(String strCredencial) {
-		UserVO user = this.decoder(strCredencial);
-    	authenticate(user);
+	public JwtAuthenticationResponse loginAndCreateToken(String strCredencial, String tokenSSO) {
+		UserVO user = new UserVO(strCredencial, tokenSSO);
+		user.setUsername(strCredencial);
+		user.setPassword(tokenSSO);
+    	this.authenticate(user);
         
         JwtUser userDetails = (JwtUser) userDetailsService.loadUserByUsername(user.getUsername());
         String strToken = jwtTokenUtil.generateToken(userDetails);
@@ -48,8 +46,6 @@ public class AuthenticateServiceImpl implements AuthenticateService{
 	 * */
 	private void authenticate(UserVO user) {
 		Objects.requireNonNull(user.getUsername());
-		Objects.requireNonNull(user.getPassword());
-		
 		try {
 			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
 		} catch (DisabledException e) {
@@ -58,19 +54,4 @@ public class AuthenticateServiceImpl implements AuthenticateService{
 			throw new AuthenticationException("Usuario y/o constraseña incorrectos", e);
 		}
 	}
-	
-	private UserVO decoder(String strEncoded) {
-		Base64.Decoder decoder = Base64.getDecoder();
-
-		String strCode = new String(decoder.decode(strEncoded));
-				
-		int intStart = strCode.indexOf(":");
-		int intEnd = strCode.indexOf(":", intStart - intStart);
-		
-		return UserVO.builder()
-			.username(strCode.substring(intStart-intStart, intEnd))
-			.password(strCode.substring(intStart + 1))
-			.build();
-	}
-	
 }

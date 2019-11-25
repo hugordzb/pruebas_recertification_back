@@ -137,7 +137,7 @@ class RecertificationApplicationTests {
 	public void lstEmployee2() {
 		String boss = "Carlos García Sánchez";
 		List<CountsEmployeeVO> lstAcounts = new LinkedList<>();
-		
+		/*
 		lstAcounts.add(CountsEmployeeVO.builder()
 				.nombre("Un Empleado")
 				.sapAccounts("CUENTA1,Cuenta2".replaceAll(",", "<br />"))
@@ -167,7 +167,7 @@ class RecertificationApplicationTests {
 				.ciatAccounts("CIAT,CIAT2".replaceAll(",", "<br />"))
 				.ciatProfiles("PROF1, PROF2".replaceAll(",", "<br />"))
 				.build());
-		
+		*/
 		RecertificacionCarta carta = new RecertificacionCarta(boss, lstAcounts);
 		JasperPrint jasperPrint = carta.build();
 		

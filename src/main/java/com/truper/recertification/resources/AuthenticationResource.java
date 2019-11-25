@@ -56,8 +56,9 @@ public class AuthenticationResource {
     						@ApiResponse(code = 401, message = "Unauthorized")})
     public JwtAuthenticationResponse createAuthenticationToken(
     		@ApiParam(value = "Usuario y password encriptado en base64 (user:password)", required = true)
-    		@Valid @RequestHeader ("credential") String strCredential) throws Exception {
-    	return this.authService.loginAndCreateToken(strCredential);
+    		@Valid @RequestHeader("credential") String strCredential,
+    		@RequestHeader("ssoToken") String ssoToken) throws Exception {
+    	return this.authService.loginAndCreateToken(strCredential, ssoToken);
     }
 
     @GetMapping(path="/refresh")

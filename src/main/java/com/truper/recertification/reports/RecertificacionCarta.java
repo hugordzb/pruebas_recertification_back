@@ -34,7 +34,7 @@ public class RecertificacionCarta {
 		
 		try(BufferedInputStream bufferedInputStream 
 				= new BufferedInputStream(
-						new FileInputStream("/recert/Recertification_template.jrxml"))) {
+						new FileInputStream("C:\\Users\\cgarcias\\JaspersoftWorkspace\\MyReports\\Recertification_template.jrxml"))) {
 
 			JasperReport jasperReport = JasperCompileManager.compileReport(bufferedInputStream);
 

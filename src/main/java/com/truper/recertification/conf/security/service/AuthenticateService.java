@@ -9,6 +9,6 @@ public interface AuthenticateService {
 	 * @param strCredencial
 	 * @return JwtAuthenticationResponse
 	 */
-	public JwtAuthenticationResponse loginAndCreateToken(String strCredencial);
+	public JwtAuthenticationResponse loginAndCreateToken(String usuario, String tokenSSO);
 
 }

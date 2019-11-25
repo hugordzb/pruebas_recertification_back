@@ -44,10 +44,10 @@ public class DetailEmployeeServiceImpl implements DetailEmployeeService{
 	public CountsEmployeeVO findEmployDetail(String strIdUsuario) {
 		CountsEmployeeVO employeeVO = new CountsEmployeeVO();
 			
-		if(daoUsuario.findByIdUsuario(strIdUsuario).isEstatus()) {
+		if(this.daoUsuario.findByIdUsuario(strIdUsuario).isEstatus()) {
 			List<ReCuentasUsuarioEntity> lstCuenta = daoCuentas.findByIdCuentaUsuarioIdUsuario(strIdUsuario);
 			try {
-				employeeVO.setNombre(daoUsuario.findById(strIdUsuario).get().getNombre());
+				employeeVO.setEmpleado(this.daoUsuario.findById(strIdUsuario).get().getNombre());
 				
 				ListAcountsVO lstAcounts = new ListAcountsVO();
 				
@@ -63,7 +63,7 @@ public class DetailEmployeeServiceImpl implements DetailEmployeeService{
 				lstAcounts.setSap(lstSap);
 				lstAcounts.setCiat(lstCiat);
 					
-				//employeeVO.setCuentas(this.orderCounts(lstAcounts));	
+				employeeVO.setCuentas(this.orderCounts(lstAcounts));	
 			} catch (Exception e) {
 				log.error("El usuario " + strIdUsuario);
 				log.info(e.getMessage());
@@ -113,8 +113,8 @@ public class DetailEmployeeServiceImpl implements DetailEmployeeService{
 	}
 	
 	@Override
-	public AcountsVO orderCounts(ListAcountsVO lstAcountsVO) {
-//		List<AcountsVO> lstCounts = new ArrayList<>();
+	public List<AcountsVO> orderCounts(ListAcountsVO lstAcountsVO) {
+		List<AcountsVO> lstCounts = new ArrayList<>();
 		AcountsVO countsVO = new AcountsVO();
 		int intTel = 0;
 		int intSap = 0;
@@ -148,9 +148,9 @@ public class DetailEmployeeServiceImpl implements DetailEmployeeService{
 				countsVO.setCTel(countsVO.getCTel() + "</br> " + lstAcountsVO.getTel().get(i).getCuenta());
 				countsVO.setPTel(countsVO.getPTel() + "</br> " + lstAcountsVO.getTel().get(i).getPerfil());
 			}
-//			lstCounts.add(countsVO);
+			lstCounts.add(countsVO);
 		}
-		return countsVO;	
+		return lstCounts;	
 	}
 
 }
