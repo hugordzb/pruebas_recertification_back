@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.truper.recertification.service.AuditoryService;
 import com.truper.recertification.vo.answer.CountsBossVO;
-import com.truper.recertification.vo.answer.CountsEmployeeVO;
+import com.truper.recertification.vo.answer.DetailCountsEmployeeVO;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -61,7 +61,7 @@ public class CountsResources {
 	  			  response = List.class)
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "OK"),
 							@ApiResponse(code = 401, message = "Unauthorized")})
-	public List<CountsEmployeeVO> letterService(
+	public List<DetailCountsEmployeeVO> letterService(
 			@ApiParam(value = "Cuenta AD (LDAP) del jefe", required = true)
     		@Valid	@PathVariable ("idJefe") String strIdJefe) {
 		return auditoryService.generateLetterByBoss(strIdJefe);
@@ -69,10 +69,10 @@ public class CountsResources {
 	
 	@GetMapping	(path = "/employeeDetail/{strIdEmployee}")
 	@ApiOperation(value = "Detalle de las Cuentas relacionadas a la recertificación por empleado", 
-				  response = CountsEmployeeVO.class)
+				  response = DetailCountsEmployeeVO.class)
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "OK"),
 							@ApiResponse(code = 401, message = "Unauthorized")})
-	public CountsEmployeeVO findByEmployee (
+	public DetailCountsEmployeeVO findByEmployee (
 			@ApiParam(value = "Cuenta AD (LDAP) del empleado)", required = true)
     		@Valid	@PathVariable("strIdEmployee") String strIdEmployee) {
 		return auditoryService.findEmployeeAcounts(strIdEmployee);

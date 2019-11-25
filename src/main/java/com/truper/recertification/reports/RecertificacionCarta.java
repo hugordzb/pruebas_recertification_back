@@ -6,7 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.truper.recertification.vo.answer.CountsEmployeeVO;
+import org.jfree.util.Log;
+
+import com.truper.recertification.vo.answer.CountEmployeeVO;
 
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JREmptyDataSource;
@@ -19,9 +21,9 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 public class RecertificacionCarta {
 	
 	private String jefe;
-	private List<CountsEmployeeVO> empleados;
+	private List<CountEmployeeVO> empleados;
 
-	public RecertificacionCarta(String jefe, List<CountsEmployeeVO> empleados) {
+	public RecertificacionCarta(String jefe, List<CountEmployeeVO> empleados) {
 		this.jefe = jefe;
 		this.empleados = empleados;
 	}
@@ -34,7 +36,7 @@ public class RecertificacionCarta {
 		
 		try(BufferedInputStream bufferedInputStream 
 				= new BufferedInputStream(
-						new FileInputStream("C:\\Users\\cgarcias\\JaspersoftWorkspace\\MyReports\\Recertification_template.jrxml"))) {
+						new FileInputStream("\\recert\\Recertification_template.jrxml"))) {
 
 			JasperReport jasperReport = JasperCompileManager.compileReport(bufferedInputStream);
 
@@ -42,6 +44,8 @@ public class RecertificacionCarta {
 			
 			return JasperFillManager.fillReport(jasperReport, parameters, dataSource);
 		} catch (Exception e) {
+			Log.error("Error al generar el archivo de recertificacion adjunto");
+			Log.info(e.getMessage());
 			e.printStackTrace();
 		}
 		return null;

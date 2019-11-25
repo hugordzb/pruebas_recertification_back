@@ -1,9 +1,9 @@
 package com.truper.recertification.service.impl;
 
-import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +18,17 @@ import com.truper.recertification.dao.ReRecertificacionDAO;
 import com.truper.recertification.model.PKRecertificacion;
 import com.truper.recertification.model.ReDetalleJefeEntity;
 import com.truper.recertification.model.ReRecertificacionEntity;
+import com.truper.recertification.reports.RecertificacionCarta;
+import com.truper.recertification.service.DetailLetterService;
 import com.truper.recertification.service.RecertificationService;
+import com.truper.recertification.vo.answer.DetailCountsEmployeeVO;
+import com.truper.recertification.vo.answer.CountEmployeeVO;
+import com.truper.recertification.vo.answer.systems.AcountsVO;
 
 import lombok.extern.slf4j.Slf4j;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperPrint;
 
 @Slf4j
 @Service
@@ -38,6 +46,9 @@ public class RecertificationServiceImpl implements RecertificationService{
 	@Autowired
 	private MailTemplate mailTemplate;
 	
+	@Autowired
+	private DetailLetterService detail;
+	
 	@Value("${recertification.letters.url}")
 	public String urlLetters;
 	
@@ -48,9 +59,8 @@ public class RecertificationServiceImpl implements RecertificationService{
 		try {
 			ReDetalleJefeEntity detailBoss = daoJefe.findById(strIdJefe).get();
 			this.generateMail(detailBoss);
-			log.info("termino");
 			blnAnswer = true;
-		
+			
 		} catch (Exception e) {
 			log.error("Error al generar el email");
 			log.info(e.getMessage());
@@ -64,12 +74,14 @@ public class RecertificationServiceImpl implements RecertificationService{
 		List<FileSystemResource> archivos = new ArrayList<>();
 		
 		lstDestinatarios.add(detailBoss.getCorreo());
-		lstCC.add(detailBoss.getCorreoCC());
 		
 		log.info("Destinatarios:" + lstDestinatarios.toString());
-				
-		//Falta agregar los archivos adjuntos;
-		archivos.add(new FileSystemResource(new File(urlLetters + detailBoss.getNombre() +".pdf")));
+		
+//		if(!detailBoss.getCorreoCC().isEmpty() || detailBoss.getCorreoCC() != null) {
+//			lstCC.add(detailBoss.getCorreoCC());
+//		}
+		
+		archivos.add(new FileSystemResource(this.generatorPDF(detailBoss.getIdJefe())));
 		
 		emailService.setLstDestinatario(lstDestinatarios);
 		emailService.setLstCC(lstCC);
@@ -93,7 +105,7 @@ public class RecertificationServiceImpl implements RecertificationService{
 							.idJefe(detailBoss.getIdJefe())
 							.periodo(this.selectPeriod())
 							.build())
-					.cartaSolicitud("guardar ip")
+					.cartaSolicitud(this.urlLetters + detailBoss.getNombre() + ".pdf")
 					.estatus(false)
 					.build());
 		} catch (Exception e) {
@@ -110,5 +122,32 @@ public class RecertificationServiceImpl implements RecertificationService{
 		  	return "02" + new SimpleDateFormat("yy").format(myDate);
 		 }
 	}
-
+	
+	private String generatorPDF(String boss) {
+		List<CountEmployeeVO> lstAcounts = new LinkedList<>();
+		DetailCountsEmployeeVO counts = detail.findEmployDetail(boss);
+		
+		for(int i = 0; i < counts.getCuentas().size(); i++) {
+			AcountsVO acountsVO =counts.getCuentas().get(i);
+			lstAcounts.add( CountEmployeeVO.builder()
+					.nombre(counts.getEmpleado())
+					.ciatAccounts(acountsVO.getCCiat())
+					.ciatProfiles(acountsVO.getPCiat())
+					.sapAccounts(acountsVO.getCSap())
+					.sapRoles(acountsVO.getPSap())
+					.telAccounts(acountsVO.getCTel())
+					.telRoles(acountsVO.getPTel())
+					.build());
+		}
+		
+		RecertificacionCarta carta = new RecertificacionCarta(boss, lstAcounts);
+		JasperPrint jasperPrint = carta.build();
+		boss = counts.getEmpleado() + ".pdf";
+		try {
+			JasperExportManager.exportReportToPdfFile(jasperPrint, this.urlLetters + boss);
+		} catch (JRException e) {
+			e.printStackTrace();
+		}
+		return this.urlLetters +boss;
+	}
 }

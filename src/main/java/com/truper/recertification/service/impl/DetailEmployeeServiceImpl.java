@@ -15,7 +15,7 @@ import com.truper.recertification.model.PKCuentasUsuario;
 import com.truper.recertification.model.ReCuentasUsuarioEntity;
 import com.truper.recertification.model.ReSistemaEntity;
 import com.truper.recertification.service.DetailEmployeeService;
-import com.truper.recertification.vo.answer.CountsEmployeeVO;
+import com.truper.recertification.vo.answer.DetailCountsEmployeeVO;
 import com.truper.recertification.vo.answer.systems.AcountsVO;
 import com.truper.recertification.vo.answer.systems.CiatDataVO;
 import com.truper.recertification.vo.answer.systems.ListAcountsVO;
@@ -41,13 +41,14 @@ public class DetailEmployeeServiceImpl implements DetailEmployeeService{
 	private RePerfilSistemaDAO daoPerfil;
 	
 	@Override
-	public CountsEmployeeVO findEmployDetail(String strIdUsuario) {
-		CountsEmployeeVO employeeVO = new CountsEmployeeVO();
+	public DetailCountsEmployeeVO findEmployDetail(String strIdUsuario) {
+		DetailCountsEmployeeVO employeeVO = new DetailCountsEmployeeVO();
 			
-		if(this.daoUsuario.findByIdUsuario(strIdUsuario).isEstatus()) {
+		if(daoUsuario.findByIdUsuario(strIdUsuario).isEstatus()) {
 			List<ReCuentasUsuarioEntity> lstCuenta = daoCuentas.findByIdCuentaUsuarioIdUsuario(strIdUsuario);
 			try {
-				employeeVO.setEmpleado(this.daoUsuario.findById(strIdUsuario).get().getNombre());
+				employeeVO.setIdEmpleado(strIdUsuario);
+				employeeVO.setEmpleado(daoUsuario.findById(strIdUsuario).get().getNombre());
 				
 				ListAcountsVO lstAcounts = new ListAcountsVO();
 				
@@ -58,7 +59,6 @@ public class DetailEmployeeServiceImpl implements DetailEmployeeService{
 				for(int j = 0; j<lstCuenta.size(); j++) {
 					this.findAcounts(lstCuenta.get(j), lstTel, lstSap, lstCiat);
 				}
-				
 				lstAcounts.setTel(lstTel);
 				lstAcounts.setSap(lstSap);
 				lstAcounts.setCiat(lstCiat);
@@ -115,7 +115,7 @@ public class DetailEmployeeServiceImpl implements DetailEmployeeService{
 	@Override
 	public List<AcountsVO> orderCounts(ListAcountsVO lstAcountsVO) {
 		List<AcountsVO> lstCounts = new ArrayList<>();
-		AcountsVO countsVO = new AcountsVO();
+		
 		int intTel = 0;
 		int intSap = 0;
 		int intCiat = 0;
@@ -134,19 +134,21 @@ public class DetailEmployeeServiceImpl implements DetailEmployeeService{
 		
 		int[] numeros = {intTel, intCiat, intSap};
 		Arrays.sort(numeros);
-		//basicamente son acums
-		for(int i = 0; i < numeros[2]; i++) {			
+		
+		for(int i=0; i < numeros[2]; i++) {
+			AcountsVO countsVO = new AcountsVO();
+			
 			if(intCiat != 0 && i < intCiat) {
-				countsVO.setCCiat(countsVO.getCCiat() + "</br> " + lstAcountsVO.getCiat().get(i).getCuenta());
-				countsVO.setPCiat(countsVO.getPCiat() + "</br> " + lstAcountsVO.getCiat().get(i).getPerfil());
+			countsVO.setCCiat(lstAcountsVO.getCiat().get(i).getCuenta());
+			countsVO.setPCiat(lstAcountsVO.getCiat().get(i).getPerfil());
 			}
 			if(intSap != 0 && i < intSap) {
-				countsVO.setCSap(lstAcountsVO.getSap().get(i).getCuenta()); //las cuentas de sap son compartidas por lo que se pueden repetir
-				countsVO.setPSap(countsVO.getPSap() + "</br> " + lstAcountsVO.getSap().get(i).getPerfil());
+			countsVO.setCSap(lstAcountsVO.getSap().get(i).getCuenta());
+			countsVO.setPSap(countsVO.getPSap() + " " + lstAcountsVO.getSap().get(i).getPerfil());
 			}
 			if(intTel != 0 && i < intTel) {
-				countsVO.setCTel(countsVO.getCTel() + "</br> " + lstAcountsVO.getTel().get(i).getCuenta());
-				countsVO.setPTel(countsVO.getPTel() + "</br> " + lstAcountsVO.getTel().get(i).getPerfil());
+			countsVO.setCTel(lstAcountsVO.getTel().get(i).getCuenta());
+			countsVO.setPTel(lstAcountsVO.getTel().get(i).getPerfil());
 			}
 			lstCounts.add(countsVO);
 		}
