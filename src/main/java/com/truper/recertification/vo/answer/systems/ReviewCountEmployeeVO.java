@@ -1,12 +1,9 @@
-package com.truper.recertification.vo.answer;
+package com.truper.recertification.vo.answer.systems;
 
 import java.io.Serializable;
 import java.util.List;
 
-import com.truper.recertification.vo.answer.systems.AcountsVO;
-
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,12 +12,9 @@ import lombok.Setter;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class CountsEmployeeVO implements Serializable{
-	
+public class ReviewCountEmployeeVO implements Serializable{
+
 	private static final long serialVersionUID = 1L;
-	
-	private String idEmpleado;
 	
 	private String empleado;
 		

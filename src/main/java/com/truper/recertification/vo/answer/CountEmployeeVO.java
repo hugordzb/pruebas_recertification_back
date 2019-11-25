@@ -1,29 +1,33 @@
 package com.truper.recertification.vo.answer;
 
 import java.io.Serializable;
-import java.util.List;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@Builder
 @Setter
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CountsBossVO implements Serializable{
-	
+public class CountEmployeeVO implements Serializable{
+
 	private static final long serialVersionUID = 1L;
 
-	private String idJefe;
+	private String nombre;
 	
-	private String jefe;
+	private String ciatAccounts;
 	
-	private String sistemas;
-
-	private boolean inAD;
+	private String ciatProfiles;
 	
-	private List<DetailCountsEmployeeVO> empleados;
-
+	private String sapAccounts;
+	
+	private String sapRoles;
+	
+	private String telAccounts;
+	
+	private String telRoles;
 }

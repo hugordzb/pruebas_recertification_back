@@ -15,5 +15,5 @@ public interface ChangeAcountsService {
 	 * process data if the change was accepted
 	 * @param json
 	 */
-	public void processChange(String json);
+	public boolean processChange(String json);
 }

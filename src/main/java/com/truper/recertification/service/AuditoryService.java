@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.truper.recertification.vo.answer.CountsBossVO;
-import com.truper.recertification.vo.answer.CountsEmployeeVO;
+import com.truper.recertification.vo.answer.DetailCountsEmployeeVO;
 
 public interface AuditoryService {
 
@@ -21,13 +21,13 @@ public interface AuditoryService {
 	 */
 	public CountsBossVO findByBoss(String strIdBoss);
 	
-	public List<CountsEmployeeVO> generateLetterByBoss(String strIdBoss);
+	public List<DetailCountsEmployeeVO> generateLetterByBoss(String strIdBoss);
 	
 	/**
 	 * This methos find by employee
 	 * @param strIdEmployee
 	 * @return acounts data by systems
 	 */
-	public CountsEmployeeVO findEmployeeAcounts(String strIdEmployee);
+	public DetailCountsEmployeeVO findEmployeeAcounts(String strIdEmployee);
 	
 }

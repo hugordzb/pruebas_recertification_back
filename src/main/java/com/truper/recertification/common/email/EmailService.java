@@ -101,19 +101,16 @@ public class EmailService {
 			mimeMessageHelper.setTo((String[])lstDestinatario.toArray(new String[0]));
 			
 			// If copy receivers are provided, they are added
-//			if (lstCC != null && !lstCC.isEmpty())
-//				mimeMessageHelper.setCc((String[])lstCC.toArray(new String[0]));
-			
-			// If blind copy receivers are provided, they are added
-			if (lstCCO != null && !lstCCO.isEmpty())
-				mimeMessageHelper.setBcc((String[])lstCCO.toArray(new String[0]));
-			
+			if (lstCC != null && !lstCC.isEmpty())
+				mimeMessageHelper.setCc((String[])lstCC.toArray(new String[0]));
+			log.info("subject");	
 			// Subject is added
 			mimeMessageHelper.setSubject( (strAsunto != null) ? strAsunto : "Sin asunto" );
 			
 			// Content is added and is specified if it is HTML content
 			mimeMessageHelper.setText(strContenido, isHTML);
 			
+			log.info("antes de anduntar");
 			if(isMultipart) {
 				// Attachments are added
 			    lstAdjunto.forEach( v -> {

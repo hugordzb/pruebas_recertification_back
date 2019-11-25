@@ -5,7 +5,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -14,6 +13,7 @@ import javax.mail.MessagingException;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.FileSystemResource;
@@ -26,22 +26,17 @@ import com.lowagie.text.FontFactory;
 import com.lowagie.text.pdf.PdfWriter;
 import com.truper.recertification.common.email.EmailService;
 import com.truper.recertification.common.template.MailContentBuilder;
-import com.truper.recertification.dao.ReDetalleJefeDAO;
-import com.truper.recertification.excel.RecertificationDocs;
-import com.truper.recertification.ldap.repository.LDAPRepository;
 import com.truper.recertification.reports.RecertificacionCarta;
-import com.truper.recertification.service.AuditoryService;
+import com.truper.recertification.service.DetailEmployeeService;
 import com.truper.recertification.service.RecertificationService;
-import com.truper.recertification.vo.LDAPVO;
-import com.truper.recertification.vo.answer.CountsEmployeeVO;
+import com.truper.recertification.vo.answer.DetailCountsEmployeeVO;
+import com.truper.recertification.vo.answer.CountEmployeeVO;
 import com.truper.recertification.vo.answer.systems.AcountsVO;
 
 import lombok.extern.slf4j.Slf4j;
-import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 @Slf4j
 @SpringBootTest
@@ -54,15 +49,12 @@ class RecertificationApplicationTests {
 	private EmailService emailService;
 	
 	@Autowired
-	private AuditoryService auditoryService;
+	@Qualifier("letter")
+	private DetailEmployeeService detail;
 	
 	@Value("${recertification.letters.url}")
 	public String urlLetters;
 	
-	
-	@Autowired
-	private ReDetalleJefeDAO daoJefe;
-		
 	//Mail
 	@Test
 	public void pruebaCorreo() throws MessagingException {
@@ -101,10 +93,13 @@ class RecertificationApplicationTests {
 	    log.info("Se envio");
 	}
 
+	@Autowired
+	private RecertificationService recertification;
+	
 	@Test
 	public void PruebaCorreo() {
 		log.info("---start---");
-//		recertification.sendMail("mgmolinae");
+		recertification.sendMail("mgmolinae");
 		log.info("---finish---");
 	}
 	
@@ -123,59 +118,61 @@ class RecertificationApplicationTests {
 		log.info("terminp");
 	}
 	
-	
 	@Test
 	public void lstEsmployee() {
-		log.info("------Start-------");
-//		List<CountsEmployeeVO> lstAcounts = auditoryService.generateLetterByBoss("mgmolinae");
-//		log.info("Lista: " + lstAcounts.size());
-		log.info("query: " + daoJefe.query("mgmolinae"));
+		String boss = "mgmolinae";
+		List<CountEmployeeVO> lstAcounts = new LinkedList<>();
+	
+		DetailCountsEmployeeVO counts = detail.findEmployDetail(boss);
+		log.info("counts" + counts.getEmpleado());
+		for(int i = 0; i < counts.getCuentas().size(); i++) {
+			AcountsVO acountsVO =counts.getCuentas().get(i);
+			lstAcounts.add( CountEmployeeVO.builder()
+					.nombre(counts.getEmpleado())
+					.ciatAccounts(acountsVO.getCCiat())
+					.ciatProfiles(acountsVO.getPCiat())
+					.sapAccounts(acountsVO.getCSap())
+					.sapRoles(acountsVO.getPSap())
+					.telAccounts(acountsVO.getCTel())
+					.telRoles(acountsVO.getPTel())
+					.build());
+		}
+		log.info("lista: " + lstAcounts.size());
 		log.info("------Finish-------");
 	}
-	
+		
 	@Test
-	public void lstEmployee2() {
-		String boss = "Carlos García Sánchez";
-		List<CountsEmployeeVO> lstAcounts = new LinkedList<>();
-		/*
-		lstAcounts.add(CountsEmployeeVO.builder()
-				.nombre("Un Empleado")
-				.sapAccounts("CUENTA1,Cuenta2".replaceAll(",", "<br />"))
-				.sapRoles("ROL1, ROL2".replaceAll(",", "<br />"))
-				.telAccounts("TEL1,TEL2".replaceAll(",", "<br />"))
-				.telRoles("ROL_TEL1, ROL_TEL2".replaceAll(",", "<br />"))
-				.ciatAccounts("CIAT,CIAT2".replaceAll(",", "<br />"))
-				.ciatProfiles("PROF1, PROF2".replaceAll(",", "<br />"))
-				.build());
+	public void generatorPDF(String boss) {
+		log.info("-----------");
+		boss = "mgmolinae";
 		
-		lstAcounts.add(CountsEmployeeVO.builder()
-				.nombre("Un Empleado 2")
-				.sapAccounts("CUENTA1,Cuenta2".replaceAll(",", "<br />"))
-				.sapRoles("ROL1, ROL2".replaceAll(",", "<br />"))
-				.telAccounts("TEL1,TEL2".replaceAll(",", "<br />"))
-				.telRoles("ROL_TEL1, ROL_TEL2".replaceAll(",", "<br />"))
-				.ciatAccounts("CIAT,CIAT2".replaceAll(",", "<br />"))
-				.ciatProfiles("PROF1, PROF2".replaceAll(",", "<br />"))
-				.build());
+		List<CountEmployeeVO> lstAcounts = new LinkedList<>();
+		log.info("buscara cliente");
+		DetailCountsEmployeeVO counts = detail.findEmployDetail("mgmolinae");
+		log.info("counts: " + counts.getEmpleado());
 		
-		lstAcounts.add(CountsEmployeeVO.builder()
-				.nombre("Un Empleado 2")
-				.sapAccounts("CUENTA1,Cuenta2".replaceAll(",", "<br />"))
-				.sapRoles("ROL1, ROL2".replaceAll(",", "<br />"))
-				.telAccounts("TEL1,TEL2".replaceAll(",", "<br />"))
-				.telRoles("ROL_TEL1, ROL_TEL2".replaceAll(",", "<br />"))
-				.ciatAccounts("CIAT,CIAT2".replaceAll(",", "<br />"))
-				.ciatProfiles("PROF1, PROF2".replaceAll(",", "<br />"))
-				.build());
-		*/
+		for(int i = 0; i < counts.getCuentas().size(); i++) {
+			AcountsVO acountsVO =counts.getCuentas().get(i);
+			lstAcounts.add( CountEmployeeVO.builder()
+					.nombre(counts.getEmpleado())
+					.ciatAccounts(acountsVO.getCCiat())
+					.ciatProfiles(acountsVO.getPCiat())
+					.sapAccounts(acountsVO.getCSap())
+					.sapRoles(acountsVO.getPSap())
+					.telAccounts(acountsVO.getCTel())
+					.telRoles(acountsVO.getPTel())
+					.build());
+			log.info("lista: " + lstAcounts.size());
+		}
+		
 		RecertificacionCarta carta = new RecertificacionCarta(boss, lstAcounts);
 		JasperPrint jasperPrint = carta.build();
 		
 		try {
-			JasperExportManager.exportReportToPdfFile(jasperPrint, this.urlLetters + "/" + boss + ".pdf");
+			boss = boss + ".pdf";
+			JasperExportManager.exportReportToPdfFile(jasperPrint, this.urlLetters + boss);
 		} catch (JRException e) {
 			e.printStackTrace();
 		}
 	}
-	
 }

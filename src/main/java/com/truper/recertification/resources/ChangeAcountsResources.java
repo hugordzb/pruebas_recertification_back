@@ -47,10 +47,10 @@ public class ChangeAcountsResources {
 				  response = void.class)
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "OK"),
 							@ApiResponse(code = 401, message = "Unauthorized")})
-	public void processChange(
+	public boolean processChange(
 			@ApiParam(value = "Json con el detalle del cambio revisado por Mesa de Servicio (Aprobado/No aprobado)", required = true)
 			@Valid	@RequestBody String json) {
-		changeService.processChange(json);
+		return changeService.processChange(json);
     }
 	
 	 /**

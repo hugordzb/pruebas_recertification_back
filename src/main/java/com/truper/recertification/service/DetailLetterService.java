@@ -10,7 +10,8 @@ import com.truper.recertification.vo.answer.systems.ListAcountsVO;
 import com.truper.recertification.vo.answer.systems.SapDataVO;
 import com.truper.recertification.vo.answer.systems.TelDataVO;
 
-public interface DetailEmployeeService {
+public interface DetailLetterService {
+
 
 	/**
 	 * This is an auxiliary method to find employ detail

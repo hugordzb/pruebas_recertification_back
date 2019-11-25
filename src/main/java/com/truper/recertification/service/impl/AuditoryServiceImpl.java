@@ -14,7 +14,7 @@ import com.truper.recertification.ldap.repository.LDAPRepository;
 import com.truper.recertification.model.ReDetalleJefeEntity;
 import com.truper.recertification.model.ReJerarquiaEntity;
 import com.truper.recertification.service.AuditoryService;
-import com.truper.recertification.vo.answer.CountsEmployeeVO;
+import com.truper.recertification.vo.answer.DetailCountsEmployeeVO;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -62,7 +62,7 @@ public class AuditoryServiceImpl implements AuditoryService{
 		CountsBossVO bossVO = new CountsBossVO();
 		String strSystems = null;
 		
-		List<CountsEmployeeVO> lstEmpleados = new ArrayList<>();		
+		List<DetailCountsEmployeeVO> lstEmpleados = new ArrayList<>();		
 		List<ReJerarquiaEntity> lstJerarquia = daoJerarquia.findByIdEmpleadoJefeIdJefe(strIdBoss);
 		
 		for(int j = 0; j<lstJerarquia.size(); j++) {
@@ -88,8 +88,8 @@ public class AuditoryServiceImpl implements AuditoryService{
 	}
 
 	@Override
-	public List<CountsEmployeeVO> generateLetterByBoss(String strIdBoss) {
-		List<CountsEmployeeVO> lstEmpleados = new ArrayList<>();		
+	public List<DetailCountsEmployeeVO> generateLetterByBoss(String strIdBoss) {
+		List<DetailCountsEmployeeVO> lstEmpleados = new ArrayList<>();		
 		List<ReJerarquiaEntity> lstJerarquia = daoJerarquia.findByIdEmpleadoJefeIdJefe(strIdBoss);
 		
 		for(int j = 0; j<lstJerarquia.size(); j++) {
@@ -101,11 +101,11 @@ public class AuditoryServiceImpl implements AuditoryService{
 	
 	
 	@Override
-	public CountsEmployeeVO findEmployeeAcounts(String strIdEmployee) {
+	public DetailCountsEmployeeVO findEmployeeAcounts(String strIdEmployee) {
 			return detailEmployee.findEmployDetail(strIdEmployee);
 	}
 	
-	private String systems(List<CountsEmployeeVO> lstEmpleados) {
+	private String systems(List<DetailCountsEmployeeVO> lstEmpleados) {
 		String tel = "";
 		String ciat = "";
 		String sap = "";
