@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import com.truper.recertification.constants.SistemaCatalogs;
 import com.truper.recertification.dao.ReCuentasUsuarioDAO;
 import com.truper.recertification.dao.RePerfilSistemaDAO;
-import com.truper.recertification.dao.ReSistemaDAO;
 import com.truper.recertification.model.PKCuentasUsuario;
 import com.truper.recertification.model.ReCuentasUsuarioEntity;
 import com.truper.recertification.model.RePerfilSistemaEntity;
@@ -28,9 +27,6 @@ public class DetailEmployeeServiceImpl implements DetailEmployeeService{
 
 	@Autowired
 	private ReCuentasUsuarioDAO daoCuentas;
-
-	@Autowired
-	private ReSistemaDAO daoSistema;
 	
 	@Autowired
 	private RePerfilSistemaDAO daoPerfil;

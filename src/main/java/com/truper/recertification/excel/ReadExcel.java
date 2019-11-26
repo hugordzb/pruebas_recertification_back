@@ -2,7 +2,6 @@ package com.truper.recertification.excel;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.ParseException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -12,13 +11,8 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
-import com.truper.recertification.excel.mapper.RecertificacionExcelMapper;
-import com.truper.recertification.excel.recertification.vo.DataDocsVO;
-import com.truper.recertification.excel.recertification.vo.RecertificationDocsVO;
 import com.truper.recertification.exception.RecertificationException;
 
 import lombok.extern.slf4j.Slf4j;
@@ -30,9 +24,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Component
 public class ReadExcel {
-	
-	@Autowired
-	private RecertificacionExcelMapper excelMapper;
 	
 	/**
 	 * This method review data on excel columns, and identify by sheets (if sheet's not defined read the first sheet) 
@@ -103,57 +94,7 @@ public class ReadExcel {
 					e.printStackTrace();
 				}
 			}
-		}
-		
+		}	
 		return rowData;
-	}
-	
-	/**
-	 * This method identify docs and invoke maps
-	 * @param list
-	 * @param dataDocsVO
-	 * @param recertDocs
-	 * @return RecertificationDocsVO
-	 * @throws ParseException
-	 */
-	private RecertificationDocsVO mapData(List<List<String>> list, DataDocsVO dataDocsVO, RecertificationDocsVO recertDocs) throws ParseException {		
-
-		switch (dataDocsVO.getStrNameFile()) {
-			case "Usuarios TEL.xlsx":
-				recertDocs.setLstTel(excelMapper.excelMapperTel(list));
-			break;
-			case "Usuarios SAP.xlsx":
-				recertDocs.setLstSap(excelMapper.excelMapperSap(list));
-			break;
-			case "Usuarios CIAT.xlsx":
-				if(dataDocsVO.getStrHoja().equals("Ciat")) {
-					recertDocs.setLstCiat(excelMapper.excelMapperCiat(list));
-				}else if(dataDocsVO.getStrHoja().equals("Ciat en Linea")) {
-					recertDocs.setLstCiatLinea(excelMapper.excelMapperCiatLinea(list));
-				}
-			break;
-			case "Recertificacion.xlsx":
-				if(dataDocsVO.getStrHoja().equals("Activos")) {
-					//recertDocs.setLstRecert(excelMapper.excelMapperRecert(list));
-				}
-			break;
-			case "Perfiles SAP.xlsx":
-				if(dataDocsVO.getStrHoja().equals("PERFILES")) {
-					recertDocs.setLstSapProfiles(excelMapper.excelMapperSapProfiles(list));
-				}else if(dataDocsVO.getStrHoja().equals("APO")) {
-					recertDocs.setLstSapAPO(excelMapper.excelMapperSapAPO(list));
-				}
-			break;
-			case "Correo Jefe.xlsx":
-				recertDocs.setLstCorreoJefe(excelMapper.excelMapperCorreo(list));
-				break;
-			case "Archivo prueba Recertificacion.xlsx":
-				recertDocs.setLstNewFile(excelMapper.excelMapperNewFormat(list));
-				break;			
-			default:
-				log.info("El nombre del documento no coincide");
-			break;
-		}
-		return recertDocs;
 	}
 }

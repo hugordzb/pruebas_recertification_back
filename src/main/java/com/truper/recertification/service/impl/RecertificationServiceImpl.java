@@ -21,9 +21,8 @@ import com.truper.recertification.model.ReRecertificacionEntity;
 import com.truper.recertification.reports.RecertificacionCarta;
 import com.truper.recertification.service.DetailLetterService;
 import com.truper.recertification.service.RecertificationService;
-import com.truper.recertification.vo.answer.DetailCountsEmployeeVO;
 import com.truper.recertification.vo.answer.CountEmployeeVO;
-import com.truper.recertification.vo.answer.systems.AcountsVO;
+import com.truper.recertification.vo.answer.DetailCountsEmployeeVO;
 
 import lombok.extern.slf4j.Slf4j;
 import net.sf.jasperreports.engine.JRException;
