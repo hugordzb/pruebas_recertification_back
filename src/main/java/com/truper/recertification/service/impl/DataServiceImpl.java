@@ -141,7 +141,11 @@ public class DataServiceImpl implements DataService{
 		List<BossDetailVO> lstBoss = new ArrayList<>();
 		
 		for(int i = 0; i < lstDetail.size(); i++) {
-			lstBoss.add(this.findBossForRecertification(lstDetail.get(i).getId(), periodo));
+			BossDetailVO boss = this.findBossForRecertification(lstDetail.get(i).getId(), periodo);
+			// All bosses should appear, despite the fact that are not yet certified, but they need to be checked
+			if(boss.getPeriodo().equals(periodo) || boss.getPeriodo().equals("0000")) { 
+				lstBoss.add(boss);
+			} 
 		}
 		bossMap.put("jefes",lstBoss);
 		
@@ -176,9 +180,11 @@ public class DataServiceImpl implements DataService{
 			}else {
 				bossVO.setInRecertificacion(false);
 			}
+			bossVO.setPeriodo(periodo);
 		}catch(NoSuchElementException nsee ) {
 			bossVO.setInRecertificacion(false);
 			bossVO.setRecertificado(false);
+			bossVO.setPeriodo("0000");
 		}
 		
 		return bossVO;

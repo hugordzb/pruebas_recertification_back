@@ -29,4 +29,6 @@ public class BossDetailVO implements Serializable{
 	
 	private boolean isRecertificado;
 	
+	private String periodo;
+	
 }
