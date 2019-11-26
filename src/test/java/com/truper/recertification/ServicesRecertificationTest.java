@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.truper.recertification.service.AuditoryService;
-import com.truper.recertification.service.ChangeAcountsService;
+import com.truper.recertification.service.ChangeRequestService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -21,7 +21,7 @@ public class ServicesRecertificationTest {
 	private AuditoryService auditoryService;
 	
 	@Autowired
-	private ChangeAcountsService changeService;
+	private ChangeRequestService changeService;
 	
 	@Test
 	public void findCuentasSistema() {

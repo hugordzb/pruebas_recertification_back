@@ -3,6 +3,7 @@ package com.truper.recertification.vo.answer.systems;
 import java.io.Serializable;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,16 +12,20 @@ import lombok.Setter;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class AnswerVO implements Serializable{
+@Builder
+public class AcountsLettersVO implements Serializable{
 
 	private static final long serialVersionUID = 1L;
-	
-	private String idUsuario;
 
-	private String cuentaSistema;
+	private String cCiat;
 	
-	private String perfil;
+	private String pCiat;
 	
-	private String sistema;
-		
+	private String cSap;
+	
+	private String pSap;
+	
+	private String cTel;
+	
+	private String pTel;
 }

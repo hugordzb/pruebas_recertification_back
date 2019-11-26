@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 import com.truper.recertification.excel.vo.CiatExcelVO;
 import com.truper.recertification.excel.vo.CiatLineaExcelVO;
-import com.truper.recertification.excel.vo.CorreoJefeExcelVO;
+import com.truper.recertification.excel.vo.EmailBossExcelVO;
 import com.truper.recertification.excel.vo.NewFileExcelVO;
 import com.truper.recertification.excel.vo.RecertificationExcelVO;
 import com.truper.recertification.excel.vo.SapApoExcelVO;
@@ -45,6 +45,7 @@ public class RecertificacionExcelMapper {
 		try {
 			recertificacion.setFechaIngreso(sdf.parse(rowData.get(i++)));	
 		} catch (Exception e) {
+			
 		}
 		
 		recertificacion.setNombre(rowData.get(i++));
@@ -128,6 +129,7 @@ public class RecertificacionExcelMapper {
 			ciat.setUsuario(rowData.get(i).get(0));
 			ciat.setNombre(rowData.get(i).get(1));
 			ciat.setPerfil(Integer.parseInt(rowData.get(i).get(2)));
+			ciat.setFechaBaja(sdf.parse(rowData.get(i).get(3)));
 			ciat.setAlmacen(rowData.get(i).get(4));
 			
 			lstExcel.add(ciat);
@@ -185,11 +187,11 @@ public class RecertificacionExcelMapper {
 		return lstExcel;
 	}
 	
-	public List<CorreoJefeExcelVO> excelMapperCorreo(List<List<String>> rowData) throws ParseException {
-		List<CorreoJefeExcelVO> lstExcel = new ArrayList<>();
+	public List<EmailBossExcelVO> excelMapperCorreo(List<List<String>> rowData) throws ParseException {
+		List<EmailBossExcelVO> lstExcel = new ArrayList<>();
 		
 		for(int i = 0; i < rowData.size(); i++) {
-			CorreoJefeExcelVO correo = new CorreoJefeExcelVO();
+			EmailBossExcelVO correo = new EmailBossExcelVO();
 			
 			correo.setIdJefe(rowData.get(i).get(0));
 			correo.setNombre(rowData.get(i).get(1));

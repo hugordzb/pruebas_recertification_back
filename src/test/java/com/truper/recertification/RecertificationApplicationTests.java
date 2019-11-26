@@ -27,12 +27,11 @@ import com.lowagie.text.pdf.PdfWriter;
 import com.truper.recertification.common.email.EmailService;
 import com.truper.recertification.common.template.MailContentBuilder;
 import com.truper.recertification.model.ReUsuarioEntity;
-import com.truper.recertification.reports.RecertificacionCarta;
+import com.truper.recertification.reports.RecertificationLetter;
 import com.truper.recertification.service.DetailEmployeeService;
 import com.truper.recertification.service.RecertificationService;
 import com.truper.recertification.vo.answer.DetailCountsEmployeeVO;
-import com.truper.recertification.vo.answer.CountEmployeeVO;
-import com.truper.recertification.vo.answer.systems.AcountsVO;
+import com.truper.recertification.vo.answer.AcountEmployeeVO;
 
 import lombok.extern.slf4j.Slf4j;
 import net.sf.jasperreports.engine.JRException;
@@ -124,9 +123,9 @@ class RecertificationApplicationTests {
 		log.info("-----------");
 		boss = "mgmolinae";
 		
-		List<CountEmployeeVO> lstAcounts = new LinkedList<>();
+		List<AcountEmployeeVO> lstAcounts = new LinkedList<>();
 		log.info("buscara cliente");
-		DetailCountsEmployeeVO counts = detail.findEmployDetail(ReUsuarioEntity
+		DetailCountsEmployeeVO counts = detail.findEmployeeDetail(ReUsuarioEntity
 				.builder()
 				.idUsuario("mgmolinae")
 				.estatus(true)
@@ -149,7 +148,7 @@ class RecertificationApplicationTests {
 			log.info("lista: " + lstAcounts.size());
 		}
 		
-		RecertificacionCarta carta = new RecertificacionCarta(boss, lstAcounts);
+		RecertificationLetter carta = new RecertificationLetter(boss, lstAcounts);
 		JasperPrint jasperPrint = carta.build();
 		
 		try {

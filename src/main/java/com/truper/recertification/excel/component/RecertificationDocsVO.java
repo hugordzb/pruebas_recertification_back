@@ -1,11 +1,11 @@
-package com.truper.recertification.excel.recertification.vo;
+package com.truper.recertification.excel.component;
 
 import java.io.Serializable;
 import java.util.List;
 
 import com.truper.recertification.excel.vo.CiatExcelVO;
 import com.truper.recertification.excel.vo.CiatLineaExcelVO;
-import com.truper.recertification.excel.vo.CorreoJefeExcelVO;
+import com.truper.recertification.excel.vo.EmailBossExcelVO;
 import com.truper.recertification.excel.vo.NewFileExcelVO;
 import com.truper.recertification.excel.vo.RecertificationExcelVO;
 import com.truper.recertification.excel.vo.SapApoExcelVO;
@@ -38,7 +38,7 @@ public class RecertificationDocsVO implements Serializable{
 	
 	private List<CiatLineaExcelVO> lstCiatLinea;
 	
-	private List<CorreoJefeExcelVO> lstCorreoJefe;
+	private List<EmailBossExcelVO> lstCorreoJefe;
 
 	private List<RecertificationExcelVO> lstRecert;
 	

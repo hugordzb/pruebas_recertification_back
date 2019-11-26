@@ -5,7 +5,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-import com.truper.recertification.constants.SistemaCatalogs;
+import com.truper.recertification.utils.constants.SistemaCatalogs;
 
 public class FiltersUtils {
 	

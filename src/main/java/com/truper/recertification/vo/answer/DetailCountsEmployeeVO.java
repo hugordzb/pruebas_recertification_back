@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.List;
 
 import com.truper.recertification.vo.answer.systems.AccountDataVO;
-import com.truper.recertification.vo.answer.systems.AcountsVO;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.truper.recertification.model.ReUsuarioEntity;
 import com.truper.recertification.service.AuditoryService;
 import com.truper.recertification.service.impl.DetailEmployeeServiceImpl;
-import com.truper.recertification.vo.answer.CountsBossVO;
+import com.truper.recertification.vo.answer.AcountsBossVO;
 import com.truper.recertification.vo.answer.DetailCountsEmployeeVO;
 
 import io.swagger.annotations.Api;
@@ -33,7 +33,7 @@ import lombok.Setter;
 @CrossOrigin(origins = "*")
 @RestController
 @Api(value = "Detalle de Cuentas", description = "Detalle de cuentas para la recertificación")
-public class CountsResources {
+public class AuditableAcountsResources {
 
 	@Autowired
 	private AuditoryService auditoryService;
@@ -55,7 +55,7 @@ public class CountsResources {
 	  			  response = Map.class)
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "OK"),
 							@ApiResponse(code = 401, message = "Unauthorized")})
-	public CountsBossVO findByBoss(
+	public AcountsBossVO findByBoss(
 			@ApiParam(value = "Cuenta AD (LDAP) del jefe", required = true)
     		@Valid	@PathVariable ("idJefe") String strIdJefe) {
 		return auditoryService.findByBoss(strIdJefe);
@@ -81,7 +81,7 @@ public class CountsResources {
 			@ApiParam(value = "Cuenta AD (LDAP) del empleado)", required = true)
     		@Valid	@PathVariable("strIdEmployee") String strIdEmployee) {
 		
-		return this.detailEmployee.findEmployDetail(ReUsuarioEntity.builder()
+		return this.detailEmployee.findEmployeeDetail(ReUsuarioEntity.builder()
 				.idUsuario(strIdEmployee)
 				.estatus(true)
 				.build());

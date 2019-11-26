@@ -8,18 +8,18 @@ import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
 import com.truper.recertification.dao.ReBitacoraCambiosDAO;
+import com.truper.recertification.json.request.vo.ToProcessChangeVO;
+import com.truper.recertification.json.request.vo.RequestChangeVO;
 import com.truper.recertification.model.ReBitacoraCambiosEntity;
 import com.truper.recertification.model.ReControlCambiosEntity;
-import com.truper.recertification.service.ChangeAcountsService;
+import com.truper.recertification.service.ChangeRequestService;
 import com.truper.recertification.service.ValidateAcountsService;
-import com.truper.recertification.vo.request.ProcessChangeVO;
-import com.truper.recertification.vo.request.RequestChangeVO;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-public class ChangeAcountsServiceImpl implements ChangeAcountsService{
+public class ChangeRequestServiceImpl implements ChangeRequestService{
 
 	@Autowired
 	private ValidateAcountsService validateAcounts;
@@ -60,7 +60,7 @@ public class ChangeAcountsServiceImpl implements ChangeAcountsService{
 		Date today = new Date();
 		Gson gson = new Gson();
 		
-		ProcessChangeVO processVO = gson.fromJson(json, ProcessChangeVO.class);
+		ToProcessChangeVO processVO = gson.fromJson(json, ToProcessChangeVO.class);
 		ReControlCambiosEntity control = new ReControlCambiosEntity();
 		try {
 			control.setIdMovimiento(Integer.parseInt(processVO.getIdMovimiento()));

@@ -14,7 +14,7 @@ import com.truper.recertification.model.ReCuentasUsuarioEntity;
 import com.truper.recertification.model.ReSistemaEntity;
 import com.truper.recertification.service.DetailLetterService;
 import com.truper.recertification.vo.answer.DetailCountsEmployeeVO;
-import com.truper.recertification.vo.answer.systems.AcountsVO;
+import com.truper.recertification.vo.answer.systems.AcountsLettersVO;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -42,8 +42,8 @@ public class DetailLettlerServiceImpl implements DetailLetterService{
 			try {
 				employeeVO.setEmpleado(this.daoUsuario.findById(strIdUsuario).get().getNombre());
 					
-				List<AcountsVO> lstAcounts = new ArrayList<>();
-				AcountsVO countsVO = new AcountsVO();
+				List<AcountsLettersVO> lstAcounts = new ArrayList<>();
+				AcountsLettersVO countsVO = new AcountsLettersVO();
 				
 				for(int j = 0; j<lstCuenta.size(); j++) {
 					

@@ -1,8 +1,8 @@
 package com.truper.recertification.service;
 
+import com.truper.recertification.json.request.vo.RequestChangeVO;
 import com.truper.recertification.model.ReBitacoraCambiosEntity;
 import com.truper.recertification.model.ReControlCambiosEntity;
-import com.truper.recertification.vo.request.RequestChangeVO;
 
 public interface ValidateAcountsService {
 

@@ -11,16 +11,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.truper.recertification.excel.ExcelRecertificationSheet;
 import com.truper.recertification.excel.mapper.ExcelRowToVOService;
 import com.truper.recertification.excel.vo.RecertificationExcelVO;
 import com.truper.recertification.exception.RecertificationException;
 import com.truper.recertification.service.LoadLayoutRecertService;
+import com.truper.recertification.utils.constants.ExcelRecertificationSheet;
 
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/conciliacion")
-public class ConciliacionResources {
+public class ConciliationResources {
 	
 	@Autowired
 	private ExcelRowToVOService<RecertificationExcelVO> readRecert;

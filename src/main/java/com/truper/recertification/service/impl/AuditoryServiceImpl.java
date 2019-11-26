@@ -9,14 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.truper.recertification.dao.ReDetalleJefeDAO;
-import com.truper.recertification.dao.ReJerarquiaDAO;
 import com.truper.recertification.dao.ReUsuarioDAO;
-import com.truper.recertification.ldap.repository.LDAPRepository;
 import com.truper.recertification.model.ReDetalleJefeEntity;
-import com.truper.recertification.model.ReJerarquiaEntity;
 import com.truper.recertification.model.ReUsuarioEntity;
 import com.truper.recertification.service.AuditoryService;
-import com.truper.recertification.vo.answer.CountsBossVO;
+import com.truper.recertification.vo.answer.AcountsBossVO;
 import com.truper.recertification.vo.answer.DetailCountsEmployeeVO;
 
 import lombok.extern.slf4j.Slf4j;
@@ -26,16 +23,10 @@ import lombok.extern.slf4j.Slf4j;
 public class AuditoryServiceImpl implements AuditoryService{
 	
 	@Autowired
-	private ReJerarquiaDAO daoJerarquia;
-	
-	@Autowired
 	private ReUsuarioDAO daoUsuario;
 
 	@Autowired
 	private ReDetalleJefeDAO daoDetalleJefe;
-	
-	@Autowired
-	private LDAPRepository ldapRepository;
 	
 	@Autowired
 	private DetailEmployeeServiceImpl detailEmployee;
@@ -44,14 +35,14 @@ public class AuditoryServiceImpl implements AuditoryService{
 	public Map<String, Object> findCuentasSistema() {
 		
 		Map<String, Object> jefesMap = new HashMap<>();
-		List<CountsBossVO> lstJefes = new ArrayList<>();
+		List<AcountsBossVO> lstJefes = new ArrayList<>();
 		
 		List<ReDetalleJefeEntity> lstCuentas = daoDetalleJefe.findAll();
 		
 		for(int i = 0; i<lstCuentas.size(); i++) {
 						
 			String strIdJefe = lstCuentas.get(i).getIdJefe();
-			CountsBossVO bossVO = this.findByBoss(strIdJefe);
+			AcountsBossVO bossVO = this.findByBoss(strIdJefe);
 			
 			if(!(bossVO.getEmpleados().isEmpty() || bossVO.getEmpleados() == null)) {
 				lstJefes.add(bossVO);
@@ -62,8 +53,8 @@ public class AuditoryServiceImpl implements AuditoryService{
 	}
 	
 	@Override
-	public CountsBossVO findByBoss(String strIdBoss) {
-		CountsBossVO bossVO = new CountsBossVO();
+	public AcountsBossVO findByBoss(String strIdBoss) {
+		AcountsBossVO bossVO = new AcountsBossVO();
 		String strSystems = null;
 		
 		List<DetailCountsEmployeeVO> lstEmpleados = new ArrayList<>();
@@ -71,7 +62,7 @@ public class AuditoryServiceImpl implements AuditoryService{
 		
 		if(listEmpleados != null) {
 			listEmpleados.forEach( emp -> {
-				lstEmpleados.add(this.detailEmployee.findEmployDetail(emp));
+				lstEmpleados.add(this.detailEmployee.findEmployeeDetail(emp));
 			});
 		}
 		
@@ -101,7 +92,7 @@ public class AuditoryServiceImpl implements AuditoryService{
 		List<ReUsuarioEntity> listEmpleados = this.daoUsuario.findUsuariosByBoss(strIdBoss);
 		if(listEmpleados != null) {
 			listEmpleados.forEach( emp -> {
-				lstEmpleados.add(this.detailEmployee.findEmployDetail(emp));
+				lstEmpleados.add(this.detailEmployee.findEmployeeDetail(emp));
 			});
 		}
 		

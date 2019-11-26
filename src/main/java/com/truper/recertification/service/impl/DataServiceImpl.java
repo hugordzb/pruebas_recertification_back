@@ -22,9 +22,7 @@ import com.truper.recertification.model.ReSistemaEntity;
 import com.truper.recertification.service.DataService;
 import com.truper.recertification.vo.answer.SystemsVO;
 import com.truper.recertification.vo.answer.BossDetailVO;
-import com.truper.recertification.vo.answer.ProfileSystemListVO;
 import com.truper.recertification.vo.answer.ProfileSystemVO;
-import com.truper.recertification.vo.answer.SystemsListVO;
 
 @Service
 public class DataServiceImpl implements DataService{
@@ -48,10 +46,10 @@ public class DataServiceImpl implements DataService{
 	private ReDepartamentoDAO daoDepartamento;
 	
 	@Override
- 	public SystemsListVO getSystems() {
+ 	public List<SystemsVO> getSystems() {
 		
-		SystemsListVO systemVO = new SystemsListVO();
-		SystemsVO vo = new SystemsVO();
+		List<SystemsVO> lstSystemVO = new ArrayList<>();
+		SystemsVO systemVO = new SystemsVO();
 		
 		List<ReSistemaEntity> list = daoSistema.findAll();
 		List<SystemsVO> lista = new ArrayList<>();
@@ -59,22 +57,21 @@ public class DataServiceImpl implements DataService{
 		for(int i = 0; i<list.size(); i++) {
 			ReSistemaEntity  sistema = list.get(i);	
 			
-			vo.setIdSistema(sistema.getIdSistema());
-			vo.setSistema(sistema.getSistema());
+			systemVO.setIdSistema(sistema.getIdSistema());
+			systemVO.setSistema(sistema.getSistema());
 			
-			lista.add(vo);
+			lista.add(systemVO);
 		}
-		systemVO.setSystems(lista);
-		return systemVO;
+		lstSystemVO.addAll(lista);
+		return lstSystemVO;
 	}
 
 	@Override
-	public ProfileSystemListVO getProfileSytem() {
+	public List<ProfileSystemVO> getProfileSytem() {
 		
 		List<ProfileSystemVO> lstAnswerPS = new ArrayList<>();
 		List<RePerfilSistemaEntity> lstPS = daoPerfilSystem.findAll();
-		
-		ProfileSystemListVO lstPSVO = new ProfileSystemListVO();
+		List<ProfileSystemVO> lstProfiles = new ArrayList<>();
 		
 		for(int i = 0; i<lstPS.size(); i++) {
 			ProfileSystemVO answerPSVO = new ProfileSystemVO();
@@ -89,8 +86,8 @@ public class DataServiceImpl implements DataService{
 			
 			lstAnswerPS.add(answerPSVO);
 		}
-		lstPSVO.setPerfiles(lstAnswerPS);
-		return lstPSVO;
+		lstProfiles.addAll(lstAnswerPS);
+		return lstProfiles;
 	}
 
 	@Override

@@ -1,4 +1,4 @@
-package com.truper.recertification.constants;
+package com.truper.recertification.utils.constants;
 
 import lombok.Getter;
 

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.truper.recertification.service.ChangeAcountsService;
+import com.truper.recertification.service.ChangeRequestService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -26,10 +26,10 @@ import lombok.Setter;
 @CrossOrigin(origins = "*")
 @RestController
 @Api(value = "Solicitud para Mesa de Servicio", description = "Solicitar, revisar y validar los cambios asociados a la recertificacion")
-public class ChangeAcountsResources {
+public class ChangeRequestResources {
 
 	@Autowired
-	private ChangeAcountsService changeService;
+	private ChangeRequestService changeService;
 	
 	@PutMapping(path="/requestChange")
     @ApiOperation(value = "Solicitar un Cambio con perfil Jefe",

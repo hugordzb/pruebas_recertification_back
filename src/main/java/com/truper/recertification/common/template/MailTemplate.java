@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 import com.truper.recertification.model.ReDetalleJefeEntity;
 import com.truper.recertification.service.AuditoryService;
-import com.truper.recertification.vo.answer.CountsBossVO;
+import com.truper.recertification.vo.answer.AcountsBossVO;
 
 @Component
 public class MailTemplate {
@@ -20,7 +20,7 @@ public class MailTemplate {
 	private AuditoryService auditoryService;
 	
 	public MailContentBuilder recertificationTemplate(ReDetalleJefeEntity detailBoss) {
-		CountsBossVO countsBossVO = auditoryService.findByBoss(detailBoss.getId());
+		AcountsBossVO countsBossVO = auditoryService.findByBoss(detailBoss.getId());
 		SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
 		
 		mailContentBuilder.setHtmlTemplateName("RecertificationMail");

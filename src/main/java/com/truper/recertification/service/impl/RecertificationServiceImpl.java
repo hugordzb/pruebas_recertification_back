@@ -18,10 +18,10 @@ import com.truper.recertification.dao.ReRecertificacionDAO;
 import com.truper.recertification.model.PKRecertificacion;
 import com.truper.recertification.model.ReDetalleJefeEntity;
 import com.truper.recertification.model.ReRecertificacionEntity;
-import com.truper.recertification.reports.RecertificacionCarta;
+import com.truper.recertification.reports.RecertificationLetter;
 import com.truper.recertification.service.DetailLetterService;
 import com.truper.recertification.service.RecertificationService;
-import com.truper.recertification.vo.answer.CountEmployeeVO;
+import com.truper.recertification.vo.answer.AcountEmployeeVO;
 import com.truper.recertification.vo.answer.DetailCountsEmployeeVO;
 
 import lombok.extern.slf4j.Slf4j;
@@ -76,9 +76,9 @@ public class RecertificationServiceImpl implements RecertificationService{
 		
 		log.info("Destinatarios:" + lstDestinatarios.toString());
 		
-//		if(!detailBoss.getCorreoCC().isEmpty() || detailBoss.getCorreoCC() != null) {
-//			lstCC.add(detailBoss.getCorreoCC());
-//		}
+		if(!detailBoss.getCorreoCC().isEmpty() || detailBoss.getCorreoCC() != null) {
+			lstCC.add(detailBoss.getCorreoCC());
+		}
 		
 		archivos.add(new FileSystemResource(this.generatorPDF(detailBoss.getIdJefe())));
 		
@@ -123,7 +123,7 @@ public class RecertificationServiceImpl implements RecertificationService{
 	}
 	
 	private String generatorPDF(String boss) {
-		List<CountEmployeeVO> lstAcounts = new LinkedList<>();
+		List<AcountEmployeeVO> lstAcounts = new LinkedList<>();
 		DetailCountsEmployeeVO counts = detail.findEmployDetail(boss);
 		
 		for(int i = 0; i < counts.getCuentas().size(); i++) {
@@ -140,7 +140,7 @@ public class RecertificationServiceImpl implements RecertificationService{
 					.build());*/
 		}
 		
-		RecertificacionCarta carta = new RecertificacionCarta(boss, lstAcounts);
+		RecertificationLetter carta = new RecertificationLetter(boss, lstAcounts);
 		JasperPrint jasperPrint = carta.build();
 		boss = counts.getEmpleado() + ".pdf";
 		try {

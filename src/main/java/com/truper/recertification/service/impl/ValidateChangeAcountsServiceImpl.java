@@ -14,6 +14,7 @@ import com.truper.recertification.dao.ReJerarquiaDAO;
 import com.truper.recertification.dao.RePerfilSistemaDAO;
 import com.truper.recertification.dao.ReSistemaDAO;
 import com.truper.recertification.dao.ReUsuarioDAO;
+import com.truper.recertification.json.request.vo.RequestChangeVO;
 import com.truper.recertification.model.PKCuentasUsuario;
 import com.truper.recertification.model.PKJerarquia;
 import com.truper.recertification.model.ReBitacoraCambiosEntity;
@@ -23,7 +24,6 @@ import com.truper.recertification.model.ReDetalleJefeEntity;
 import com.truper.recertification.model.ReJerarquiaEntity;
 import com.truper.recertification.model.ReUsuarioEntity;
 import com.truper.recertification.service.ValidateAcountsService;
-import com.truper.recertification.vo.request.RequestChangeVO;
 
 import lombok.extern.slf4j.Slf4j;
 

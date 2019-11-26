@@ -1,4 +1,4 @@
-package com.truper.recertification.vo.request;
+package com.truper.recertification.json.request.vo;
 
 import java.io.Serializable;
 

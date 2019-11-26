@@ -7,9 +7,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.truper.recertification.excel.ExcelRecertificationSheet;
 import com.truper.recertification.excel.ReadExcel;
 import com.truper.recertification.exception.RecertificationException;
+import com.truper.recertification.utils.constants.ExcelRecertificationSheet;
 
 @Component
 public class ExcelRowToVOService<T> {

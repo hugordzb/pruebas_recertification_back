@@ -1,7 +1,6 @@
-package com.truper.recertification.vo.answer.systems;
+package com.truper.recertification.excel.vo;
 
 import java.io.Serializable;
-import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,11 +11,12 @@ import lombok.Setter;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ReviewCountEmployeeVO implements Serializable{
+public class EmailBossExcelVO implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	
-	private String empleado;
-		
-	private List<AcountsVO> cuentas;
+	private String idJefe;
+	
+	private String nombre;
+
 }

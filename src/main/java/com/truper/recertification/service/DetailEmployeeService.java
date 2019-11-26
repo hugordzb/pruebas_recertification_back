@@ -14,7 +14,7 @@ public interface DetailEmployeeService {
 	 * @param strIdUsuario
 	 * @return counts by Employ
 	 */
-	public DetailCountsEmployeeVO findEmployDetail(ReUsuarioEntity userEntity);
+	public DetailCountsEmployeeVO findEmployeeDetail(ReUsuarioEntity userEntity);
 	
 	/**
 	 * This is an auxiliary method to separate acounts systems
@@ -23,5 +23,5 @@ public interface DetailEmployeeService {
 	 * @param lstSap
 	 * @param lstCiat
 	 */
-	public void findAcounts(ReCuentasUsuarioEntity cuentasUsuario, List<AccountDataVO> lstTel);
+	public void findEmployeeAcounts(ReCuentasUsuarioEntity cuentasUsuario, List<AccountDataVO> lstTel);
 }

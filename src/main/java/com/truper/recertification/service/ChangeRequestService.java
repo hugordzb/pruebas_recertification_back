@@ -1,6 +1,6 @@
 package com.truper.recertification.service;
 
-public interface ChangeAcountsService {
+public interface ChangeRequestService {
 
 	/**
 	 * This method read request Json, validate data and insert DB on RE_BITACORA_CAMBIOS

@@ -1,5 +1,6 @@
 package com.truper.recertification.resources;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
@@ -16,8 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.truper.recertification.service.DataService;
 import com.truper.recertification.vo.answer.BossDetailVO;
-import com.truper.recertification.vo.answer.ProfileSystemListVO;
-import com.truper.recertification.vo.answer.SystemsListVO;
+import com.truper.recertification.vo.answer.ProfileSystemVO;
+import com.truper.recertification.vo.answer.SystemsVO;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -41,19 +42,19 @@ public class DataResources {
 	
 	@GetMapping(path = "/auditableSystems")
 	@ApiOperation(value = "Recupera los Sistemas Auditables", 
-	  			  response = SystemsListVO.class)
+	  			  response = List.class)
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "OK"),
 							@ApiResponse(code = 401, message = "Unauthorized")})
-    public SystemsListVO findAuditableSystems()  throws Exception{
+    public List<SystemsVO> findAuditableSystems()  throws Exception{
             return infoService.getSystems();
     }
 	
 	@GetMapping(path = "/profileSystems")
 	@ApiOperation(value = "Recupera los perfiles auditables", 
-				  response = ProfileSystemListVO.class)
+				  response = List.class)
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "OK"),
 							@ApiResponse(code = 401, message = "Unauthorized")})
-	public ProfileSystemListVO findProfileSystems()  throws Exception{
+	public List<ProfileSystemVO> findProfileSystems()  throws Exception{
 		return infoService.getProfileSytem();
 	}
 	

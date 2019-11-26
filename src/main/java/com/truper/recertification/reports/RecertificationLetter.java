@@ -8,7 +8,7 @@ import java.util.Map;
 
 import org.jfree.util.Log;
 
-import com.truper.recertification.vo.answer.CountEmployeeVO;
+import com.truper.recertification.vo.answer.AcountEmployeeVO;
 
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JREmptyDataSource;
@@ -18,12 +18,12 @@ import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
-public class RecertificacionCarta {
+public class RecertificationLetter {
 	
 	private String jefe;
-	private List<CountEmployeeVO> empleados;
+	private List<AcountEmployeeVO> empleados;
 
-	public RecertificacionCarta(String jefe, List<CountEmployeeVO> empleados) {
+	public RecertificationLetter(String jefe, List<AcountEmployeeVO> empleados) {
 		this.jefe = jefe;
 		this.empleados = empleados;
 	}

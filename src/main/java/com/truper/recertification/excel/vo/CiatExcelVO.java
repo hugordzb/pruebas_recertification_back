@@ -24,7 +24,6 @@ public class CiatExcelVO implements Serializable{
 	
 	private String nombrePerfil;
 	
-	//se encuentra vacio en el doc por lo que no se mapeo
 	private Date fechaBaja;
 	
 	private String almacen;

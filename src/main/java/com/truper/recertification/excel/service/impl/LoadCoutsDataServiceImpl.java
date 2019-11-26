@@ -10,7 +10,7 @@ import com.truper.recertification.dao.ReJerarquiaDAO;
 import com.truper.recertification.dao.RePerfilSistemaDAO;
 import com.truper.recertification.dao.ReUsuarioDAO;
 import com.truper.recertification.excel.service.LoadCoutsDataService;
-import com.truper.recertification.excel.vo.CorreoJefeExcelVO;
+import com.truper.recertification.excel.vo.EmailBossExcelVO;
 import com.truper.recertification.excel.vo.RecertificationExcelVO;
 import com.truper.recertification.model.PKCuentasUsuario;
 import com.truper.recertification.model.PKJerarquia;
@@ -79,7 +79,7 @@ public class LoadCoutsDataServiceImpl implements LoadCoutsDataService{
 	}
 	
 	@Override
-	public void insertDetalleJefe(CorreoJefeExcelVO correoJefeVO, RecertificationExcelVO excelVO) {
+	public void insertDetalleJefe(EmailBossExcelVO correoJefeVO, RecertificationExcelVO excelVO) {
 		try {
 			if(daoDepa.findByDepartamento(excelVO.getDepartamento()).getIdDepartamento() == null) {
 				daoJefe.save(ReDetalleJefeEntity.builder()
