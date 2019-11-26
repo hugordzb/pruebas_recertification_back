@@ -35,24 +35,27 @@ public class DetailEmployeeServiceImpl implements DetailEmployeeService{
 	public DetailCountsEmployeeVO findEmployeeDetail(ReUsuarioEntity userEntity) {
 		DetailCountsEmployeeVO employeeVO = new DetailCountsEmployeeVO();
 		
-		if(userEntity != null && userEntity.isEstatus()) {
-			List<ReCuentasUsuarioEntity> lstCuenta = this.daoCuentas.findByIdCuentaUsuarioIdUsuario(userEntity.getIdUsuario());
-			try {
-				employeeVO.setIdEmpleado(userEntity.getIdUsuario());
-				employeeVO.setEmpleado(userEntity.getNombre());
-				
-				List<AccountDataVO> listaCuentas = new ArrayList<>();
-				
-				for(int j = 0; j<lstCuenta.size(); j++) {
-					this.findEmployeeAcounts(lstCuenta.get(j), listaCuentas);
+		if(userEntity != null) {
+			employeeVO.setIdEmpleado(userEntity.getIdUsuario());
+			employeeVO.setEmpleado(userEntity.getNombre());
+			
+			List<AccountDataVO> listaCuentas = new ArrayList<>();
+			if(userEntity.isEstatus()) {
+				List<ReCuentasUsuarioEntity> lstCuenta = this.daoCuentas.findByIdCuentaUsuarioIdUsuario(userEntity.getIdUsuario());
+				try {
+					for(int j = 0; j<lstCuenta.size(); j++) {
+						this.findEmployeeAcounts(lstCuenta.get(j), listaCuentas);
+					}
+						
+				} catch (Exception e) {
+					log.error("El usuario " + userEntity.getIdUsuario());
+					log.info(e.getMessage());
 				}
-					
-				employeeVO.setCuentas(listaCuentas);
-			} catch (Exception e) {
-				log.error("El usuario " + userEntity.getIdUsuario());
-				log.info(e.getMessage());
 			}
+			
+			employeeVO.setCuentas(listaCuentas);
 		}
+		
 		return employeeVO;
 	}
 	

@@ -194,7 +194,7 @@ public class LoadLayoutRecertServiceImpl implements LoadLayoutRecertService {
 		entity.setIdUsuario(vo.getAd());
 		entity.setNombre(vo.getNombre());
 		entity.setNoEmpleado(vo.getNoEmpleado());
-		entity.setEstatus("1".equalsIgnoreCase(vo.getActivo()) ? true : false);
+		entity.setEstatus(true);
 		entity.setFechaIngreso(vo.getFechaIngreso());
 		return entity;
 	}
