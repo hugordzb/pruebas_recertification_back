@@ -57,7 +57,7 @@ public class ExcelRowToVOService<T> {
 		List<Object> list = new LinkedList<>();
 		
 		try {
-			List<List<String>> rowData = this.read.readExcelData(ios, sheet.getSheetLocation(), sheet.getMaxColumns());
+			List<List<String>> rowData = this.read.readExcelData(ios, sheet.getSheet(), sheet.getMaxColumns());
 			rowData.forEach(row -> {
 				Object tmp = null;
 				switch (sheet) {
@@ -65,12 +65,11 @@ public class ExcelRowToVOService<T> {
 						tmp = this.mapperRecert.excelMapperCiat(row);
 						break;
 					case CIATENLINEA:
-						tmp = null;
+						tmp = this.mapperRecert.excelMapperCiat(row);
 						break;
 					default:
 					break;
 				}
-				Log.info("List: " + list.size());
 				if(tmp != null)
 					list.add(tmp);
 			});

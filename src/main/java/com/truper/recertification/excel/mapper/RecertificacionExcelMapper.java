@@ -7,7 +7,6 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 import com.truper.recertification.excel.vo.CiatExcelVO;
-import com.truper.recertification.excel.vo.CiatLineaExcelVO;
 import com.truper.recertification.excel.vo.EmailBossExcelVO;
 import com.truper.recertification.excel.vo.NewFileExcelVO;
 import com.truper.recertification.excel.vo.RecertificationExcelVO;
@@ -123,35 +122,10 @@ public class RecertificacionExcelMapper {
 			ciat.setPerfil(-1);
 		}
 		ciat.setNombrePerfil(rowData.get(i++));
-		try {
-			ciat.setFechaBaja(sdf.parse(rowData.get(i++)));	
-		} catch (Exception e) {
-			
-		}
-		ciat.setAlmacen(rowData.get(i));
 		
 		return ciat;
 	}
-	
-	public CiatLineaExcelVO excelMapperCiatLinea(List<String> rowData) {
-		CiatLineaExcelVO ciatLinea = new CiatLineaExcelVO();
-		int i = 0;
 		
-		ciatLinea.setUsuario(rowData.get(i++));
-		ciatLinea.setNombre(rowData.get(i++));
-		try {
-			ciatLinea.setPerfil(Integer.parseInt(rowData.get(i++)));
-		} catch (Exception e) {
-			ciatLinea.setPerfil(-1);
-		}
-		
-		ciatLinea.setNombrePerfil(rowData.get(i++));
-		ciatLinea.setCdrs(rowData.get(i++));
-		ciatLinea.setEstado(rowData.get(i));
-		
-		return ciatLinea;
-	}
-	
 	public SapProfilesExcelVO excelMapperSapProfiles(List<String> rowData) {
 		SapProfilesExcelVO sapProfile = new SapProfilesExcelVO();
 		int i = 0;

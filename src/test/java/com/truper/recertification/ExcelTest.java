@@ -2,6 +2,7 @@ package com.truper.recertification;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -98,10 +99,15 @@ public class ExcelTest {
 	public void excelCiat() {
 		log.info("-----Start-------");
 		File file = new File("/tmp/Usuarios CIAT.xlsx");
-		List<CiatExcelVO> listData = null;
+		List<CiatExcelVO> listData = new ArrayList<>();
 		
 		try (FileInputStream fios = new FileInputStream(file)) {
-			listData = this.readCiat.readExcelCiatToVo(fios, ExcelCiatSheet.CIAT);
+//			listData = this.readCiat.readExcelCiatToVo(fios, ExcelCiatSheet.CIATENLINEA);
+//			listData = this.readCiat.readExcelCiatToVo(fios, ExcelCiatSheet.CIAT);
+			listData.addAll(this.readCiat.readExcelCiatToVo(fios, ExcelCiatSheet.CIAT));
+			log.info("cambio hoja");
+			listData.addAll(this.readCiat.readExcelCiatToVo(fios, ExcelCiatSheet.CIATENLINEA));
+			
 			if(listData  != null) {
 				this.ciatService.insertUsersData(listData);
 			}

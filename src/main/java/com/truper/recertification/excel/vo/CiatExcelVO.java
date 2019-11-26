@@ -1,7 +1,6 @@
 package com.truper.recertification.excel.vo;
 
 import java.io.Serializable;
-import java.util.Date;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,8 +22,4 @@ public class CiatExcelVO implements Serializable{
 	private Integer perfil;
 	
 	private String nombrePerfil;
-	
-	private Date fechaBaja;
-	
-	private String almacen;
 }

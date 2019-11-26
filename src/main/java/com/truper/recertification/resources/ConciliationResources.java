@@ -1,6 +1,7 @@
 package com.truper.recertification.resources;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,6 @@ import com.truper.recertification.excel.service.LoadLayoutRecertService;
 import com.truper.recertification.excel.utils.constants.ExcelCiatSheet;
 import com.truper.recertification.excel.utils.constants.ExcelRecertificationSheet;
 import com.truper.recertification.excel.vo.CiatExcelVO;
-import com.truper.recertification.excel.vo.CiatLineaExcelVO;
 import com.truper.recertification.excel.vo.RecertificationExcelVO;
 import com.truper.recertification.exception.ProfilesException;
 import com.truper.recertification.exception.RecertificationException;
@@ -67,21 +67,14 @@ public class ConciliationResources {
 		if(file == null)
 			throw new ProfilesException("Debes enviar un archivo");
 		
-		List<CiatExcelVO> listData = null;
-		List<CiatLineaExcelVO> listLineData = null;
-		
+		List<CiatExcelVO> listData = new ArrayList<>();
 		try {
-			listData = this.readCiat.readExcelCiatToVo(file.getInputStream(), ExcelCiatSheet.CIAT);
+			listData.addAll(this.readCiat.readExcelCiatToVo(file.getInputStream(), ExcelCiatSheet.CIAT));
+			listData.addAll(this.readCiat.readExcelCiatToVo(file.getInputStream(), ExcelCiatSheet.CIATENLINEA));
 			
-			if(listData  != null) {
+			if(listData  != null && !listData.isEmpty()) {
 				this.loadlayoutCiatService.insertUsersData(listData);
 			}
-			
-//			listLineData = this.readCiat.readExcelCiatToVo(file.getInputStream(), ExcelCiatSheet.CIATENLINEA);
-//			
-//			if(listLineData  != null) {
-//				this.loadlayoutCiatService.insertUsersData(listData);
-//			}
 					
 		} catch (Exception e) {
 			e.printStackTrace();

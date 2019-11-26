@@ -13,6 +13,16 @@ public enum ExcelCiatSheet {
 	ExcelCiatSheet(Integer sheetLocation) {
 		this.sheetLocation = sheetLocation;
 	}
+	public Integer getSheet() {
+		switch(this) {
+		case CIAT:
+			return 0;
+		case CIATENLINEA:
+			return 1;
+		default:
+				return 0;
+		}
+	}
 	
 	public Integer getMaxColumns() {
 		switch(this) {
