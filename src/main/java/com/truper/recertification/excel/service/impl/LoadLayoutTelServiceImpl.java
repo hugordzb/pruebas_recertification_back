@@ -10,8 +10,8 @@ import org.springframework.stereotype.Service;
 
 import com.truper.recertification.dao.ReCuentasUsuarioDAO;
 import com.truper.recertification.dao.RePerfilSistemaDAO;
-import com.truper.recertification.excel.service.LoadLayoutCiatService;
-import com.truper.recertification.excel.vo.CiatExcelVO;
+import com.truper.recertification.excel.service.LoadLayoutTelService;
+import com.truper.recertification.excel.vo.TelExcelVO;
 import com.truper.recertification.exception.ProfilesException;
 import com.truper.recertification.model.PKCuentasUsuario;
 import com.truper.recertification.model.ReCuentasUsuarioEntity;
@@ -23,8 +23,8 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-public class LoadLayoutCiatServiceImpl implements LoadLayoutCiatService{
-	
+public class LoadLayoutTelServiceImpl implements LoadLayoutTelService{
+
 	@Autowired
 	private RePerfilSistemaDAO daoProfile;
 	
@@ -32,16 +32,16 @@ public class LoadLayoutCiatServiceImpl implements LoadLayoutCiatService{
 	private ReCuentasUsuarioDAO daoAcounts;
 	
 	@Override
-	public List<RePerfilSistemaEntity> insertUsersData(List<CiatExcelVO> listData) 
+	public List<RePerfilSistemaEntity> insertUsersData(List<TelExcelVO> listData) 
 			throws ProfilesException {
-
-		List<RePerfilSistemaEntity> profileList = this.daoProfile.findByIdSistema(SistemaCatalogs.CIAT.getCode());
-
+		
+		List<RePerfilSistemaEntity> profileList = this.daoProfile.findByIdSistema(SistemaCatalogs.TEL.getCode());
+		
 		if(listData == null || listData.isEmpty())
 			throw new ProfilesException("No hay datos para insertar");
 		
 		Set<String> profilesUniques = listData.stream()
-				.map(v -> v.getNombrePerfil().toUpperCase())
+				.map(v -> v.getRol().toUpperCase())
 				.collect(Collectors.toSet());
 		
 		if(profilesUniques != null && !profilesUniques.isEmpty()) {
@@ -54,10 +54,10 @@ public class LoadLayoutCiatServiceImpl implements LoadLayoutCiatService{
 				}else {
 					RePerfilSistemaEntity profileTmp = this.daoProfile.save(
 							RePerfilSistemaEntity.builder()
-							.idSistema(SistemaCatalogs.CIAT.getCode())
+							.idSistema(SistemaCatalogs.TEL.getCode())
 							.perfil(profile.trim())
 							.build());
-					
+					log.info("perfil: " + profileTmp);
 					profileList.add(profileTmp);
 				}
 			});
@@ -67,12 +67,13 @@ public class LoadLayoutCiatServiceImpl implements LoadLayoutCiatService{
 		
 		listData.forEach(v ->{
 			ReCuentasUsuarioEntity acountEntity  = this.daoAcounts.
-					findByIdCuentaUsuarioIdPerfilAndIdCuentaUsuarioCuentaSistema(Constants.DEFAULT_PROFILE, v.getUsuario());
+					findByIdCuentaUsuarioIdPerfilAndIdCuentaUsuarioCuentaSistema(Constants.DEFAULT_PROFILE, 
+							v.getUsuarioTel());
 			
 			if(acountEntity != null) {
 				
 				RePerfilSistemaEntity currentProfile = profileList.stream()
-						.filter(perf -> v.getNombrePerfil().trim().equalsIgnoreCase(perf.getPerfil()))
+						.filter(perf -> v.getRol().trim().equalsIgnoreCase(perf.getPerfil()))
 						.findAny().orElse(null);
 				
 				if(currentProfile != null) {
@@ -86,9 +87,10 @@ public class LoadLayoutCiatServiceImpl implements LoadLayoutCiatService{
 					acountsList.add(acountEntity);
 				}
 			}else {
-				log.error("No se encontro relacion registro de '" + v.getUsuario() + "'");
+				log.error("No se encontro relacion registro de '" + v.getUsuarioTel() + "'");
 			}
 		});
+		
 		return profileList;
 	}
 

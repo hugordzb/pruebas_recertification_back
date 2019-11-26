@@ -15,10 +15,13 @@ import org.springframework.web.multipart.MultipartFile;
 import com.truper.recertification.excel.mapper.ExcelRowToVOService;
 import com.truper.recertification.excel.service.LoadLayoutCiatService;
 import com.truper.recertification.excel.service.LoadLayoutRecertService;
+import com.truper.recertification.excel.service.LoadLayoutTelService;
 import com.truper.recertification.excel.utils.constants.ExcelCiatSheet;
 import com.truper.recertification.excel.utils.constants.ExcelRecertificationSheet;
+import com.truper.recertification.excel.utils.constants.ExcelTelSheet;
 import com.truper.recertification.excel.vo.CiatExcelVO;
 import com.truper.recertification.excel.vo.RecertificationExcelVO;
+import com.truper.recertification.excel.vo.TelExcelVO;
 import com.truper.recertification.exception.ProfilesException;
 import com.truper.recertification.exception.RecertificationException;
 
@@ -34,10 +37,16 @@ public class ConciliationResources {
 	private ExcelRowToVOService<CiatExcelVO> readCiat;
 	
 	@Autowired
+	private ExcelRowToVOService<TelExcelVO> readTel;
+	
+	@Autowired
 	private LoadLayoutRecertService loadLayoutRecertService;
 	
 	@Autowired
 	private LoadLayoutCiatService loadlayoutCiatService;
+	
+	@Autowired
+	private LoadLayoutTelService loadlayoutTelService;
 	
 	@PostMapping("/recertificacion")
 	public List<RecertificationExcelVO> processRecertification(@RequestParam(name="file", required = false) MultipartFile file) 
@@ -82,4 +91,26 @@ public class ConciliationResources {
 		
 		return listData;
     }
+	
+	@PostMapping("/telProfiles")
+	public List<TelExcelVO> processTelProfiles(@RequestParam(name="file", required = false) MultipartFile file) 
+			throws IOException, ProfilesException{
+	
+		if(file == null)
+			throw new ProfilesException("Debes enviar un archivo");
+		
+		List<TelExcelVO> listData = null;
+		try {
+			listData = this.readTel.readExcelTelToVo(file.getInputStream(), ExcelTelSheet.HOJA1);
+			
+			if(listData  != null) {
+				this.loadlayoutTelService.insertUsersData(listData);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return listData;
+    }
+	
 }

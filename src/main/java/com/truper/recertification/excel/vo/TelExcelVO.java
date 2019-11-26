@@ -15,6 +15,10 @@ public class TelExcelVO implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 
+	private Integer noEmpleado;
+	
+	private String nombre;
+	
 	private String estatus;
 	
 	private String departamento;

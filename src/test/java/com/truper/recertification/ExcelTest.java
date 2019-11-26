@@ -14,10 +14,13 @@ import com.truper.recertification.dao.ReUsuarioDAO;
 import com.truper.recertification.excel.mapper.ExcelRowToVOService;
 import com.truper.recertification.excel.service.LoadLayoutCiatService;
 import com.truper.recertification.excel.service.LoadLayoutRecertService;
+import com.truper.recertification.excel.service.LoadLayoutTelService;
 import com.truper.recertification.excel.utils.constants.ExcelCiatSheet;
 import com.truper.recertification.excel.utils.constants.ExcelRecertificationSheet;
+import com.truper.recertification.excel.utils.constants.ExcelTelSheet;
 import com.truper.recertification.excel.vo.CiatExcelVO;
 import com.truper.recertification.excel.vo.RecertificationExcelVO;
+import com.truper.recertification.excel.vo.TelExcelVO;
 import com.truper.recertification.model.ReUsuarioEntity;
 import com.truper.recertification.service.AuditoryService;
 import com.truper.recertification.vo.answer.AcountsBossVO;
@@ -34,12 +37,18 @@ public class ExcelTest {
 	
 	@Autowired
 	private ExcelRowToVOService<CiatExcelVO> readCiat;
+
+	@Autowired
+	private ExcelRowToVOService<TelExcelVO> readTel;
 	
 	@Autowired
 	private LoadLayoutRecertService layService;
 	
 	@Autowired
 	private LoadLayoutCiatService ciatService;
+	
+	@Autowired
+	private LoadLayoutTelService telService;
 	
 	@Autowired
 	private AuditoryService audService;
@@ -102,14 +111,29 @@ public class ExcelTest {
 		List<CiatExcelVO> listData = new ArrayList<>();
 		
 		try (FileInputStream fios = new FileInputStream(file)) {
-//			listData = this.readCiat.readExcelCiatToVo(fios, ExcelCiatSheet.CIATENLINEA);
-//			listData = this.readCiat.readExcelCiatToVo(fios, ExcelCiatSheet.CIAT);
 			listData.addAll(this.readCiat.readExcelCiatToVo(fios, ExcelCiatSheet.CIAT));
-			log.info("cambio hoja");
 			listData.addAll(this.readCiat.readExcelCiatToVo(fios, ExcelCiatSheet.CIATENLINEA));
 			
 			if(listData  != null) {
 				this.ciatService.insertUsersData(listData);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		log.info("-----Finish-------");
+	}
+	
+	@Test
+	public void excelTel() {
+		log.info("-----Start-------");
+		File file = new File("/tmp/Usuarios TEL.xlsx");
+		List<TelExcelVO> listData = null;
+		
+		try (FileInputStream fios = new FileInputStream(file)) {
+			listData = this.readTel.readExcelTelToVo(fios, ExcelTelSheet.HOJA1);
+			
+			if(listData  != null) {
+				this.telService.insertUsersData(listData);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -7,10 +7,8 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 import com.truper.recertification.excel.vo.CiatExcelVO;
-import com.truper.recertification.excel.vo.EmailBossExcelVO;
 import com.truper.recertification.excel.vo.NewFileExcelVO;
 import com.truper.recertification.excel.vo.RecertificationExcelVO;
-import com.truper.recertification.excel.vo.SapApoExcelVO;
 import com.truper.recertification.excel.vo.SapExcelVO;
 import com.truper.recertification.excel.vo.SapProfilesExcelVO;
 import com.truper.recertification.excel.vo.TelExcelVO;
@@ -82,7 +80,13 @@ public class RecertificacionExcelMapper {
 	public TelExcelVO excelMapperTel(List<String> rowData) {
 		int i = 0;
 		TelExcelVO tel = new TelExcelVO();
+		try {
+			tel.setNoEmpleado(Integer.parseInt(rowData.get(i++)));	
+		} catch (Exception e) {
+			tel.setNoEmpleado(-1);
+		}
 		
+		tel.setNombre(rowData.get(i++));
 		tel.setEstatus(rowData.get(i++));
 		tel.setDepartamento(rowData.get(i++));
 		tel.setJefeJerarquico(rowData.get(i++));
@@ -121,7 +125,7 @@ public class RecertificacionExcelMapper {
 		} catch (Exception e) {
 			ciat.setPerfil(-1);
 		}
-		ciat.setNombrePerfil(rowData.get(i++));
+		ciat.setNombrePerfil(rowData.get(i));
 		
 		return ciat;
 	}
@@ -136,28 +140,6 @@ public class RecertificacionExcelMapper {
 		sapProfile.setTexto(rowData.get(i));
 		
 		return sapProfile;
-	}
-	
-	public SapApoExcelVO excelMapperSapAPO(List<String> rowData) {
-		SapApoExcelVO sapAPO = new SapApoExcelVO();
-		int i = 0;
-		
-		sapAPO.setUsuarios(rowData.get(i++));
-		sapAPO.setNombre(rowData.get(i++));
-		sapAPO.setPerfil(rowData.get(i++));
-		sapAPO.setTexto(rowData.get(i));
-		
-		return sapAPO;
-	}
-	
-	public EmailBossExcelVO excelMapperCorreo(List<String> rowData) {
-		EmailBossExcelVO correo = new EmailBossExcelVO();
-		int i = 0;
-		
-		correo.setIdJefe(rowData.get(i++));
-		correo.setNombre(rowData.get(i));
-		
-		return correo;
 	}
 	
 	public NewFileExcelVO excelMapperNewFormat(List<String> rowData) {
