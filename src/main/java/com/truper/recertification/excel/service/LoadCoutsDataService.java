@@ -24,12 +24,6 @@ public interface LoadCoutsDataService {
 	 * @param excelVO
 	 */
 	public void insertDetalleJefe(CorreoJefeExcelVO correoJefeVO, RecertificationExcelVO excelVO);
-	
-	/**
-	 * This method insert on RE_USUARIO tables the employees
-	 * @param excelVO
-	 */
-	public void insertUsuario(RecertificationExcelVO excelVO);
 
 	/**
 	 * This method insert on RE_USUARIO tables the boss

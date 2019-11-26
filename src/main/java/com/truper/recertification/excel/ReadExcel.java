@@ -1,7 +1,7 @@
 package com.truper.recertification.excel;
 
-import java.io.File;
-import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.ParseException;
 import java.util.LinkedList;
 import java.util.List;
@@ -10,14 +10,16 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-import com.lowagie.text.pdf.codec.Base64.InputStream;
 import com.truper.recertification.excel.mapper.RecertificacionExcelMapper;
 import com.truper.recertification.excel.recertification.vo.DataDocsVO;
 import com.truper.recertification.excel.recertification.vo.RecertificationDocsVO;
+import com.truper.recertification.exception.RecertificationException;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -26,7 +28,7 @@ import lombok.extern.slf4j.Slf4j;
  * @author mgmolinae
  */
 @Slf4j
-@Service
+@Component
 public class ReadExcel {
 	
 	@Autowired
@@ -37,36 +39,36 @@ public class ReadExcel {
 	 * @param docsData
 	 * @param recertDocs
 	 */
-	public void readExcelSheet(DataDocsVO dataDocsVO, RecertificationDocsVO recertDocs) {
+	public List<List<String>> readExcelData(InputStream streamFile, ExcelRecertificationSheet sheet) throws RecertificationException {
+		if(streamFile == null)
+			throw new RecertificationException("No hay ningún archivo para leer");
+		
+		if(sheet == null)
+			throw new RecertificationException("Debes especificar una hoja a leer");
 		
 		List<List<String>> rowData = new LinkedList<>();
 		DataFormatter formatter = new DataFormatter();
 
-		try (FileInputStream file = new FileInputStream(new File(dataDocsVO.getStrNameFile()))) {
+		try (Workbook workbook = WorkbookFactory.create(streamFile)) {
+			Sheet xssfSheet = workbook.getSheetAt(sheet.getSheetLocation());
 			
-			XSSFWorkbook worbook = new XSSFWorkbook(file);
-			Sheet sheet = worbook.getSheetAt(0);
-			if(dataDocsVO.getStrHoja() != null) {
-				sheet = worbook.getSheet(dataDocsVO.getStrHoja());
-			}
 			Row hssfRow;
 			int rowInit = 2;
-			int rows = sheet.getLastRowNum();
-			
+			int rows = xssfSheet.getLastRowNum();
 			
 			if(rows >0) {
 				List<String> cells = null;
 				for(int r = rowInit; r<= rows; r++) {
 					cells = new LinkedList<>();
 					if(r > 0) {
-						hssfRow = sheet.getRow(r);
+						hssfRow = xssfSheet.getRow(r);
 						
 						if(hssfRow == null) {
 							break;
 						}else {
 							int i = 0;
 							
-							while(i < this.getMaxColumns()) {
+							while(i < sheet.getMaxColumns()) {
 								if(hssfRow.getCell(i) != null && hssfRow.getCell(i).getCellType() == Cell.CELL_TYPE_FORMULA) {
 									switch(hssfRow.getCell(i).getCachedFormulaResultType()) {
 										case Cell.CELL_TYPE_NUMERIC:
@@ -91,19 +93,19 @@ public class ReadExcel {
 					}
 				}
 			}
-			this.mapData(rowData, dataDocsVO, recertDocs);
 		} catch (Exception e) {
-			e.printStackTrace();
 			log.info("error: " + e);
+		}finally {
+			if(streamFile != null) {
+				try {
+					streamFile.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
 		}
-	}
-	
-	/**
-	 * This method content the maximun number of columns in the docs
-	 * @return integer
-	 */
-	private int getMaxColumns() {
-		return 25;
+		
+		return rowData;
 	}
 	
 	/**
@@ -132,7 +134,7 @@ public class ReadExcel {
 			break;
 			case "Recertificacion.xlsx":
 				if(dataDocsVO.getStrHoja().equals("Activos")) {
-					recertDocs.setLstRecert(excelMapper.excelMapperRecert(list));
+					//recertDocs.setLstRecert(excelMapper.excelMapperRecert(list));
 				}
 			break;
 			case "Perfiles SAP.xlsx":

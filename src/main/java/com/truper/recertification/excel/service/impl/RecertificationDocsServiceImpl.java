@@ -7,11 +7,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.truper.recertification.excel.ReadExcel;
-import com.truper.recertification.excel.component.InsertExcelData;
 import com.truper.recertification.excel.component.InsertNewExcelData;
 import com.truper.recertification.excel.recertification.vo.DataDocsVO;
 import com.truper.recertification.excel.recertification.vo.RecertificationDocsVO;
 import com.truper.recertification.excel.service.RecertificationDocsService;
+import com.truper.recertification.exception.RecertificationException;
 
 @Service
 public class RecertificationDocsServiceImpl implements RecertificationDocsService{
@@ -53,40 +53,18 @@ public class RecertificationDocsServiceImpl implements RecertificationDocsServic
 	private ReadExcel readExcel;
 	
 	@Autowired
-	private InsertExcelData insertData;
-	
-	@Autowired
 	private InsertNewExcelData insertNewData;
 	
 	@Override
-	public void selectRecertificationDoc(String strFileName, InputStream inputStream) {
-		
+	public void loadRecert(String strFileName, InputStream inputStream) throws RecertificationException {
 		RecertificationDocsVO recertDocs = new RecertificationDocsVO();
 		
-		if(true) {
-			readExcel.readExcelSheet(DataDocsVO.builder()
-					.strNameFile(strFileName)
-					.inputStream(inputStream)
-					.build(), recertDocs);	
-			insertNewData.insertDataLastRecertification(recertDocs);
-		}else {
-			
-			if(strFileName == "Recertificacion.xlsx")
-			readExcel.readExcelSheet(new DataDocsVO(strFileName, strHojaRecert), recertDocs);
-			
-			if(strFileName == "Usuarios SAP.xlsx") {
-				readExcel.readExcelSheet(new DataDocsVO(strFileName, strHojaPerfiles), recertDocs);
-				readExcel.readExcelSheet(new DataDocsVO(strFileName, strHojaAPO), recertDocs);
-			}
-			
-			if(strFileName == "Usuarios CIAT.xlsx") {
-				readExcel.readExcelSheet(new DataDocsVO(strFileName, strHojaCiat), recertDocs);
-				readExcel.readExcelSheet(new DataDocsVO(strFileName, strHojaCiatLinea), recertDocs);
-			}
-			
-				
-//			insertData.insertDataLastRecertification(recertDocs);
-		}
-			
+		DataDocsVO dataObjetct = DataDocsVO.builder()
+				.strNameFile(strFileName)
+				.inputStream(inputStream)
+				.build();
+		
+		//this.readExcel.readExcelData(dataObjetct, recertDocs);
+		this.insertNewData.insertDataLastRecertification(recertDocs);
 	}
 }

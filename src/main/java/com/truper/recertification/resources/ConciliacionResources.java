@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.truper.recertification.excel.service.impl.RecertificationDocsServiceImpl;
 import com.truper.recertification.excel.vo.FileVO;
+import com.truper.recertification.exception.RecertificationException;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -21,9 +22,10 @@ public class ConciliacionResources {
 	@Autowired
 	private RecertificationDocsServiceImpl recertDocs;
 	
-	@PostMapping("/")
-	public FileVO processExcel(@RequestParam(name="file", required = false)MultipartFile file) throws IOException{
-		recertDocs.selectRecertificationDoc(path, file.getOriginalFilename(), file.getInputStream());
+	@PostMapping("/recertificacion")
+	public FileVO processRecertification(@RequestParam(name="file", required = false)MultipartFile file) 
+			throws IOException, RecertificationException{
+		this.recertDocs.loadRecert(file.getOriginalFilename(), file.getInputStream());
 		return null;
     }
 }

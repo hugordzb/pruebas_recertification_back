@@ -1,6 +1,7 @@
 package com.truper.recertification.excel.mapper;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,47 +22,56 @@ import com.truper.recertification.excel.vo.TelExcelVO;
  * @author mgmolinae
  */
 @Component
-public class RecertificacionExcelMapper{
+public class RecertificacionExcelMapper {
 
+	private SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yy");
+	
 	/**
 	 * This method map the principal excel doc of recertification
 	 * @param rowData
 	 * @return
 	 * @throws ParseException
 	 */
-	public List<RecertificationExcelVO> excelMapperRecert(List<List<String>> rowData) throws ParseException {
-		List<RecertificationExcelVO> lstExcel = new ArrayList<>();
+	public RecertificationExcelVO excelMapperRecert(List<String> rowData) {
+		int i = 0;
 		
-		for(int i = 0; i < rowData.size(); i++) {
-			RecertificationExcelVO recertificacion = new RecertificationExcelVO();
-		
-			recertificacion.setNoEmpleado(rowData.get(i).get(0));
-			recertificacion.setNombre(rowData.get(i).get(2));
-			recertificacion.setUbicacion(rowData.get(i).get(3));
-			recertificacion.setDireccion(rowData.get(i).get(4));
-		    recertificacion.setArea(rowData.get(i).get(5));
-		    recertificacion.setDepartamento(rowData.get(i).get(6));
-		    recertificacion.setPuesto(rowData.get(i).get(7));
-		    recertificacion.setJefeJerarquico(rowData.get(i).get(8));
-		    recertificacion.setNombreJefeFuncional(rowData.get(i).get(9));
-		    recertificacion.setCarta(rowData.get(i).get(10));
-		    recertificacion.setRespuesta(rowData.get(i).get(11));
-		    recertificacion.setAd(rowData.get(i).get(12));
-		    recertificacion.setSap(rowData.get(i).get(13));
-		    recertificacion.setTel(rowData.get(i).get(14));
-		    recertificacion.setCiat(rowData.get(i).get(15));
-		    recertificacion.setAltas(Boolean.parseBoolean(rowData.get(i).get(16)));
-		    recertificacion.setBajas(Boolean.parseBoolean(rowData.get(i).get(17)));
-		    recertificacion.setCambioCuenta(rowData.get(i).get(18));
-		    recertificacion.setCambioUsuario(rowData.get(i).get(19));
-		    recertificacion.setTicket(rowData.get(i).get(20));
-			recertificacion.setCarta(rowData.get(i).get(21));
-			recertificacion.setActivo(Boolean.parseBoolean(rowData.get(i).get(22)));
-			recertificacion.setAtendio(rowData.get(i).get(23));
-			
-			lstExcel.add(recertificacion);
+		RecertificationExcelVO recertificacion = new RecertificationExcelVO();
+		try {
+			recertificacion.setNoEmpleado(Integer.parseInt(rowData.get(i++)));	
+		} catch (Exception e) {
+			recertificacion.setNoEmpleado(-1);
 		}
-		return lstExcel;
+		
+		try {
+			recertificacion.setFechaIngreso(sdf.parse(rowData.get(i++)));	
+		} catch (Exception e) {
+		}
+		
+		recertificacion.setNombre(rowData.get(i++));
+		recertificacion.setUbicacion(rowData.get(i++));
+		recertificacion.setDireccion(rowData.get(i++));
+	    recertificacion.setArea(rowData.get(i++));
+	    recertificacion.setDepartamento(rowData.get(i++));
+	    recertificacion.setPuesto(rowData.get(i++));
+	    recertificacion.setJefeJerarquico(rowData.get(i++));
+	    recertificacion.setCorreoJefe(rowData.get(i++));
+	    recertificacion.setNombreJefeFuncional(rowData.get(i++));
+	    recertificacion.setCarta(rowData.get(i++));
+	    recertificacion.setRespuesta(rowData.get(i++));
+	    recertificacion.setAd(rowData.get(i++));
+	    recertificacion.setSap(rowData.get(i++));
+	    recertificacion.setTel(rowData.get(i++));
+	    recertificacion.setCiat(rowData.get(i++));
+	    recertificacion.setAltas(rowData.get(i++));
+	    recertificacion.setBajas(rowData.get(i++));
+	    recertificacion.setCambioCuenta(rowData.get(i++));
+	    recertificacion.setCambioUsuario(rowData.get(i++));
+	    recertificacion.setTicket(rowData.get(i++));
+		recertificacion.setCarta(rowData.get(i++));
+		recertificacion.setActivo(rowData.get(i++));
+		recertificacion.setAtendio(rowData.get(i));
+	
+		return recertificacion;
 	}
 	
 	/**

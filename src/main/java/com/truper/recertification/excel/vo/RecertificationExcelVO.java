@@ -1,23 +1,28 @@
 package com.truper.recertification.excel.vo;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Setter
 @Getter
+@ToString
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class RecertificationExcelVO implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
 
-	private String noEmpleado;
+	private Integer noEmpleado;
 	
-	private String fechaIngreso;
+	private Date fechaIngreso;
 	
 	private String nombre;
 	
@@ -33,13 +38,15 @@ public class RecertificationExcelVO implements Serializable{
 	
 	private String jefeJerarquico;
 	
+	private String correoJefe;
+	
 	private String nombreJefeFuncional;
 	
 	//no creo se necesite
 	private String carta;
 
 	//no creo se necesite
-	private String Respuesta;
+	private String respuesta;
 	
 	private String ad;
 	
@@ -49,9 +56,9 @@ public class RecertificationExcelVO implements Serializable{
 	
 	private String ciat;
 	
-	private boolean altas;
+	private String altas;
 	
-	private boolean bajas;
+	private String bajas;
 	
 	private String cambioCuenta;
 	
@@ -59,9 +66,9 @@ public class RecertificationExcelVO implements Serializable{
 	
 	private String ticket;
 	
-	private boolean cartaResp;
+	private String cartaResp;
 	
-	private boolean activo;
+	private String activo;
 	
 	private String atendio;
 }

@@ -96,26 +96,6 @@ public class LoadCoutsDataServiceImpl implements LoadCoutsDataService{
 	}
 	
 	@Override
-	public void insertUsuario(RecertificationExcelVO excelVO) {
-		try {
-			String strNoEmploy =excelVO.getNoEmpleado();
-			if(strNoEmploy == null) {
-				strNoEmploy = "0";
-			}
-			log.info("Usuario (empleado)");
-			daoUsuario.save(ReUsuarioEntity.builder()
-					.idUsuario(excelVO.getAd())
-					.nombre(excelVO.getNombre())
-					.noEmpleado(Integer.parseInt(strNoEmploy))
-					.estatus(true)
-					.build());
-		} catch (Exception e) {
-			log.error("ya existe el usuario en la tabla principal");
-			log.info(e.getMessage());
-		}
-	}
-	
-	@Override
 	public void insertUsuarioJefe(String strAD, String strName) {
 		try {
 			log.info("Usuario (jefe)");

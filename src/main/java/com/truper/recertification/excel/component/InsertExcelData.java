@@ -38,7 +38,6 @@ public class InsertExcelData {
 		
 		for(int i = 0; i < recertDocs.getLstRecert().size(); i++) {
 			RecertificationExcelVO recertVO =recertDocs.getLstRecert().get(i);
-			loadService.insertUsuario(recertVO);
 			loadService.insertJerarquia(recertVO);
 			this.insertCuentasUsuario(recertDocs, recertVO);
 		}

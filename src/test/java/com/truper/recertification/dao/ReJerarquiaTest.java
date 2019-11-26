@@ -12,7 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @SpringBootTest
-public class ReJerarquia {
+public class ReJerarquiaTest {
 	
 	@Autowired
 	private ReJerarquiaDAO jerarquiaDAO;

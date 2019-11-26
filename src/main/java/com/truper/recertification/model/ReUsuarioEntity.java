@@ -7,6 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.springframework.data.domain.Persistable;
 
@@ -46,6 +47,9 @@ public class ReUsuarioEntity implements Serializable, Persistable<String>{
 	@Column(name = "FECHATERMINACION")
 	private Date fechaTerminacion;
 
+	@Transient
+	private boolean exist;
+	
 	@Override
 	public String getId() {
 		return this.getIdUsuario();
@@ -53,7 +57,7 @@ public class ReUsuarioEntity implements Serializable, Persistable<String>{
 
 	@Override
 	public boolean isNew() {
-		return this.isEstatus();
+		return this.exist;
 	}
 
 }
