@@ -26,6 +26,7 @@ import com.lowagie.text.FontFactory;
 import com.lowagie.text.pdf.PdfWriter;
 import com.truper.recertification.common.email.EmailService;
 import com.truper.recertification.common.template.MailContentBuilder;
+import com.truper.recertification.model.ReUsuarioEntity;
 import com.truper.recertification.reports.RecertificacionCarta;
 import com.truper.recertification.service.DetailEmployeeService;
 import com.truper.recertification.service.RecertificationService;
@@ -117,29 +118,6 @@ class RecertificationApplicationTests {
 		document.close();
 		log.info("terminp");
 	}
-	
-	@Test
-	public void lstEsmployee() {
-		String boss = "mgmolinae";
-		List<CountEmployeeVO> lstAcounts = new LinkedList<>();
-	
-		DetailCountsEmployeeVO counts = detail.findEmployDetail(boss);
-		log.info("counts" + counts.getEmpleado());
-		for(int i = 0; i < counts.getCuentas().size(); i++) {
-			AcountsVO acountsVO =counts.getCuentas().get(i);
-			lstAcounts.add( CountEmployeeVO.builder()
-					.nombre(counts.getEmpleado())
-					.ciatAccounts(acountsVO.getCCiat())
-					.ciatProfiles(acountsVO.getPCiat())
-					.sapAccounts(acountsVO.getCSap())
-					.sapRoles(acountsVO.getPSap())
-					.telAccounts(acountsVO.getCTel())
-					.telRoles(acountsVO.getPTel())
-					.build());
-		}
-		log.info("lista: " + lstAcounts.size());
-		log.info("------Finish-------");
-	}
 		
 	@Test
 	public void generatorPDF(String boss) {
@@ -148,10 +126,16 @@ class RecertificationApplicationTests {
 		
 		List<CountEmployeeVO> lstAcounts = new LinkedList<>();
 		log.info("buscara cliente");
-		DetailCountsEmployeeVO counts = detail.findEmployDetail("mgmolinae");
+		DetailCountsEmployeeVO counts = detail.findEmployDetail(ReUsuarioEntity
+				.builder()
+				.idUsuario("mgmolinae")
+				.estatus(true)
+				.build());
+		
 		log.info("counts: " + counts.getEmpleado());
 		
 		for(int i = 0; i < counts.getCuentas().size(); i++) {
+			/*
 			AcountsVO acountsVO =counts.getCuentas().get(i);
 			lstAcounts.add( CountEmployeeVO.builder()
 					.nombre(counts.getEmpleado())
@@ -161,7 +145,7 @@ class RecertificationApplicationTests {
 					.sapRoles(acountsVO.getPSap())
 					.telAccounts(acountsVO.getCTel())
 					.telRoles(acountsVO.getPTel())
-					.build());
+					.build());*/
 			log.info("lista: " + lstAcounts.size());
 		}
 		

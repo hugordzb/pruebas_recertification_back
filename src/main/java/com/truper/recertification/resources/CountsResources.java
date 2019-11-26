@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.truper.recertification.model.ReUsuarioEntity;
 import com.truper.recertification.service.AuditoryService;
+import com.truper.recertification.service.impl.DetailEmployeeServiceImpl;
 import com.truper.recertification.vo.answer.CountsBossVO;
 import com.truper.recertification.vo.answer.DetailCountsEmployeeVO;
 
@@ -35,6 +37,9 @@ public class CountsResources {
 
 	@Autowired
 	private AuditoryService auditoryService;
+	
+	@Autowired
+	private DetailEmployeeServiceImpl detailEmployee;
 			
 	@GetMapping(path = "/auditableAcounts")
 	@ApiOperation(value = "Detalle de todas las Cuentas relacionadas a la recertificación", 
@@ -75,7 +80,11 @@ public class CountsResources {
 	public DetailCountsEmployeeVO findByEmployee (
 			@ApiParam(value = "Cuenta AD (LDAP) del empleado)", required = true)
     		@Valid	@PathVariable("strIdEmployee") String strIdEmployee) {
-		return auditoryService.findEmployeeAcounts(strIdEmployee);
+		
+		return this.detailEmployee.findEmployDetail(ReUsuarioEntity.builder()
+				.idUsuario(strIdEmployee)
+				.estatus(true)
+				.build());
 	}
 	
 	 /**

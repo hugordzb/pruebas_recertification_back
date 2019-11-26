@@ -4,11 +4,9 @@ import java.util.List;
 
 import com.truper.recertification.model.ReCuentasUsuarioEntity;
 import com.truper.recertification.vo.answer.DetailCountsEmployeeVO;
-import com.truper.recertification.vo.answer.systems.AcountsVO;
+import com.truper.recertification.vo.answer.systems.AccountDataVO;
 import com.truper.recertification.vo.answer.systems.CiatDataVO;
-import com.truper.recertification.vo.answer.systems.ListAcountsVO;
 import com.truper.recertification.vo.answer.systems.SapDataVO;
-import com.truper.recertification.vo.answer.systems.TelDataVO;
 
 public interface DetailLetterService {
 
@@ -27,13 +25,6 @@ public interface DetailLetterService {
 	 * @param lstSap
 	 * @param lstCiat
 	 */
-	public void findAcounts(ReCuentasUsuarioEntity cuentasUsuario, List<TelDataVO> lstTel,
+	public void findAcounts(ReCuentasUsuarioEntity cuentasUsuario, List<AccountDataVO> lstTel,
 							List<SapDataVO> lstSap, List<CiatDataVO> lstCiat);
-	/**
-	 * This is an auxiliary method to order data on a list
-	 * the principal function is remove logic from front 
-	 * @param lstAcountsVO
-	 * @return
-	 */
-	public List<AcountsVO> orderCounts(ListAcountsVO lstAcountsVO);
 }

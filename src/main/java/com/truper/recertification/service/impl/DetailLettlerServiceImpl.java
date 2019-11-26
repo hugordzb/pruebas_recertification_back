@@ -14,11 +14,10 @@ import com.truper.recertification.model.ReCuentasUsuarioEntity;
 import com.truper.recertification.model.ReSistemaEntity;
 import com.truper.recertification.service.DetailLetterService;
 import com.truper.recertification.vo.answer.DetailCountsEmployeeVO;
+import com.truper.recertification.vo.answer.systems.AccountDataVO;
 import com.truper.recertification.vo.answer.systems.AcountsVO;
 import com.truper.recertification.vo.answer.systems.CiatDataVO;
-import com.truper.recertification.vo.answer.systems.ListAcountsVO;
 import com.truper.recertification.vo.answer.systems.SapDataVO;
-import com.truper.recertification.vo.answer.systems.TelDataVO;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -94,7 +93,7 @@ public class DetailLettlerServiceImpl implements DetailLetterService{
 				}
 				
 				lstAcounts.add(countsVO);
-				employeeVO.setCuentas(lstAcounts);
+				//employeeVO.setCuentas(lstAcounts);
 				
 			} catch (Exception e) {
 				log.error("El usuario " + strIdUsuario);
@@ -105,14 +104,9 @@ public class DetailLettlerServiceImpl implements DetailLetterService{
 	}
 	
 	@Override
-	public void findAcounts(ReCuentasUsuarioEntity cuentasUsuario, List<TelDataVO> lstTel,
+	public void findAcounts(ReCuentasUsuarioEntity cuentasUsuario, List<AccountDataVO> lstTel,
 		List<SapDataVO> lstSap, List<CiatDataVO> lstCiat) {
 		
-	}
-	
-	@Override
-	public List<AcountsVO> orderCounts(ListAcountsVO lstAcountsVO) {
-		return null;	
 	}
 
 }

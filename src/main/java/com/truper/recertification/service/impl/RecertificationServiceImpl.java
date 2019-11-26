@@ -128,7 +128,8 @@ public class RecertificationServiceImpl implements RecertificationService{
 		DetailCountsEmployeeVO counts = detail.findEmployDetail(boss);
 		
 		for(int i = 0; i < counts.getCuentas().size(); i++) {
-			AcountsVO acountsVO =counts.getCuentas().get(i);
+			/*
+			AcountsVO acountsVO = counts.getCuentas().get(i);
 			lstAcounts.add( CountEmployeeVO.builder()
 					.nombre(counts.getEmpleado())
 					.ciatAccounts(acountsVO.getCCiat())
@@ -137,7 +138,7 @@ public class RecertificationServiceImpl implements RecertificationService{
 					.sapRoles(acountsVO.getPSap())
 					.telAccounts(acountsVO.getCTel())
 					.telRoles(acountsVO.getPTel())
-					.build());
+					.build());*/
 		}
 		
 		RecertificacionCarta carta = new RecertificacionCarta(boss, lstAcounts);

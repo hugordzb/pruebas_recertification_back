@@ -11,13 +11,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
+import com.truper.recertification.dao.ReUsuarioDAO;
 import com.truper.recertification.excel.ExcelRecertificationSheet;
 import com.truper.recertification.excel.ReadExcel;
 import com.truper.recertification.excel.mapper.ExcelRowToVOService;
 import com.truper.recertification.excel.service.impl.RecertificationDocsServiceImpl;
 import com.truper.recertification.excel.vo.RecertificationExcelVO;
+import com.truper.recertification.model.ReUsuarioEntity;
+import com.truper.recertification.service.AuditoryService;
 import com.truper.recertification.service.LoadLayoutRecertService;
 import com.truper.recertification.util.FiltersUtils;
+import com.truper.recertification.vo.answer.CountsBossVO;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -38,32 +42,40 @@ public class ExcelTest {
 	@Autowired
 	private LoadLayoutRecertService layService;
 	
+	@Autowired
+	private AuditoryService audService;
+	
+	@Autowired
+	private ReUsuarioDAO userDAO;
+	
+	@Test
+	public void pruebaUnit() {
+		List<ReUsuarioEntity> usuarios = this.userDAO.findUsuariosByBoss("fmacedoniom");
+		if(usuarios != null) {
+			usuarios.forEach( v -> {
+				System.out.println(v.getNombre());
+			});
+		}
+	}
+	
 	@Test
 	public void unicos() {
-		List<RecertificationExcelVO> listData = new LinkedList<>();
-		listData.add(RecertificationExcelVO
-				.builder()
-				.jefeJerarquico("LUPIS")
-				.build());
-		
-		
-		listData.add(RecertificationExcelVO
-				.builder()
-				.jefeJerarquico("LUPIS")
-				.build());
-		
-		listData.add(RecertificationExcelVO
-				.builder()
-				.jefeJerarquico("LAPIZ")
-				.build());
-		
-		List<RecertificationExcelVO> jefesUniquesList = listData.stream()
-				.filter(FiltersUtils.distinctByKey( p -> p.getJefeJerarquico()))
-				.collect(Collectors.toList());
-		
-		jefesUniquesList.forEach(v -> {
-			System.out.println(v.getJefeJerarquico());
-		});
+		log.info("Inicio...");
+		CountsBossVO detailJefe = this.audService.findByBoss("fmacedoniom");
+		if(detailJefe != null) {
+			detailJefe.getEmpleados().forEach( emp -> {
+				System.out.println("Empleado " + emp.getEmpleado());
+				
+				if(emp.getCuentas() != null && !emp.getCuentas().isEmpty()) {
+					emp.getCuentas().forEach( v -> {
+						System.out.println("\t"+ v.getSystem() + " - " + v.getCuenta() + " - " + v.getPerfil());
+					});
+				}else {
+					System.out.println("\t El usuario no tiene cuentas");
+				}
+			});
+		}
+		log.info("Fin");
 	}
 	
 	@Test

@@ -23,11 +23,4 @@ public interface AuditoryService {
 	
 	public List<DetailCountsEmployeeVO> generateLetterByBoss(String strIdBoss);
 	
-	/**
-	 * This methos find by employee
-	 * @param strIdEmployee
-	 * @return acounts data by systems
-	 */
-	public DetailCountsEmployeeVO findEmployeeAcounts(String strIdEmployee);
-	
 }

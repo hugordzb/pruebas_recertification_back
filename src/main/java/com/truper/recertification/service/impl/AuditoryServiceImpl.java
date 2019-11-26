@@ -10,15 +10,16 @@ import org.springframework.stereotype.Service;
 
 import com.truper.recertification.dao.ReDetalleJefeDAO;
 import com.truper.recertification.dao.ReJerarquiaDAO;
+import com.truper.recertification.dao.ReUsuarioDAO;
 import com.truper.recertification.ldap.repository.LDAPRepository;
 import com.truper.recertification.model.ReDetalleJefeEntity;
 import com.truper.recertification.model.ReJerarquiaEntity;
+import com.truper.recertification.model.ReUsuarioEntity;
 import com.truper.recertification.service.AuditoryService;
+import com.truper.recertification.vo.answer.CountsBossVO;
 import com.truper.recertification.vo.answer.DetailCountsEmployeeVO;
 
 import lombok.extern.slf4j.Slf4j;
-
-import com.truper.recertification.vo.answer.CountsBossVO;
 
 @Slf4j
 @Service
@@ -26,6 +27,9 @@ public class AuditoryServiceImpl implements AuditoryService{
 	
 	@Autowired
 	private ReJerarquiaDAO daoJerarquia;
+	
+	@Autowired
+	private ReUsuarioDAO daoUsuario;
 
 	@Autowired
 	private ReDetalleJefeDAO daoDetalleJefe;
@@ -62,13 +66,15 @@ public class AuditoryServiceImpl implements AuditoryService{
 		CountsBossVO bossVO = new CountsBossVO();
 		String strSystems = null;
 		
-		List<DetailCountsEmployeeVO> lstEmpleados = new ArrayList<>();		
-		List<ReJerarquiaEntity> lstJerarquia = daoJerarquia.findByIdEmpleadoJefeIdJefe(strIdBoss);
+		List<DetailCountsEmployeeVO> lstEmpleados = new ArrayList<>();
+		List<ReUsuarioEntity> listEmpleados = this.daoUsuario.findUsuariosByBoss(strIdBoss);
 		
-		for(int j = 0; j<lstJerarquia.size(); j++) {
-			String strIdemployee = lstJerarquia.get(j).getIdEmpleadoJefe().getIdUsuario();
-			lstEmpleados.add(this.findEmployeeAcounts(strIdemployee));
+		if(listEmpleados != null) {
+			listEmpleados.forEach( emp -> {
+				lstEmpleados.add(this.detailEmployee.findEmployDetail(emp));
+			});
 		}
+		
 		strSystems = this.systems(lstEmpleados);
 		bossVO.setSistemas(strSystems);
 		bossVO.setEmpleados(lstEmpleados);
@@ -80,9 +86,10 @@ public class AuditoryServiceImpl implements AuditoryService{
 			log.error("El jefe no ha sido dado de alta");
 			log.info(e.getMessage());
 		}
-		
+		/*
 		if(ldapRepository.findByUsername(strIdBoss) != null)
 			bossVO.setInAD(true);
+		*/
 				
 		return bossVO;
 	}
@@ -90,26 +97,22 @@ public class AuditoryServiceImpl implements AuditoryService{
 	@Override
 	public List<DetailCountsEmployeeVO> generateLetterByBoss(String strIdBoss) {
 		List<DetailCountsEmployeeVO> lstEmpleados = new ArrayList<>();		
-		List<ReJerarquiaEntity> lstJerarquia = daoJerarquia.findByIdEmpleadoJefeIdJefe(strIdBoss);
 		
-		for(int j = 0; j<lstJerarquia.size(); j++) {
-			String strIdemployee = lstJerarquia.get(j).getIdEmpleadoJefe().getIdUsuario();
-			lstEmpleados.add(this.findEmployeeAcounts(strIdemployee));
+		List<ReUsuarioEntity> listEmpleados = this.daoUsuario.findUsuariosByBoss(strIdBoss);
+		if(listEmpleados != null) {
+			listEmpleados.forEach( emp -> {
+				lstEmpleados.add(this.detailEmployee.findEmployDetail(emp));
+			});
 		}
+		
 		return lstEmpleados;
-	}
-	
-	
-	@Override
-	public DetailCountsEmployeeVO findEmployeeAcounts(String strIdEmployee) {
-			return detailEmployee.findEmployDetail(strIdEmployee);
 	}
 	
 	private String systems(List<DetailCountsEmployeeVO> lstEmpleados) {
 		String tel = "";
 		String ciat = "";
 		String sap = "";
-/*
+		/*
 		for(int i = 0; i < lstEmpleados.size(); i++) {
 			List<AcountsVO> lstAcounts = lstEmpleados.get(i).getCuentas();
 			

@@ -15,4 +15,19 @@ public enum SistemaCatalogs {
 	SistemaCatalogs(String code){
 		this.code = code;
 	}
+	
+	public String getSystemName() {
+		switch(this) {
+			case UNDEFINED:
+				return "UNDEFINED";
+			case CIAT: 
+				return "CIAT";
+			case SAP:
+				return "SAP";
+			case TEL:
+				return "TEL";
+			default:
+				return "NOT FOUND";
+		}
+	}
 }

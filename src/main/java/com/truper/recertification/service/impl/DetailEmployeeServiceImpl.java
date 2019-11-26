@@ -1,26 +1,24 @@
 package com.truper.recertification.service.impl;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.truper.recertification.constants.SistemaCatalogs;
 import com.truper.recertification.dao.ReCuentasUsuarioDAO;
 import com.truper.recertification.dao.RePerfilSistemaDAO;
 import com.truper.recertification.dao.ReSistemaDAO;
-import com.truper.recertification.dao.ReUsuarioDAO;
 import com.truper.recertification.model.PKCuentasUsuario;
 import com.truper.recertification.model.ReCuentasUsuarioEntity;
-import com.truper.recertification.model.ReSistemaEntity;
+import com.truper.recertification.model.RePerfilSistemaEntity;
+import com.truper.recertification.model.ReUsuarioEntity;
 import com.truper.recertification.service.DetailEmployeeService;
+import com.truper.recertification.util.FiltersUtils;
 import com.truper.recertification.vo.answer.DetailCountsEmployeeVO;
-import com.truper.recertification.vo.answer.systems.AcountsVO;
-import com.truper.recertification.vo.answer.systems.CiatDataVO;
-import com.truper.recertification.vo.answer.systems.ListAcountsVO;
-import com.truper.recertification.vo.answer.systems.SapDataVO;
-import com.truper.recertification.vo.answer.systems.TelDataVO;
+import com.truper.recertification.vo.answer.systems.AccountDataVO;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -35,37 +33,27 @@ public class DetailEmployeeServiceImpl implements DetailEmployeeService{
 	private ReSistemaDAO daoSistema;
 	
 	@Autowired
-	private ReUsuarioDAO daoUsuario;
-	
-	@Autowired
 	private RePerfilSistemaDAO daoPerfil;
 	
 	@Override
-	public DetailCountsEmployeeVO findEmployDetail(String strIdUsuario) {
+	public DetailCountsEmployeeVO findEmployDetail(ReUsuarioEntity userEntity) {
 		DetailCountsEmployeeVO employeeVO = new DetailCountsEmployeeVO();
-			
-		if(daoUsuario.findByIdUsuario(strIdUsuario).isEstatus()) {
-			List<ReCuentasUsuarioEntity> lstCuenta = daoCuentas.findByIdCuentaUsuarioIdUsuario(strIdUsuario);
+		
+		if(userEntity != null && userEntity.isEstatus()) {
+			List<ReCuentasUsuarioEntity> lstCuenta = this.daoCuentas.findByIdCuentaUsuarioIdUsuario(userEntity.getIdUsuario());
 			try {
-				employeeVO.setIdEmpleado(strIdUsuario);
-				employeeVO.setEmpleado(daoUsuario.findById(strIdUsuario).get().getNombre());
+				employeeVO.setIdEmpleado(userEntity.getIdUsuario());
+				employeeVO.setEmpleado(userEntity.getNombre());
 				
-				ListAcountsVO lstAcounts = new ListAcountsVO();
-				
-				List<TelDataVO> lstTel = new ArrayList<>();
-				List<SapDataVO> lstSap = new ArrayList<>();
-				List<CiatDataVO> lstCiat = new ArrayList<>();
+				List<AccountDataVO> listaCuentas = new ArrayList<>();
 				
 				for(int j = 0; j<lstCuenta.size(); j++) {
-					this.findAcounts(lstCuenta.get(j), lstTel, lstSap, lstCiat);
+					this.findAcounts(lstCuenta.get(j), listaCuentas);
 				}
-				lstAcounts.setTel(lstTel);
-				lstAcounts.setSap(lstSap);
-				lstAcounts.setCiat(lstCiat);
 					
-				employeeVO.setCuentas(this.orderCounts(lstAcounts));	
+				employeeVO.setCuentas(listaCuentas);
 			} catch (Exception e) {
-				log.error("El usuario " + strIdUsuario);
+				log.error("El usuario " + userEntity.getIdUsuario());
 				log.info(e.getMessage());
 			}
 		}
@@ -73,45 +61,33 @@ public class DetailEmployeeServiceImpl implements DetailEmployeeService{
 	}
 	
 	@Override
-	public void findAcounts(ReCuentasUsuarioEntity cuentasUsuario, List<TelDataVO> lstTel,
-			List<SapDataVO> lstSap, List<CiatDataVO> lstCiat) {
-		
-		TelDataVO telVO = new TelDataVO();
-		SapDataVO sapVO = new SapDataVO();
-		CiatDataVO ciatVO = new CiatDataVO();
+	public void findAcounts(ReCuentasUsuarioEntity cuentasUsuario, List<AccountDataVO> lstTel) {
+		AccountDataVO accVO = new AccountDataVO();
 		
 		PKCuentasUsuario pkUsuario = cuentasUsuario.getIdCuentaUsuario();
 		
 		int intIdPerfil = pkUsuario.getIdPerfil();
-		String strSistema = daoPerfil.findById(intIdPerfil).get().getIdSistema();
+		Optional<RePerfilSistemaEntity> perfil = this.daoPerfil.findById(intIdPerfil);
 		
-		ReSistemaEntity sistemaEntity = daoSistema.findById(strSistema).get();
+		String strSistema = "";
+		String strPerfil = "";
 		
-		String strCuenta = sistemaEntity.getSistema();
-		String strPerfil = daoPerfil.findById(intIdPerfil).get().getPerfil();
+		if(perfil.isPresent()) {
+			strSistema = perfil.get().getIdSistema();
+			strPerfil = perfil.get().getPerfil();
+		}
+		
+		SistemaCatalogs sistema = FiltersUtils.getCatalog(strSistema);
+		
+		String strCuenta = sistema.getSystemName();
 		String cuentaSistema = pkUsuario.getCuentaSistema();
 		
-		switch (strCuenta) {
-		case "TEL":
-				telVO.setCuenta(cuentaSistema);
-				telVO.setPerfil(strPerfil);
-				lstTel.add(telVO);
-			break;
-		case "SAP":
-				sapVO.setCuenta(cuentaSistema);
-				sapVO.setPerfil(strPerfil);
-				lstSap.add(sapVO);
-				break;
-		case "CIAT":
-				ciatVO.setCuenta(cuentaSistema);
-				ciatVO.setPerfil(strPerfil);
-				lstCiat.add(ciatVO);
-			break;
-		default:
-			break;			
-		}
+		accVO.setSystem(strCuenta);
+		accVO.setCuenta(cuentaSistema);
+		accVO.setPerfil(strPerfil);
+		lstTel.add(accVO);
 	}
-	
+	/*
 	@Override
 	public List<AcountsVO> orderCounts(ListAcountsVO lstAcountsVO) {
 		List<AcountsVO> lstCounts = new ArrayList<>();
@@ -153,6 +129,6 @@ public class DetailEmployeeServiceImpl implements DetailEmployeeService{
 			lstCounts.add(countsVO);
 		}
 		return lstCounts;	
-	}
+	}*/
 
 }
