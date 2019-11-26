@@ -29,7 +29,7 @@ import com.truper.recertification.common.template.MailContentBuilder;
 import com.truper.recertification.model.ReUsuarioEntity;
 import com.truper.recertification.reports.RecertificationLetter;
 import com.truper.recertification.service.DetailEmployeeService;
-import com.truper.recertification.service.RecertificationService;
+import com.truper.recertification.service.RecertificationMailService;
 import com.truper.recertification.vo.answer.DetailCountsEmployeeVO;
 import com.truper.recertification.vo.answer.AcountEmployeeVO;
 
@@ -94,7 +94,7 @@ class RecertificationApplicationTests {
 	}
 
 	@Autowired
-	private RecertificationService recertification;
+	private RecertificationMailService recertification;
 	
 	@Test
 	public void PruebaCorreo() {

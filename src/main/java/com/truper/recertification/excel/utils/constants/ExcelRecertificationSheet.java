@@ -1,4 +1,4 @@
-package com.truper.recertification.utils.constants;
+package com.truper.recertification.excel.utils.constants;
 
 import lombok.Getter;
 

@@ -19,7 +19,13 @@ public interface ReCuentasUsuarioDAO extends JpaRepository<ReCuentasUsuarioEntit
 	 * @return List<ReCuentasUsuarioEntity>
 	 */
 	public List<ReCuentasUsuarioEntity> findByIdCuentaUsuarioIdUsuario(String idUsuario);
-	
+
+	/**
+	 * This method find data by IdUsuario and systemAcount
+	 * @param idUsuario
+	 * @param cuentaSistema
+	 * @return List<ReCuentasUsuarioEntity>
+	 */
 	public List<ReCuentasUsuarioEntity> findByIdCuentaUsuarioIdUsuarioAndIdCuentaUsuarioCuentaSistema(String idUsuario, String cuentaSistema);
 		
 	/**
@@ -29,4 +35,13 @@ public interface ReCuentasUsuarioDAO extends JpaRepository<ReCuentasUsuarioEntit
 	 */
 	public List<ReCuentasUsuarioEntity> findByIdCuentaUsuarioCuentaSistema(String cuentaSistema);
 	
+	/**
+	 * This method find data by systemAcount
+	 * @param cuentaSistema
+	 * @return List<ReCuentasUsuarioEntity>
+	 */
+	public List<ReCuentasUsuarioEntity> findByIdCuentaUsuarioIdPerfil(Integer idPerfil);
+	
+	
+	public ReCuentasUsuarioEntity findByIdCuentaUsuarioIdPerfilAndIdCuentaUsuarioCuentaSistema(Integer idPerfil, String cuentaSistema);
 }

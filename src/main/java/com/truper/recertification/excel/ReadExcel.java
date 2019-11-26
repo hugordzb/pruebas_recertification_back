@@ -14,7 +14,6 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.springframework.stereotype.Component;
 
 import com.truper.recertification.exception.RecertificationException;
-import com.truper.recertification.utils.constants.ExcelRecertificationSheet;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -31,18 +30,18 @@ public class ReadExcel {
 	 * @param docsData
 	 * @param recertDocs
 	 */
-	public List<List<String>> readExcelData(InputStream streamFile, ExcelRecertificationSheet sheet) throws RecertificationException {
+	public List<List<String>> readExcelData(InputStream streamFile, Integer sheetLocation, Integer maxColumns) throws RecertificationException {
 		if(streamFile == null)
 			throw new RecertificationException("No hay ningún archivo para leer");
 		
-		if(sheet == null)
+		if(sheetLocation == null)
 			throw new RecertificationException("Debes especificar una hoja a leer");
 		
 		List<List<String>> rowData = new LinkedList<>();
 		DataFormatter formatter = new DataFormatter();
 
 		try (Workbook workbook = WorkbookFactory.create(streamFile)) {
-			Sheet xssfSheet = workbook.getSheetAt(sheet.getSheetLocation());
+			Sheet xssfSheet = workbook.getSheetAt(sheetLocation);
 			
 			Row hssfRow;
 			int rowInit = 2;
@@ -60,7 +59,7 @@ public class ReadExcel {
 						}else {
 							int i = 0;
 							
-							while(i < sheet.getMaxColumns()) {
+							while(i < maxColumns) {
 								if(hssfRow.getCell(i) != null && hssfRow.getCell(i).getCellType() == Cell.CELL_TYPE_FORMULA) {
 									switch(hssfRow.getCell(i).getCachedFormulaResultType()) {
 										case Cell.CELL_TYPE_NUMERIC:
@@ -98,4 +97,5 @@ public class ReadExcel {
 		}	
 		return rowData;
 	}
+
 }

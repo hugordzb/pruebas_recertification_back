@@ -20,7 +20,7 @@ import com.truper.recertification.model.ReDetalleJefeEntity;
 import com.truper.recertification.model.ReRecertificacionEntity;
 import com.truper.recertification.reports.RecertificationLetter;
 import com.truper.recertification.service.DetailLetterService;
-import com.truper.recertification.service.RecertificationService;
+import com.truper.recertification.service.RecertificationMailService;
 import com.truper.recertification.vo.answer.AcountEmployeeVO;
 import com.truper.recertification.vo.answer.DetailCountsEmployeeVO;
 
@@ -31,7 +31,7 @@ import net.sf.jasperreports.engine.JasperPrint;
 
 @Slf4j
 @Service
-public class RecertificationServiceImpl implements RecertificationService{
+public class RecertificationMailServiceImpl implements RecertificationMailService{
 
 	@Autowired
 	private ReDetalleJefeDAO daoJefe;

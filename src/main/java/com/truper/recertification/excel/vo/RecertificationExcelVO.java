@@ -42,10 +42,8 @@ public class RecertificationExcelVO implements Serializable{
 	
 	private String nombreJefeFuncional;
 	
-	//no creo se necesite
 	private String carta;
 
-	//no creo se necesite
 	private String respuesta;
 	
 	private String ad;

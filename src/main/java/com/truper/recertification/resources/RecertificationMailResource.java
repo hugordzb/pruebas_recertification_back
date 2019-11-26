@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.truper.recertification.service.RecertificationService;
+import com.truper.recertification.service.RecertificationMailService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -29,10 +29,10 @@ import lombok.Setter;
 	 description = "Se genera el envio de correos para solicitar "
 	 		+ "la validación de las cuentas de usuarios; "
 	 		+ "y realizar la recertificación")
-public class RecertificationResource {
+public class RecertificationMailResource {
 
 	@Autowired
-	private RecertificationService recertification;
+	private RecertificationMailService recertification;
 	
 	@GetMapping(path = "/sendRecertification/{idJefe}")
 	@ApiOperation(value = "Envio de la Carta para la Recertificación", 

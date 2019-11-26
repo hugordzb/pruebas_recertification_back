@@ -2,7 +2,7 @@ package com.truper.recertification.service;
 
 import com.truper.recertification.model.ReDetalleJefeEntity;
 
-public interface RecertificationService {
+public interface RecertificationMailService {
 
 	/**
 	 * This method send email by boss

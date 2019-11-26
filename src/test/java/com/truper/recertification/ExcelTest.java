@@ -11,11 +11,14 @@ import org.springframework.test.context.ActiveProfiles;
 
 import com.truper.recertification.dao.ReUsuarioDAO;
 import com.truper.recertification.excel.mapper.ExcelRowToVOService;
+import com.truper.recertification.excel.service.LoadLayoutCiatService;
+import com.truper.recertification.excel.service.LoadLayoutRecertService;
+import com.truper.recertification.excel.utils.constants.ExcelCiatSheet;
+import com.truper.recertification.excel.utils.constants.ExcelRecertificationSheet;
+import com.truper.recertification.excel.vo.CiatExcelVO;
 import com.truper.recertification.excel.vo.RecertificationExcelVO;
 import com.truper.recertification.model.ReUsuarioEntity;
 import com.truper.recertification.service.AuditoryService;
-import com.truper.recertification.service.LoadLayoutRecertService;
-import com.truper.recertification.utils.constants.ExcelRecertificationSheet;
 import com.truper.recertification.vo.answer.AcountsBossVO;
 
 import lombok.extern.slf4j.Slf4j;
@@ -28,8 +31,13 @@ public class ExcelTest {
 	@Autowired
 	private ExcelRowToVOService<RecertificationExcelVO> readRecert;
 	
+	private ExcelRowToVOService<CiatExcelVO> readCiat;
+	
 	@Autowired
 	private LoadLayoutRecertService layService;
+	
+	@Autowired
+	private LoadLayoutCiatService ciatService;
 	
 	@Autowired
 	private AuditoryService audService;
@@ -68,7 +76,7 @@ public class ExcelTest {
 	}
 	
 	@Test
-	public void excel() {
+	public void excelRecert() {
 		log.info("-----Start-------");
 		File file = new File("/tmp/RECERT_DUMMY.xlsx");
 		List<RecertificationExcelVO> listData = null;
@@ -84,13 +92,21 @@ public class ExcelTest {
 		}
 		log.info("-----Finish-------");
 	}
-		
-	//Excel
+	
 	@Test
-	public void excelNewFile() {
+	public void excelCiat() {
 		log.info("-----Start-------");
-//		recert.selectNewFormatDoc();
-		log.info("-----Finish-------");
+		File file = new File("/tmp/Usuarios CIAT.xlsx");
+		List<CiatExcelVO> listData = null;
 		
+		try (FileInputStream fios = new FileInputStream(file)) {
+			listData = this.readCiat.readExcelCiatToVo(fios, ExcelCiatSheet.CIAT);
+			if(listData  != null) {
+				this.ciatService.insertUsersData(listData);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		log.info("-----Finish-------");
 	}
 }

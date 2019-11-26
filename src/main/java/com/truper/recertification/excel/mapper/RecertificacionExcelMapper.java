@@ -2,7 +2,6 @@ package com.truper.recertification.excel.mapper;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
@@ -18,7 +17,7 @@ import com.truper.recertification.excel.vo.SapProfilesExcelVO;
 import com.truper.recertification.excel.vo.TelExcelVO;
 
 /**
- * This class map excel docs
+ * This class make a mapper between vo and excel docs
  * @author mgmolinae
  */
 @Component
@@ -47,7 +46,7 @@ public class RecertificacionExcelMapper {
 		} catch (Exception e) {
 			
 		}
-		
+
 		recertificacion.setNombre(rowData.get(i++));
 		recertificacion.setUbicacion(rowData.get(i++));
 		recertificacion.setDireccion(rowData.get(i++));
@@ -81,21 +80,17 @@ public class RecertificacionExcelMapper {
 	 * @return
 	 * @throws ParseException
 	 */
-	public List<TelExcelVO> excelMapperTel(List<List<String>> rowData) throws ParseException {
-			List<TelExcelVO> lstExcel = new ArrayList<>();
+	public TelExcelVO excelMapperTel(List<String> rowData) {
+		int i = 0;
+		TelExcelVO tel = new TelExcelVO();
+		
+		tel.setEstatus(rowData.get(i++));
+		tel.setDepartamento(rowData.get(i++));
+		tel.setJefeJerarquico(rowData.get(i++));
+		tel.setUsuarioTel(rowData.get(i++));
+		tel.setRol(rowData.get(i));
 			
-			for(int i = 0; i < rowData.size(); i++) {
-				TelExcelVO tel = new TelExcelVO();
-				
-				tel.setEstatus(rowData.get(i).get(0));
-				tel.setDepartamento(rowData.get(i).get(1));
-				tel.setJefeJerarquico(rowData.get(i).get(2));
-				tel.setUsuarioTel(rowData.get(i).get(3));
-				tel.setRol(rowData.get(i).get(4));
-				
-				lstExcel.add(tel);
-			}
-			return lstExcel;
+		return tel;
 	}
 
 	/**
@@ -104,124 +99,110 @@ public class RecertificacionExcelMapper {
 	 * @return
 	 * @throws ParseException
 	 */
-	public List<SapExcelVO> excelMapperSap(List<List<String>> rowData) throws ParseException {
-		List<SapExcelVO> lstExcel = new ArrayList<>();
+	public SapExcelVO excelMapperSap(List<String> rowData) {
+		SapExcelVO sap = new SapExcelVO();
+		int i = 0;
 		
-		for(int i = 0; i < rowData.size(); i++) {
-			SapExcelVO sap = new SapExcelVO();
-			
-			sap.setNombre(rowData.get(i).get(0));
-			sap.setDepartamento(rowData.get(i).get(1));
-			sap.setUsuarioSAP(rowData.get(i).get(2));
-			sap.setRol(rowData.get(i).get(3));
-			
-			lstExcel.add(sap);
-		}
-		return lstExcel;
+		sap.setNombre(rowData.get(i++));
+		sap.setDepartamento(rowData.get(i++));
+		sap.setUsuarioSAP(rowData.get(i++));
+		sap.setRol(rowData.get(i));
+		
+		return sap;
 	}
 	
-	public List<CiatExcelVO> excelMapperCiat(List<List<String>> rowData) throws ParseException {
-		List<CiatExcelVO> lstExcel = new ArrayList<>();
+	public CiatExcelVO excelMapperCiat(List<String> rowData) {
+		CiatExcelVO ciat = new CiatExcelVO();
+		int i = 0;
 		
-		for(int i = 0; i < rowData.size(); i++) {
-			CiatExcelVO ciat = new CiatExcelVO();
-			
-			ciat.setUsuario(rowData.get(i).get(0));
-			ciat.setNombre(rowData.get(i).get(1));
-			ciat.setPerfil(Integer.parseInt(rowData.get(i).get(2)));
-			ciat.setFechaBaja(sdf.parse(rowData.get(i).get(3)));
-			ciat.setAlmacen(rowData.get(i).get(4));
-			
-			lstExcel.add(ciat);
+		ciat.setUsuario(rowData.get(i++));
+		ciat.setNombre(rowData.get(i++));
+		try {
+			ciat.setPerfil(Integer.parseInt(rowData.get(i++)));
+		} catch (Exception e) {
+			ciat.setPerfil(-1);
 		}
-		return lstExcel;
+		ciat.setNombrePerfil(rowData.get(i++));
+		try {
+			ciat.setFechaBaja(sdf.parse(rowData.get(i++)));	
+		} catch (Exception e) {
+			
+		}
+		ciat.setAlmacen(rowData.get(i));
+		
+		return ciat;
 	}
 	
-	public List<CiatLineaExcelVO> excelMapperCiatLinea(List<List<String>> rowData) throws ParseException {
-		List<CiatLineaExcelVO> lstExcel = new ArrayList<>();
+	public CiatLineaExcelVO excelMapperCiatLinea(List<String> rowData) {
+		CiatLineaExcelVO ciatLinea = new CiatLineaExcelVO();
+		int i = 0;
 		
-		for(int i = 0; i < rowData.size(); i++) {
-			CiatLineaExcelVO ciatLinea = new CiatLineaExcelVO();
-			
-			ciatLinea.setUsuario(rowData.get(i).get(0));
-			ciatLinea.setNombre(rowData.get(i).get(1));
-			ciatLinea.setPerfil(Integer.parseInt(rowData.get(i).get(2)));
-			ciatLinea.setNombrePerfil(rowData.get(i).get(3));
-			ciatLinea.setCdrs(rowData.get(i).get(4));
-			ciatLinea.setEstado(rowData.get(i).get(5));
-			
-			lstExcel.add(ciatLinea);
+		ciatLinea.setUsuario(rowData.get(i++));
+		ciatLinea.setNombre(rowData.get(i++));
+		try {
+			ciatLinea.setPerfil(Integer.parseInt(rowData.get(i++)));
+		} catch (Exception e) {
+			ciatLinea.setPerfil(-1);
 		}
-		return lstExcel;
+		
+		ciatLinea.setNombrePerfil(rowData.get(i++));
+		ciatLinea.setCdrs(rowData.get(i++));
+		ciatLinea.setEstado(rowData.get(i));
+		
+		return ciatLinea;
 	}
 	
-	public List<SapProfilesExcelVO> excelMapperSapProfiles(List<List<String>> rowData) throws ParseException {
-		List<SapProfilesExcelVO> lstExcel = new ArrayList<>();
+	public SapProfilesExcelVO excelMapperSapProfiles(List<String> rowData) {
+		SapProfilesExcelVO sapProfile = new SapProfilesExcelVO();
+		int i = 0;
 		
-		for(int i = 0; i < rowData.size(); i++) {
-			SapProfilesExcelVO sapProfile = new SapProfilesExcelVO();
-			
-			sapProfile.setUsuarios(rowData.get(i).get(0));
-			sapProfile.setNombre(rowData.get(i).get(1));
-			sapProfile.setPerfil(rowData.get(i).get(2));
-			sapProfile.setTexto(rowData.get(i).get(3));
-			
-			lstExcel.add(sapProfile);
-		}
-		return lstExcel;
+		sapProfile.setUsuarios(rowData.get(i++));
+		sapProfile.setNombre(rowData.get(i++));
+		sapProfile.setPerfil(rowData.get(i++));
+		sapProfile.setTexto(rowData.get(i));
+		
+		return sapProfile;
 	}
 	
-	public List<SapApoExcelVO> excelMapperSapAPO(List<List<String>> rowData) throws ParseException {
-		List<SapApoExcelVO> lstExcel = new ArrayList<>();
+	public SapApoExcelVO excelMapperSapAPO(List<String> rowData) {
+		SapApoExcelVO sapAPO = new SapApoExcelVO();
+		int i = 0;
 		
-		for(int i = 0; i < rowData.size(); i++) {
-			SapApoExcelVO sapAPO = new SapApoExcelVO();
-			
-			sapAPO.setUsuarios(rowData.get(i).get(0));
-			sapAPO.setNombre(rowData.get(i).get(1));
-			sapAPO.setPerfil(rowData.get(i).get(2));
-			sapAPO.setTexto(rowData.get(i).get(3));
-			
-			lstExcel.add(sapAPO);
-		}
-		return lstExcel;
+		sapAPO.setUsuarios(rowData.get(i++));
+		sapAPO.setNombre(rowData.get(i++));
+		sapAPO.setPerfil(rowData.get(i++));
+		sapAPO.setTexto(rowData.get(i));
+		
+		return sapAPO;
 	}
 	
-	public List<EmailBossExcelVO> excelMapperCorreo(List<List<String>> rowData) throws ParseException {
-		List<EmailBossExcelVO> lstExcel = new ArrayList<>();
+	public EmailBossExcelVO excelMapperCorreo(List<String> rowData) {
+		EmailBossExcelVO correo = new EmailBossExcelVO();
+		int i = 0;
 		
-		for(int i = 0; i < rowData.size(); i++) {
-			EmailBossExcelVO correo = new EmailBossExcelVO();
-			
-			correo.setIdJefe(rowData.get(i).get(0));
-			correo.setNombre(rowData.get(i).get(1));
-			
-			lstExcel.add(correo);
-		}
-		return lstExcel;
+		correo.setIdJefe(rowData.get(i++));
+		correo.setNombre(rowData.get(i));
+		
+		return correo;
 	}
 	
-	public List<NewFileExcelVO> excelMapperNewFormat(List<List<String>> rowData) throws ParseException {
-		List<NewFileExcelVO> lstExcel = new ArrayList<>();
+	public NewFileExcelVO excelMapperNewFormat(List<String> rowData) {
+		NewFileExcelVO newFile = new NewFileExcelVO();
+		int i = 0;
 		
-		for(int i = 0; i < rowData.size(); i++) {
-			NewFileExcelVO newFile = new NewFileExcelVO();
-			
-			newFile.setIdJefe(rowData.get(i).get(0));
-			newFile.setNombreJefe(rowData.get(i).get(1));
-			newFile.setIdEmpleado(rowData.get(i).get(2));
-			newFile.setNombreEmpleado(rowData.get(i).get(3));
-			newFile.setCuentatel(rowData.get(i).get(4));
-			newFile.setRolTel(rowData.get(i).get(5));
-			newFile.setCuentaCiat(rowData.get(i).get(6));
-			newFile.setRolCiat(rowData.get(i).get(7));
-			newFile.setCuentaSap(rowData.get(i).get(8));
-			newFile.setRolSap(rowData.get(i).get(9));
-			newFile.setDescRolSap(rowData.get(i).get(10));
-			newFile.setDepartamento(rowData.get(i).get(11));
-			
-			lstExcel.add(newFile);
-		}
-		return lstExcel;
+		newFile.setIdJefe(rowData.get(i++));
+		newFile.setNombreJefe(rowData.get(i++));
+		newFile.setIdEmpleado(rowData.get(i++));
+		newFile.setNombreEmpleado(rowData.get(i++));
+		newFile.setCuentatel(rowData.get(i++));
+		newFile.setRolTel(rowData.get(i++));
+		newFile.setCuentaCiat(rowData.get(i++));
+		newFile.setRolCiat(rowData.get(i++));
+		newFile.setCuentaSap(rowData.get(i++));
+		newFile.setRolSap(rowData.get(i++));
+		newFile.setDescRolSap(rowData.get(i++));
+		newFile.setDepartamento(rowData.get(i++));
+
+		return newFile;
 	}
 }
