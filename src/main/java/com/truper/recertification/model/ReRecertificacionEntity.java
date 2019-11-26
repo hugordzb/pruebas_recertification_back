@@ -1,7 +1,7 @@
 package com.truper.recertification.model;
 
 import java.io.Serializable;
-import java.security.Timestamp;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
@@ -46,7 +46,7 @@ public class ReRecertificacionEntity implements Serializable, Persistable<PKRece
 	private String comentarios;
 	
 	@Column(name = "FECHATERMINO")
-	private Timestamp fechaTermino;
+	private Date fechaTermino;
 	
 	@Override
 	public PKRecertificacion getId() {

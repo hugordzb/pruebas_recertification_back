@@ -25,4 +25,10 @@ public class BossDetailVO implements Serializable{
 
 	private String departamento;
 	
+	private boolean isInRecertificacion;
+	
+	private boolean isRecertificado;
+	
+	private String periodo;
+	
 }

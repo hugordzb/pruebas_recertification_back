@@ -43,8 +43,16 @@ public interface DataService {
 	public BossDetailVO findByBoss(String idJefe);
 	
 	/**
-	 * This method that contain all boss data
+	 * This method finds the boss data for the recertification process, it returns flags
+	 * to know an email has been sent to the boss and if it is recertified.
+	 * @param String idJefe, is the boss id
+	 * @param String periodo, is the period of the recertififcation 
+	 */
+	public BossDetailVO findBossForRecertification(String idJefe, String periodo);
+	
+	/**
+	 * This method that contain all boss data from period
 	 * @return
 	 */
-	public Map<String, Object> findByAllBoss();
+	public Map<String, Object> findByAllBoss(String periodo);
 }

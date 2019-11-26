@@ -78,13 +78,14 @@ public class DataResources {
 		return infoService.findByBoss(idJefe);
 	}
 	
-	@GetMapping(path = "/bossesData")
+	@GetMapping(path = "/bossesData/{periodo}")
 	@ApiOperation(value = "Recupera la información de todos los Jefes",
 				  response = Map.class)
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "OK"),
 							@ApiResponse(code = 401, message = "Unauthorized")})
-	public Map<String, Object> findBossesData() {
-		return infoService.findByAllBoss();
+	public Map<String, Object> findBossesData(@ApiParam(value = "Cuenta AD (LDAP) del jefe)", required = true)
+	@Valid @PathVariable ("periodo") String periodo) {
+		return infoService.findByAllBoss(periodo);
 	}
 	
 	 /**
