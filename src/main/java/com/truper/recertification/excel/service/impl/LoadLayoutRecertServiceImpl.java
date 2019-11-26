@@ -25,6 +25,7 @@ import com.truper.recertification.model.ReDetalleJefeEntity;
 import com.truper.recertification.model.ReJerarquiaEntity;
 import com.truper.recertification.model.ReUsuarioEntity;
 import com.truper.recertification.util.FiltersUtils;
+import com.truper.recertification.utils.constants.Constants;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -163,26 +164,25 @@ public class LoadLayoutRecertServiceImpl implements LoadLayoutRecertService {
 		return users;
 	}
 	
-	//SE DEBE CAMBIAR EL ID PERFIL 300 POR UNO QUE CONTENA 1 Ó 0
 	private List<ReCuentasUsuarioEntity> convertToReCuentasUsuarioEntity(RecertificationExcelVO vo) {
 		List<ReCuentasUsuarioEntity> listCuentas = new LinkedList<>();
 		
 		ReCuentasUsuarioEntity cuentaUser;
 		if(vo.getSap() != null && !vo.getSap().isEmpty()) {
 			cuentaUser = new ReCuentasUsuarioEntity();
-			cuentaUser.setIdCuentaUsuario(new PKCuentasUsuario(vo.getAd(), 300, vo.getSap()));
+			cuentaUser.setIdCuentaUsuario(new PKCuentasUsuario(vo.getAd(), Constants.DEFAULT_PROFILE, vo.getSap()));
 			listCuentas.add(cuentaUser);
 		}
 		
 		if(vo.getTel() != null && !vo.getTel().isEmpty()) {
 			cuentaUser = new ReCuentasUsuarioEntity();
-			cuentaUser.setIdCuentaUsuario(new PKCuentasUsuario(vo.getAd(), 300, vo.getTel()));
+			cuentaUser.setIdCuentaUsuario(new PKCuentasUsuario(vo.getAd(), Constants.DEFAULT_PROFILE, vo.getTel()));
 			listCuentas.add(cuentaUser);
 		}
 		
 		if(vo.getCiat() != null && !vo.getCiat().isEmpty()) {
 			cuentaUser = new ReCuentasUsuarioEntity();
-			cuentaUser.setIdCuentaUsuario(new PKCuentasUsuario(vo.getAd(), 300, vo.getCiat()));
+			cuentaUser.setIdCuentaUsuario(new PKCuentasUsuario(vo.getAd(), Constants.DEFAULT_PROFILE, vo.getCiat()));
 			listCuentas.add(cuentaUser);
 		}
 		

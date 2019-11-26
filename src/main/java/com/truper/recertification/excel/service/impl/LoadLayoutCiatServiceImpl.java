@@ -2,7 +2,6 @@ package com.truper.recertification.excel.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -14,10 +13,11 @@ import com.truper.recertification.dao.RePerfilSistemaDAO;
 import com.truper.recertification.excel.service.LoadLayoutCiatService;
 import com.truper.recertification.excel.vo.CiatExcelVO;
 import com.truper.recertification.exception.ProfilesException;
-import com.truper.recertification.exception.RecertificationException;
 import com.truper.recertification.model.PKCuentasUsuario;
 import com.truper.recertification.model.ReCuentasUsuarioEntity;
 import com.truper.recertification.model.RePerfilSistemaEntity;
+import com.truper.recertification.utils.constants.Constants;
+import com.truper.recertification.utils.constants.SistemaCatalogs;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -35,7 +35,7 @@ public class LoadLayoutCiatServiceImpl implements LoadLayoutCiatService{
 	public List<RePerfilSistemaEntity> insertUsersData(List<CiatExcelVO> listData) 
 			throws ProfilesException {
 
-		List<RePerfilSistemaEntity> profileList = this.daoProfile.findByIdSistema("S001");
+		List<RePerfilSistemaEntity> profileList = this.daoProfile.findByIdSistema(SistemaCatalogs.CIAT.getCode());
 
 		if(listData == null || listData.isEmpty())
 			throw new ProfilesException("No hay datos para insertar");
@@ -54,7 +54,7 @@ public class LoadLayoutCiatServiceImpl implements LoadLayoutCiatService{
 				}else {
 					RePerfilSistemaEntity profileTmp = this.daoProfile.save(
 							RePerfilSistemaEntity.builder()
-							.idSistema("S001")
+							.idSistema(SistemaCatalogs.CIAT.getCode())
 							.perfil(profile.trim())
 							.build());
 					
@@ -65,53 +65,32 @@ public class LoadLayoutCiatServiceImpl implements LoadLayoutCiatService{
 		
 		//filtramos por perfil y usuario
 		List<ReCuentasUsuarioEntity> acountsList = new ArrayList<>();
-		List<RePerfilSistemaEntity> newProfileList = new ArrayList<>();
 		
 		listData.forEach(v ->{
-			PKCuentasUsuario pk = new PKCuentasUsuario();
-			pk.setCuentaSistema(v.getUsuario());
-			log.info("cuenta: " + v.getUsuario());
-			pk.setIdPerfil(300);
+			ReCuentasUsuarioEntity acountEntity  = this.daoAcounts.
+					findByIdCuentaUsuarioIdPerfilAndIdCuentaUsuarioCuentaSistema(Constants.DEFAULT_PROFILE, v.getUsuario());
 			
-			ReCuentasUsuarioEntity acountEntity  = daoAcounts.
-					findByIdCuentaUsuarioIdPerfilAndIdCuentaUsuarioCuentaSistema(
-							300, v.getUsuario());
 			if(acountEntity != null) {
-				acountsList.add(acountEntity);
 				
-				profileList.forEach(profile ->{
-					if(profile.getPerfil().equals(v.getNombrePerfil())) {
-						
-						newProfileList.add(profile);
-						
-					}else {
-						log.info("No existe un perfil '" + v.getNombrePerfil() + "'");
-					}
-				});
-			}
-			else {
+				RePerfilSistemaEntity currentProfile = profileList.stream()
+						.filter(perf -> v.getNombrePerfil().trim().equalsIgnoreCase(perf.getPerfil()))
+						.findAny().orElse(null);
+				
+				if(currentProfile != null) {
+					PKCuentasUsuario pkAccount = acountEntity.getIdCuentaUsuario();
+					this.daoAcounts.deleteById(pkAccount);
+					
+					pkAccount.setIdPerfil(currentProfile.getIdPerfil());
+					acountEntity.setIdCuentaUsuario(pkAccount);
+					
+					this.daoAcounts.save(acountEntity);
+					acountsList.add(acountEntity);
+				}
+			}else {
 				log.error("No se encontro relacion registro de '" + v.getUsuario() + "'");
 			}
 		});
-		
-		log.info("lista: " + newProfileList.size());
-		log.info("lista2: " + acountsList.size());
-		
-		//en esta insertamos
-		acountsList.forEach(acount ->{ 
-			
-			PKCuentasUsuario pkAcounst = new PKCuentasUsuario();
-			pkAcounst.setIdUsuario(acount.getIdCuentaUsuario().getIdUsuario());
-//			pkAcounst.setIdPerfil();
-//			
-//			ReCuentasUsuarioEntity acountsTmp = this.daoAcounts.save(
-//					ReCuentasUsuarioEntity.builder()
-//					.idCuentaUsuario(pkAcounst)
-//					.build());
-			
-		});
-		
-		return null;
+		return profileList;
 	}
 
 }

@@ -31,6 +31,7 @@ public class ExcelTest {
 	@Autowired
 	private ExcelRowToVOService<RecertificationExcelVO> readRecert;
 	
+	@Autowired
 	private ExcelRowToVOService<CiatExcelVO> readCiat;
 	
 	@Autowired
