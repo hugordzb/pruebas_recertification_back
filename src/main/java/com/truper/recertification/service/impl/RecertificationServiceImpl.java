@@ -1,10 +1,12 @@
 package com.truper.recertification.service.impl;
 
+import java.security.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -149,5 +151,28 @@ public class RecertificationServiceImpl implements RecertificationService{
 			e.printStackTrace();
 		}
 		return this.urlLetters +boss;
+	}
+
+	@Override
+	public boolean recertifyBoss(String strIdJefe, String strPeriodo) {
+		boolean status = false;
+		
+		
+		ReRecertificacionEntity jefeRecertificado = null;
+		
+		try {
+			jefeRecertificado = daoRecertification.findById(PKRecertificacion.builder()
+					.idJefe(strIdJefe).periodo(strPeriodo).build()).get();
+			
+			status = !jefeRecertificado.isEstatus();
+			jefeRecertificado.setEstatus(status);
+			daoRecertification.save(jefeRecertificado);
+			
+			
+		}catch(NoSuchElementException nsee ) {
+			
+		}
+
+		return status;
 	}
 }

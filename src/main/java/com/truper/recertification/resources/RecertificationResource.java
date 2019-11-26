@@ -45,6 +45,20 @@ public class RecertificationResource {
             return recertification.sendMail(strIdJefe);
     }
 	
+	
+	@GetMapping(path = "/recertifyBoss/{periodo}/{idJefe}")
+	@ApiOperation(value = "Se recertifica el jefe", 
+				  response = Boolean.class)
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "OK"),
+							@ApiResponse(code = 401, message = "Unauthorized")})
+    public Boolean recertifyBoss(
+    		@ApiParam(value = "Cuenta AD (LDAP) del jefe", required = true)
+    		@PathVariable ("idJefe") String strIdJefe, 
+    		@PathVariable ("periodo") String strPeriodo) {
+            return recertification.recertifyBoss(strIdJefe, strPeriodo);
+    }
+	
+	
 	 /**
      * Intercepta todas las excepciones y los convierte en respuestas json
      * @param exception
