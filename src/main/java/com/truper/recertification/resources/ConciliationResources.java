@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.truper.recertification.dao.ReDepartamentoDAO;
+import com.truper.recertification.dao.ReDetalleJefeDAO;
+import com.truper.recertification.dao.ReRecertificacionDAO;
 import com.truper.recertification.excel.mapper.ExcelRowToVOService;
 import com.truper.recertification.excel.service.LoadLayoutCiatService;
 import com.truper.recertification.excel.service.LoadLayoutRecertService;
@@ -24,6 +27,10 @@ import com.truper.recertification.excel.vo.RecertificationExcelVO;
 import com.truper.recertification.excel.vo.TelExcelVO;
 import com.truper.recertification.exception.ProfilesException;
 import com.truper.recertification.exception.RecertificationException;
+import com.truper.recertification.model.PKRecertificacion;
+import com.truper.recertification.model.ReDetalleJefeEntity;
+import com.truper.recertification.model.ReRecertificacionEntity;
+import com.truper.recertification.vo.answer.BossDetailVO;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -48,8 +55,17 @@ public class ConciliationResources {
 	@Autowired
 	private LoadLayoutTelService loadlayoutTelService;
 	
+	@Autowired
+	private ReDetalleJefeDAO daoDetalleJefe;
+	
+	@Autowired
+	private ReDepartamentoDAO daoDepartamento;
+	
+	@Autowired 
+	private ReRecertificacionDAO daoRecertificacion;
+	
 	@PostMapping("/recertificacion")
-	public List<RecertificationExcelVO> processRecertification(@RequestParam(name="file", required = false) MultipartFile file) 
+	public List<BossDetailVO> processRecertification(@RequestParam(name="file", required = false) MultipartFile file) 
 			throws IOException, RecertificationException{
 	
 		if(file == null)
@@ -66,7 +82,40 @@ public class ConciliationResources {
 			e.printStackTrace();
 		}
 		
-		return listData;
+		List<String> lstNewBossesNames = new ArrayList<>();
+		
+		if(listData != null) {
+			listData.forEach(element -> {
+				if(!lstNewBossesNames.contains(element.getJefeJerarquico())) {
+					lstNewBossesNames.add(element.getJefeJerarquico()); 
+				} 
+			});
+		}
+		
+		
+		List<BossDetailVO> lstNewBosses = new ArrayList<BossDetailVO>();
+		if(lstNewBossesNames != null && !lstNewBossesNames.isEmpty()) {
+			lstNewBossesNames.forEach(bossName -> {
+				ReDetalleJefeEntity detalleJefeEntity = daoDetalleJefe.findByNombre(bossName);
+				BossDetailVO boss = new BossDetailVO();
+				if(detalleJefeEntity != null) {
+					boss.setIdJefe(detalleJefeEntity.getIdJefe());
+					boss.setNombre(detalleJefeEntity.getNombre());
+					boss.setCorreo(detalleJefeEntity.getCorreo());
+					boss.setCorreoCC(detalleJefeEntity.getCorreoCC());
+					boss.setDepartamento(daoDepartamento.findById(detalleJefeEntity.getIdDepartamento()).get().getDepartamento());
+					boss.setInRecertificacion(false);
+					boss.setRecertificado(false);
+					boss.setPeriodo("0000");
+					
+					if(!lstNewBosses.contains(boss)) {
+						lstNewBosses.add(boss); 
+					}
+				} 
+			});
+		}	
+		
+		return lstNewBosses;
     }
 	
 	@PostMapping("/ciatProfiles")
